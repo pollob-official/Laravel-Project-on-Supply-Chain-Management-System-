@@ -17,6 +17,13 @@
     </style>
   </head>
   <body>
+      @if (session('success'))
+      <div class="alert alert-success">
+        {{ session('success') }}
+      </div>
+
+     @endif
+
     <h3>Customer List</h3>
    <table class="table">
   <thead>
@@ -26,7 +33,7 @@
       <th scope="col">email</th>
       <th scope="col">phone</th>
       <th scope="col">address</th>
-      {{-- <th scope="col">photo</th> --}}
+      <th scope="col">photo</th>
       <th scope="col">Action</th>
     </tr>
   </thead>
@@ -38,7 +45,9 @@
       <td>{{$customer->email}}</td>
       <td>{{$customer->phone}}</td>
       <td>{{$customer->address}}</td>
-      {{-- <td>{{$customer->photo}}</td> --}}
+
+      {{-- <td> <img src="{{asset("storage" )}}/{{$customer->photo}}" alt="" srcset="" width="100">       </td> --}}
+      <td> <img src="{{asset("storage/photo/customer" )}}/{{$customer->photo}}" alt="" srcset="" width="50" height="50">       </td>
       <td class="btn btn-group">
          <a class="btn btn-secondary" href="{{URL("customer/edit", $customer->id)}}">Edit</a>
 

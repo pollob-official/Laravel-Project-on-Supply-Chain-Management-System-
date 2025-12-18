@@ -14,18 +14,38 @@
   </head>
   <body>
 
+    <h1>Create Customers</h1>
+
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+<!-- Create Post Form -->
+
 <form action="{{URL("customer/save")}}" method="POST" enctype="multipart/form-data" class="p-4 border rounded">
    @csrf
   <!-- Name -->
   <div class="mb-3">
     <label class="form-label">Name</label>
     <input type="text" name="name" class="form-control" placeholder="Enter name">
+    @error("name")
+        <span class="text-danger">{{$message}}</span>
+    @enderror
   </div>
 
   <!-- Email -->
   <div class="mb-3">
     <label class="form-label">Email</label>
     <input type="email" name="email" class="form-control" placeholder="Enter email">
+     @error("email")
+        <span class="text-danger">{{$message}}</span>
+    @enderror
   </div>
 
   <!-- Phone -->

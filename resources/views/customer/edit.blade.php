@@ -41,10 +41,10 @@
   </div>
 
 
-  {{-- <div class="mb-3">
+  <div class="mb-3">
     <label class="form-label">Photo</label>
     <input type="file" name="photo" class="form-control">
-  </div> --}}
+  </div>
 
   <!-- Action -->
   <button type="submit" class="btn btn-primary">
