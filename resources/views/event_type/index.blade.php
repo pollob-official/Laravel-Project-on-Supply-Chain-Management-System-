@@ -10,7 +10,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <title>Customer</title>
+    <title>Event</title>
     <style>
 
 
@@ -24,36 +24,27 @@
 
      @endif
 
-    <h3>Customer List</h3>
+    <h3>Event list</h3>
    <table class="table">
   <thead>
     <tr>
-      <th scope="col">#</th>
+      <th scope="col">Id</th>
       <th scope="col">name</th>
-      <th scope="col">email</th>
-      <th scope="col">phone</th>
-      <th scope="col">address</th>
-      <th scope="col">photo</th>
       <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
-    @foreach($customers as $customer)
+    @foreach($event_types as $event)
     <tr>
-      <th scope="row">{{$customer->id}}</th>
-      <td>{{$customer->name}}</td>
-      <td>{{$customer->email}}</td>
-      <td>{{$customer->phone}}</td>
-      <td>{{$customer->address}}</td>
+      <th scope="row">{{$event->id}}</th>
+      <td>{{$event->name}}</td>
 
 
 
-      {{-- <td> <img src="{{asset("storage" )}}/{{$customer->photo}}" alt="" srcset="" width="100">       </td> --}}
-      <td> <img src="{{asset("storage/photo/customer" )}}/{{$customer->photo}}" alt="" srcset="" width="50" height="50">       </td>
       <td class="btn btn-group">
-         <a class="btn btn-secondary" href="{{URL("customer/edit", $customer->id)}}">Edit</a>
+         <a class="btn btn-secondary" href="{{URL("event_type/edit", $event->id)}}">Edit</a>
 
-         <form action="{{URL("customer/delete", $customer->id)}}" method="post">
+         <form action="{{URL("event_type/delete", $event->id)}}" method="post">
             @csrf
             @method("delete")
              <button onclick="return confirm(`Are you sure`)" type="submit" class="btn btn-danger">Delete</button>
@@ -67,9 +58,9 @@
   </tbody>
 </table>
 
-<div class="">
+{{-- <div class="">
     {{ $customers->links() }}
-</div>
+</div> --}}
 
     <!-- Optional JavaScript; choose one of the two! -->
 

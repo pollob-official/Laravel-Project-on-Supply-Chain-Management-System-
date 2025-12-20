@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\EventTypeController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,13 +22,24 @@ Route::get('/pollob', function () {
 //     return view ("students", ["id"=>$id, "name"=>$name]);
 // });
 
-Route::get("/customers", [CustomerController::class, "index"]);
+
 Route::get("/students", [StudentController::class, "index"]);
 Route::get("/student/create", [StudentController::class, "create"]);
 Route::get("/student/find/{id}", [StudentController::class, "find"]);
 Route::get("/student/edit/{id}", [StudentController::class, "edit"]);
 Route::get("/student/update/{id}/{name}", [StudentController::class, "update"]);
 Route::get("/student/delete/{id}", [StudentController::class, "delete"]);
+
+// Event_Type:
+
+Route::get("/event_type", [EventTypeController::class, "index"]);
+Route::get("/event_type/create", [EventTypeController::class, "create"]);
+Route::post("/event_type/save", [EventTypeController::class, "save"]);
+// Route::get("/event_type/find/{id}", [EventTypeController::class, "find"]);
+Route::get("/event_type/edit/{id}", [EventTypeController::class, "edit"]);
+Route::put("/event_type/update/{id}", [EventTypeController::class, "update"]);
+Route::delete("/event_type/delete/{id}", [EventTypeController::class, "delete"]);
+
 
 
 Route::prefix("customer")->controller(CustomerController::class)->group(function(){

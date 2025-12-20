@@ -72,3 +72,5 @@ php artisan db:seed
 
  php artisan storage:link
 php artisan lang:publish
+
+ php artisan make:model event_type -c
