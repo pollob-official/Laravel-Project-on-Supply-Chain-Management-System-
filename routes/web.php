@@ -6,7 +6,7 @@ use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return "welcome to Laravel World";
+    return view ("pages.erp.dashboard.index");
 });
 
 Route::get('/pollob', function () {
