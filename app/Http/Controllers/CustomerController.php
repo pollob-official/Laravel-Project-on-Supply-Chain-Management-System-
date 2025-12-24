@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 class CustomerController extends Controller
 {
 
-    function index()
+    function index(Request $request)
     {
         // $customers = Customer::all()->toArray();
         // echo '<pre>';
@@ -22,8 +22,42 @@ class CustomerController extends Controller
         // $customers= DB::table("customers")->get();
         // $customers= DB::select("select * from lav_customers");
 
-        $customers = Customer::orderBy("id", "desc")->paginate(8);
+        // $customers = Customer::orderBy("id", "desc")->paginate(8);
+
+
+        $customers = Customer::when($request->search, function($query) use($request) {
+          return $query->whereAny([
+            "name",
+            "email",
+             "id",
+             "phone"
+        ], "LIKE" , "%".$request->search."%" );
+
+        })->orderBy("id", "desc")->paginate(8);
+
+
+
+
         return view("customer.index", compact("customers"));
+    }
+
+
+
+    function trashed()
+    {
+        $customers = Customer::onlyTrashed()->orderBy("id", "desc")->paginate(8);
+        return view("customer.trashed", compact("customers"));
+    }
+    function force_delete($id)
+    {
+         Customer::withTrashed()->find($id)->forceDelete();
+        return redirect("customer/trashed");
+    }
+
+    function restore($id)
+    {
+         Customer::withTrashed()->find($id)->restore();
+        return redirect("customer");
     }
 
 
@@ -73,7 +107,7 @@ class CustomerController extends Controller
         $customer->save();
 
         //   echo "saved";
-        return redirect("customer");
+        return redirect("customer")->with("success", "Customer Created successfully");
     }
 
 

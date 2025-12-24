@@ -1,23 +1,10 @@
 
 @extends("layout.erp.app")
 @section("content")
-
-
-
-
-     @if (session('success'))
-      <div class="alert alert-success">
-        {{ session('success') }}
-      </div>
-
-     @endif
-
-
-
-    <div>
+    <x-alert/>
 
 <h3>Customer List</h3>
-<span>
+{{-- <span>
   <a href="{{ url('customer/create') }}" class="btn btn-primary">
     <i class="bi bi-plus-lg"></i> Add Customer
   </a>
@@ -46,7 +33,7 @@
 
 
       {{-- <td> <img src="{{asset("storage" )}}/{{$customer->photo}}" alt="" srcset="" width="100">       </td> --}}
-      <td> <img src="{{asset("storage/photo/customer" )}}/{{$customer->photo}}" alt="" srcset="" width="50" height="50">       </td>
+      {{-- <td> <img src="{{asset("storage/photo/customer" )}}/{{$customer->photo}}" alt="" srcset="" width="50" height="50">       </td>
       <td class="btn btn-group">
          <a class="btn btn-secondary" href="{{URL("customer/edit", $customer->id)}}">Edit</a>
 
@@ -68,4 +55,46 @@
     {{ $customers->links() }}
 </div>
 
+@endsection --}}
+
+
+  <form action="{{URL("customer")}}" method="GET">
+        <div class="mb-3">
+            <input value="{{request("search")}}" type="text" class="form-control" id="search" name="search" placeholder="Search data">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+
+
+
+
+    <x-button :url="URL('customer/create')" type="primary"><i class="bi bi-plus-lg"></i> Add Customer</x-button>
+    {{-- <span>
+        <a href="{{ url('customer/create') }}" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Add Customer
+        </a>
+    </span> --}}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">name</th>
+                <th scope="col">email</th>
+                <th scope="col">phone</th>
+                <th scope="col">address</th>
+                <th scope="col">photo</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($customers as $customer)
+                <x-customertable :customer="$customer" />
+            @endforeach
+        </tbody>
+    </table>
+
+    <div class="">
+        {{ $customers->appends(request()->query())->links() }}
+    </div>
 @endsection

@@ -86,4 +86,25 @@ class UserController extends Controller
          return redirect("system/users")->with("success", "User deleted
         Successfully");
     }
+
+    function trashed()
+    {
+        $users = User::onlyTrashed()->orderBy("id", "desc")->paginate(8);
+        return view("pages.erp.user.trashed", compact("users"));
+
+
+
+    }
+
+   function restore($id)
+    {
+        User::withTrashed()->find($id)->restore();
+        return redirect()->route("users.index");
+    }
+
+    function force_delete($id)
+    {
+        User::withTrashed()->find($id)->forceDelete();
+        return redirect()->route("user.trashed");
+    }
 }
