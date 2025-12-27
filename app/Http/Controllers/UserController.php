@@ -11,7 +11,7 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-   public function index(){
+   public function index(Request $request){
     //   $users= User::all();
       $users= User::select("id","name","email")->paginate(15);
       return view("pages.erp.user.index", ["users"=>$users]);

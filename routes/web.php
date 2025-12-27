@@ -79,3 +79,7 @@ Route::fallback(function(){
 
 // php artisan make:controller CustomerController.php
 // user  ->  request  ->  controller -> model    -> database
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

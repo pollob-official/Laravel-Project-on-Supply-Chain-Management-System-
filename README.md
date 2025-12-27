@@ -202,3 +202,4 @@ search $customers = Customer::when($request->search, function($query) use($reque
 // $users = DB::select("SELECT * FROM users WHERE status = ?", ['active']);
 
 php artisan make:controller RoleController --resource
+
