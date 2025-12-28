@@ -4,7 +4,7 @@
     <x-alert/>
 
 <h3>Customer List</h3>
-{{-- <span>
+
   <a href="{{ url('customer/create') }}" class="btn btn-primary">
     <i class="bi bi-plus-lg"></i> Add Customer
   </a>
@@ -33,7 +33,7 @@
 
 
       {{-- <td> <img src="{{asset("storage" )}}/{{$customer->photo}}" alt="" srcset="" width="100">       </td> --}}
-      {{-- <td> <img src="{{asset("storage/photo/customer" )}}/{{$customer->photo}}" alt="" srcset="" width="50" height="50">       </td>
+     <td> <img src="{{asset("storage/photo/customer" )}}/{{$customer->photo}}" alt="" srcset="" width="50" height="50">       </td>
       <td class="btn btn-group">
          <a class="btn btn-secondary" href="{{URL("customer/edit", $customer->id)}}">Edit</a>
 
@@ -55,7 +55,7 @@
     {{ $customers->links() }}
 </div>
 
-@endsection --}}
+
 
 
   <form action="{{URL("customer")}}" method="GET">

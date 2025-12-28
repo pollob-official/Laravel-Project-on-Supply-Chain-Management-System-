@@ -22,7 +22,7 @@
   <!-- Name -->
   <div class="mb-3">
     <label class="form-label">Name</label>
-    <input type="text" name="name" class="form-control" placeholder="Enter name">
+    <input type="text" name="name" class="form-control" placeholder="Enter name" value="{{old('name')}}">
     @error("name")
         <span class="text-danger">{{$message}}</span>
     @enderror

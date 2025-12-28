@@ -71,13 +71,15 @@ php artisan make:factory CustomerFactory php artisan make:model Customer
 
 php artisan db:seed
 
- php artisan storage:link
+ php artisan storage:link  
+ <!-- [photo pload link public/storage folder] -->
 php artisan lang:publish
 
  php artisan make:model event_type -c
  php artisan make:model Role -c
  
-php artisan storage:link php artisan lang:publish
+php artisan storage:link 
+php artisan lang:publish
 
 php artisan make:controller namecontroller --resource route::resource("student", StudentController::class)
 
