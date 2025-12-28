@@ -77,7 +77,7 @@ class CustomerController extends Controller
     {
         // required | email | min | max | numeric | unique | confirmed | nullable
 
-        print_r($request->all());
+        // print_r($request->all());
 
         $request->validate(
             [
@@ -94,7 +94,8 @@ class CustomerController extends Controller
         $imgname = "";
         if ($request->hasFile("photo")) {
             // $image= $request->file("photo")->store("photo/customer", "public");
-            $imgname = $request->name . "." . $request->file("photo")->extension();
+            $slg=strtolower(str_replace(" ", "-", $request->name));
+            $imgname =  $slg . "." . $request->file("photo")->extension();
             $request->file("photo")->storeAs("photo/customer", $imgname, "public");
         }
 
