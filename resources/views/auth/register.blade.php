@@ -14,11 +14,11 @@
                                 <div class="d-flex flex-column h-100">
                                     <div class="auth-brand p-4">
                                         <a href="index.html" class="logo-light">
-                                            <img src="assets/images/logo.png" alt="logo" height="22">
+                                        <img src="assets/images/logo.png" alt="logo" style="height: 80px; width: 200px;">
                                         </a>
-                                        <a href="index.html" class="logo-dark">
+                                        {{-- <a href="index.html" class="logo-dark">
                                             <img src="assets/images/logo-dark.png" alt="dark logo" height="22">
-                                        </a>
+                                        </a> --}}
                                     </div>
                                     <div class="p-4 my-auto">
                                         <h4 class="fs-20">Free Sign Up</h4>
