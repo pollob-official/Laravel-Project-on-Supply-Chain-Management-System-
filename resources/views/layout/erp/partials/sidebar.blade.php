@@ -1,22 +1,22 @@
   <div class="leftside-menu">
 
                 <!-- Brand Logo Light -->
-                <a href="index.html" class="logo logo-light">
+                <a href="index.html" class="logo logo-light" >
                     <span class="logo-lg">
-                        <img src="{{asset('assets')}}/images/logo.png" alt="logo">
+                        <img src="{{ asset('assets/images/logo.png') }}" alt="logo" style="height: 80px; width: 200px;">
                     </span>
                     <span class="logo-sm">
-                        <img src="{{asset('assets')}}/images/logo-sm.png" alt="small logo">
+                        <img src="{{ asset('assets/images/logo-sm.png') }}" alt="small logo" style="height: 30px; width: 40px;">
                     </span>
                 </a>
 
                 <!-- Brand Logo Dark -->
                 <a href="index.html" class="logo logo-dark">
                     <span class="logo-lg">
-                        <img src="{{asset('assets')}}/images/logo-dark.png" alt="dark logo">
+                        <img src="{{ asset('assets/images/logo-dark.png') }}" alt="dark logo">
                     </span>
                     <span class="logo-sm">
-                        <img src="{{asset('assets')}}/images/logo-sm.png" alt="small logo">
+                        <img src="{{ asset('assets/images/logo-sm.png') }}" alt="small logo">
                     </span>
                 </a>
 

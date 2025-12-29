@@ -21,7 +21,7 @@
 
                         <div class="row">
                             <div class="col-xxl-3 col-sm-6">
-                                <div class="card widget-flat text-bg-pink">
+                                <div class="card widget-flat text-bg-danger">
                                     <div class="card-body">
                                         <div class="float-end">
                                             <i class="ri-eye-line widget-icon"></i>
@@ -69,7 +69,7 @@
                             </div> <!-- end col-->
 
                             <div class="col-xxl-3 col-sm-6">
-                                <div class="card widget-flat text-bg-primary">
+                                <div class="card widget-flat text-bg-warning">
                                     <div class="card-body">
                                         <div class="float-end">
                                             <i class="ri-group-2-line widget-icon"></i>

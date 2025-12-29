@@ -8,20 +8,20 @@
                             <!-- Logo light -->
                             <a href="index.html" class="logo-light">
                                 <span class="logo-lg">
-                                    <img src="{{asset('assets')}}/images/logo.png" alt="logo">
+                                <img src="{{ asset('assets/images/logo.png') }}" alt="logo" >
                                 </span>
                                 <span class="logo-sm">
-                                    <img src="{{asset('assets')}}/images/logo-sm.png" alt="small logo">
+                                <img src="{{ asset('assets/images/logo-sm.png') }}" alt="small logo">
                                 </span>
-                            </a>
+                                </a>
 
                             <!-- Logo Dark -->
                             <a href="index.html" class="logo-dark">
                                 <span class="logo-lg">
-                                    <img src="{{asset('assets')}}/images/logo-dark.png" alt="dark logo">
+                                    <img src="{{ asset('assets/images/logo-dark.png') }}" alt="dark logo">
                                 </span>
                                 <span class="logo-sm">
-                                    <img src="{{asset('assets')}}/images/logo-sm.png" alt="small logo">
+                                    <img src="{{ asset('assets/images/logo-sm.png') }}" alt="small logo">
                                 </span>
                             </a>
                         </div>
@@ -68,34 +68,38 @@
                         <li class="dropdown">
                             <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button"
                                 aria-haspopup="false" aria-expanded="false">
-                                <img src="{{asset('assets')}}/images/flags/us.jpg" alt="user-image" class="me-0 me-sm-1" height="12">
-                                <span class="align-middle d-none d-lg-inline-block">English</span> <i
+                                <img src="{{ asset('assets/images/flags/Bangladesh.jpg') }}" alt="user-image" class="me-0 me-sm-1" height="12">
+                                <span class="align-middle d-none d-lg-inline-block">Bengali</span> <i
                                     class="ri-arrow-down-s-line d-none d-sm-inline-block align-middle"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated">
 
                                 <!-- item-->
                                 <a href="javascript:void(0);" class="dropdown-item">
-                                    <img src="{{asset('assets')}}/images/flags/germany.jpg" alt="user-image" class="me-1" height="12"> <span
+                                    <img src="{{ asset('assets/images/flags/germany.jpg') }}" alt="user-image" class="me-1" height="12"> <span
                                         class="align-middle">German</span>
                                 </a>
 
                                 <!-- item-->
                                 <a href="javascript:void(0);" class="dropdown-item">
-                                    <img src="{{asset('assets')}}/images/flags/italy.jpg" alt="user-image" class="me-1" height="12"> <span
+                                    <img src="{{ asset('assets/images/flags/italy.jpg') }}" alt="user-image" class="me-1" height="12"> <span
                                         class="align-middle">Italian</span>
                                 </a>
 
                                 <!-- item-->
                                 <a href="javascript:void(0);" class="dropdown-item">
-                                    <img src="{{asset('assets')}}/images/flags/spain.jpg" alt="user-image" class="me-1" height="12"> <span
+                                    <img src="{{ asset('assets/images/flags/spain.jpg') }}" alt="user-image" class="me-1" height="12"> <span
                                         class="align-middle">Spanish</span>
                                 </a>
 
                                 <!-- item-->
                                 <a href="javascript:void(0);" class="dropdown-item">
-                                    <img src="{{asset('assets')}}/images/flags/russia.jpg" alt="user-image" class="me-1" height="12"> <span
+                                    <img src="{{ asset('assets/images/flags/russia.jpg') }}" alt="user-image" class="me-1" height="12"> <span
                                         class="align-middle">Russian</span>
+                                </a>
+                                <a href="javascript:void(0);" class="dropdown-item">
+                                    <img src="{{ asset('assets/images/flags/us.jpg') }}" alt="user-image" class="me-1" height="12"> <span
+                                        class="align-middle">English</span>
                                 </a>
 
                             </div>
@@ -130,7 +134,7 @@
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0">
                                                     <div class="notify-icon">
-                                                        <img src="{{asset('assets')}}/images/users/avatar-1.jpg" class="img-fluid rounded-circle"
+                                                        <img src="{{ asset('assets/images/users/avatar-1.jpg') }}" class="img-fluid rounded-circle"
                                                             alt="" />
                                                     </div>
                                                 </div>
@@ -151,7 +155,7 @@
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0">
                                                     <div class="notify-icon">
-                                                        <img src="{{asset('assets')}}/images/users/avatar-2.jpg" class="img-fluid rounded-circle"
+                                                        <img src="{{ asset('assets/images/users/avatar-2.jpg') }}" class="img-fluid rounded-circle"
                                                             alt="" />
                                                     </div>
                                                 </div>
@@ -171,7 +175,7 @@
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0">
                                                     <div class="notify-icon">
-                                                        <img src="{{asset('assets')}}/images/users/avatar-3.jpg" class="img-fluid rounded-circle"
+                                                        <img src="{{ asset('assets/images/users/avatar-3.jpg') }}" class="img-fluid rounded-circle"
                                                             alt="" />
                                                     </div>
                                                 </div>
@@ -191,7 +195,7 @@
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0">
                                                     <div class="notify-icon">
-                                                        <img src="{{asset('assets')}}/images/users/avatar-4.jpg" class="img-fluid rounded-circle"
+                                                        <img src="{{ asset('assets/images/users/avatar-4.jpg') }}" class="img-fluid rounded-circle"
                                                             alt="" />
                                                     </div>
                                                 </div>
@@ -212,7 +216,7 @@
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0">
                                                     <div class="notify-icon">
-                                                        <img src="{{asset('assets')}}/images/users/avatar-5.jpg" class="img-fluid rounded-circle"
+                                                        <img src="{{ asset('assets/images/users/avatar-5.jpg') }}" class="img-fluid rounded-circle"
                                                             alt="" />
                                                     </div>
                                                 </div>
@@ -342,10 +346,10 @@
                             <a class="nav-link dropdown-toggle arrow-none nav-user" data-bs-toggle="dropdown" href="#" role="button"
                                 aria-haspopup="false" aria-expanded="false">
                                 <span class="account-user-avatar">
-                                    <img src="{{asset('assets')}}/images/users/avatar-1.jpg" alt="user-image" width="32" class="rounded-circle">
+                                    <img src="{{ asset('assets/images/users/avatar-1.jpg') }}" alt="user-image" width="32" class="rounded-circle">
                                 </span>
                                 <span class="d-lg-block d-none">
-                                    <h5 class="my-0 fw-normal">Thomson <i
+                                    <h5 class="my-0 fw-normal">POLLOB AHMED SAGOR <i
                                             class="ri-arrow-down-s-line d-none d-sm-inline-block align-middle"></i></h5>
                                 </span>
                             </a>
