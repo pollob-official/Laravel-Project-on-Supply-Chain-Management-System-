@@ -16,11 +16,13 @@ class UserNotification extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public $customer;
+    public function __construct($customer)
     {
-        //
+        $this->customer= $customer;
     }
 
+    
     /**
      * Get the message envelope.
      */

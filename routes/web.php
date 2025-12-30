@@ -89,9 +89,9 @@ Auth::routes();
 Route::match(['get', 'post'], '/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::get("sendmail", function(){
-     Mail::to("idbpollob@gmail.com")->send(new UserNotification);
-           return "Mail has been sent successfully";
-    });
+// Route::get("sendmail", function(){
+//      Mail::to("idbpollob@gmail.com")->send(new UserNotification("Pollob"));
+//            return "Mail has been sent successfully";
+//     });
 
 

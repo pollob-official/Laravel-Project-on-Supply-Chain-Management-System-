@@ -1,5 +1,5 @@
      <!-- ========== Topbar Start ========== -->
-            <div class="navbar-custom">
+            <div class="navbar-custom" style="background: linear-gradient(90deg, #d4670e, #46a50f);">
                 <div class="topbar container-fluid">
                     <div class="d-flex align-items-center gap-1">
 
