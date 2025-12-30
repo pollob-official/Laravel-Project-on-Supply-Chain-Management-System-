@@ -209,3 +209,10 @@ php artisan make:controller RoleController --resource
 npm install
 npm run dev
 npm run build } -->
+
+
+composer require laravel/ui
+php artisan ui bootstrap --auth
+
+
+
