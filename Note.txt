@@ -23,3 +23,34 @@ then>
 composer require laravel/ui
 php artisan ui bootstrap --auth
 
+
+
+#gmail >
+    accunt setting>
+        security & sign in>
+            2 step verification > app passwords > copy ......
+
+then...
+
+.env file >
+
+1. APP_NAME="Supply Chain Management System App"
+
+51. MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=idbpollob@gmail.com
+MAIL_PASSWORD="pyyi twsh lzoa lizi"
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=scms@gmail.com
+58. MAIL_FROM_NAME="${APP_NAME}"
+
+php artisan make:mail UserNotification
+
+App>Mail> UserNotification >37 no line>
+ public function content(): Content
+    {
+        return new Content(
+            view: 'emails.userNotification',
+        );
+    }

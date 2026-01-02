@@ -1,5 +1,6 @@
-     <!-- ========== Topbar Start ========== -->
-            <div class="navbar-custom">
+      <!-- ========== Topbar Start ========== -->
+         <div class="navbar-custom" style="background: linear-gradient(90deg, #11998e, #38ef7d);">
+
                 <div class="topbar container-fluid">
                     <div class="d-flex align-items-center gap-1">
 
@@ -384,7 +385,7 @@
                                 </a>
 
                                 <!-- item-->
-                                <a href="auth-logout-2.html" class="dropdown-item">
+                                <a href="{{ url('/logout') }}" class="dropdown-item">
                                     <i class="ri-logout-box-line fs-18 align-middle me-1"></i>
                                     <span>Logout</span>
                                 </a>
