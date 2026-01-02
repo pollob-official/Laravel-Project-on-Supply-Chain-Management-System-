@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\UserNotification;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class CustomerController extends Controller
@@ -106,6 +108,8 @@ class CustomerController extends Controller
         $customer->address = $request->address;
         $customer->photo = $imgname;
         $customer->save();
+
+        Mail::to($request->email)->send(new UserNotification($customer));
 
         //   echo "saved";
         return redirect("customer")->with("success", "Customer Created successfully");
