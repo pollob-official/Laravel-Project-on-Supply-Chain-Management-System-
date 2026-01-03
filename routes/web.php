@@ -4,7 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EventTypeController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\HomeCotroller;
+use App\Http\Controllers\StakeholderController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use App\Mail\UserNotification;
@@ -94,4 +94,17 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 //            return "Mail has been sent successfully";
 //     });
 
+Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
+
+// Route::resource('stakeholder', StakeholderController::class);
+
+Route::prefix("stakeholder")->controller(StakeholderController::class)->group(function(){
+    Route::get("/", "index");
+    Route::get("create", "create");
+    Route::post("store", "store");
+    Route::get("edit/{id}", "edit");
+    Route::post("update/{id}", "update");
+    Route::get("delete/{id}", "delete");
+    Route::post("save", "save");
+});
 
