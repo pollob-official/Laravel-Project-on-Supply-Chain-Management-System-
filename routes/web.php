@@ -3,10 +3,14 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EventTypeController;
+use App\Http\Controllers\FarmerController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MillersSupplierController;
+use App\Http\Controllers\RetailerController;
 use App\Http\Controllers\StakeholderController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WholesalerController;
 use App\Mail\UserNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -101,3 +105,54 @@ Route::prefix("stakeholder")->controller(StakeholderController::class)->group(fu
     Route::delete("force-delete/{id}", "force_delete");
 });
 
+Route::prefix("farmer")->controller(FarmerController::class)->group(function(){
+    Route::get("/", "index");
+    Route::get("create", "create");
+    Route::post("store", "store");
+    Route::get("edit/{id}", "edit");
+    Route::post("update/{id}", "update");
+    Route::delete("delete/{id}", "delete");
+    Route::get("trashed", "trashed");
+    Route::get("restore/{id}", "restore");
+    Route::delete("force-delete/{id}", "force_delete");
+});
+
+
+// ২. Wholesaler Routes
+Route::prefix("wholesaler")->controller(WholesalerController::class)->group(function(){
+    Route::get("/", "index");
+    Route::get("create", "create");
+    Route::post("store", "store");
+    Route::get("edit/{id}", "edit");
+    Route::post("update/{id}", "update");
+    Route::delete("delete/{id}", "delete");
+    Route::get("trashed", "trashed");
+    Route::get("restore/{id}", "restore");
+    Route::get("force-delete/{id}", "force_delete");
+});
+
+// ৩. Retailer Routes
+Route::prefix("retailer")->controller(RetailerController::class)->group(function(){
+    Route::get("/", "index");
+    Route::get("create", "create");
+    Route::post("store", "store");
+    Route::get("edit/{id}", "edit");
+    Route::post("update/{id}", "update");
+    Route::delete("delete/{id}", "delete");
+    Route::get("trashed", "trashed");
+    Route::get("restore/{id}", "restore");
+    Route::get("force-delete/{id}", "force_delete");
+});
+
+// ৪. Millers & Supplier Routes
+Route::prefix("miller")->controller(MillersSupplierController::class)->group(function(){
+    Route::get("/", "index");
+    Route::get("create", "create");
+    Route::post("store", "store");
+    Route::get("edit/{id}", "edit");
+    Route::post("update/{id}", "update");
+    Route::delete("delete/{id}", "delete");
+    Route::get("trashed", "trashed");
+    Route::get("restore/{id}", "restore");
+    Route::get("force-delete/{id}", "force_delete");
+});

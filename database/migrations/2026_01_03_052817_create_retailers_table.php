@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('tin_no')->nullable();
             $table->string('market_name')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->index('stakeholder_id');
         });

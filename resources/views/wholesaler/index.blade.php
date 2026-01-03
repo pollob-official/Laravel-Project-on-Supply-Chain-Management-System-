@@ -2,7 +2,7 @@
 @section("content")
     <x-alert/>
 
-    <h1 class="mb-2">Stakeholder List</h1>
+    <h3 class="mb-2">Stakeholder List</h3>
 
     <form action="{{URL("stakeholder")}}" method="GET">
         <div class="mb-3 ">
