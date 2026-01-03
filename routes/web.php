@@ -18,16 +18,6 @@ Route::get('/', function () {
 
 
 
-// Route::get('/students', function () {
-//     return view ("students");
-// });
-
-// Route::get('/student/{name}/{id}', function ($name, $id) {
-//   $student=["Hasan", "Masud", "M A Jalil"];
-//     return view ("students", ["id"=>$id, "name"=>$name]);
-// });
-
-
 Route::get("/students", [StudentController::class, "index"]);
 Route::get("/student/create", [StudentController::class, "create"]);
 Route::get("/student/find/{id}", [StudentController::class, "find"]);
@@ -40,7 +30,7 @@ Route::get("/student/delete/{id}", [StudentController::class, "delete"]);
 Route::get("/event_type", [EventTypeController::class, "index"]);
 Route::get("/event_type/create", [EventTypeController::class, "create"]);
 Route::post("/event_type/save", [EventTypeController::class, "save"]);
-// Route::get("/event_type/find/{id}", [EventTypeController::class, "find"]);
+Route::get("/event_type/find/{id}", [EventTypeController::class, "find"]);
 Route::get("/event_type/edit/{id}", [EventTypeController::class, "edit"]);
 Route::put("/event_type/update/{id}", [EventTypeController::class, "update"]);
 Route::delete("/event_type/delete/{id}", [EventTypeController::class, "delete"]);
@@ -104,7 +94,10 @@ Route::prefix("stakeholder")->controller(StakeholderController::class)->group(fu
     Route::post("store", "store");
     Route::get("edit/{id}", "edit");
     Route::post("update/{id}", "update");
-    Route::get("delete/{id}", "delete");
+    Route::delete("delete/{id}", "delete");
     Route::post("save", "save");
+    Route::get("trashed", "trashed");
+    Route::get("restore/{id}", "restore");
+    Route::delete("force-delete/{id}", "force_delete");
 });
 

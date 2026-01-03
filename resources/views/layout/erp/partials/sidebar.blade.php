@@ -1,7 +1,7 @@
 <div class="leftside-menu">
 
     <a href="/" class="logo logo-light text-center">
-        <span class="logo-lg"><img src="{{ asset('assets/images/logo.png') }}" alt="logo" style="height: 60px; width: 200px;"></span>
+        <span class="logo-lg"><img src="{{ asset('assets/images/logo.png') }}" alt="logo" style="height: 50px; width: 180px;"></span>
         <span class="logo-sm"><img src="{{ asset('assets/images/logo-sm.png') }}" alt="small logo" style="height: 30px; width: 40px;"></span>
     </a>
 

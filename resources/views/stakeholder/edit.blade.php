@@ -1,45 +1,79 @@
-
 @extends("layout.erp.app")
 @section("content")
 
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Edit Stakeholder ({{ ucfirst($stakeholder->role) }})</h3>
+        <a href="{{ URL('stakeholder') }}" class="btn btn-secondary">Back to List</a>
+    </div>
 
-<form action="{{URL("customer/update", $customer->id)}}" method="POST" enctype="multipart/form-data" class="p-4 border rounded">
-   @csrf
-  <!-- Name -->
-  <div class="mb-3">
-    <label class="form-label">Name</label>
-    <input value="{{$customer->name}}"  type="text" name="name" class="form-control" placeholder="Enter name">
-  </div>
+    <form action="{{ URL('stakeholder/update', $stakeholder->id) }}" method="POST" class="p-4 border rounded shadow-sm bg-light">
+        @csrf
 
-  <!-- Email -->
-  <div class="mb-3">
-    <label class="form-label">Email</label>
-    <input value="{{$customer->email}}" type="email" name="email" class="form-control" placeholder="Enter email">
-  </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">Name</label>
+                <input value="{{ $stakeholder->name }}" type="text" name="name" class="form-control" required>
+            </div>
 
-  <!-- Phone -->
-  <div class="mb-3">
-    <label class="form-label">Phone</label>
-    <input value="{{$customer->phone}}" type="text" name="phone" class="form-control" placeholder="Enter phone">
-  </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">Email</label>
+                <input value="{{ $stakeholder->email }}" type="email" name="email" class="form-control">
+            </div>
 
-  <!-- Address -->
-  <div class="mb-3">
-    <label class="form-label">Address</label>
-    <textarea  name="address" class="form-control" rows="3" placeholder="Enter address"> {{$customer->address}}</textarea>
-  </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">Phone</label>
+                <input value="{{ $stakeholder->phone }}" type="text" name="phone" class="form-control" required>
+            </div>
 
+            <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">NID Number</label>
+                <input value="{{ $stakeholder->nid }}" type="text" name="nid" class="form-control">
+            </div>
 
-  <div class="mb-3">
-    <label class="form-label">Photo</label>
-    <input type="file" name="photo" class="form-control">
-  </div>
+            <div class="col-md-12 mb-3">
+                <label class="form-label font-weight-bold">Address</label>
+                <textarea name="address" class="form-control" rows="2">{{ $stakeholder->address }}</textarea>
+            </div>
 
-  <!-- Action -->
-  <button type="submit" class="btn btn-primary">
-    Update Customer
-  </button>
+            <hr>
 
-</form>
+            @if($stakeholder->role == 'farmer')
+                <div class="col-md-6 mb-3">
+                    <label class="form-label text-success font-weight-bold">Land Area (Acre)</label>
+                    <input value="{{ $stakeholder->farmer->land_area ?? '' }}" type="text" name="land_area" class="form-control border-success">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label text-success font-weight-bold">Farmer Card No</label>
+                    <input value="{{ $stakeholder->farmer->farmer_card_no ?? '' }}" type="text" name="farmer_card_no" class="form-control border-success">
+                </div>
+
+            @elseif($stakeholder->role == 'miller')
+                <div class="col-md-12 mb-3">
+                    <label class="form-label text-info font-weight-bold">Factory License Number</label>
+                    <input value="{{ $stakeholder->miller->factory_license ?? '' }}" type="text" name="factory_license" class="form-control border-info">
+                </div>
+
+            @elseif($stakeholder->role == 'wholesaler')
+                <div class="col-md-12 mb-3">
+                    <label class="form-label text-warning font-weight-bold">Trade License Number</label>
+                    <input value="{{ $stakeholder->wholesaler->trade_license ?? '' }}" type="text" name="trade_license" class="form-control border-warning">
+                </div>
+
+            @elseif($stakeholder->role == 'retailer')
+                <div class="col-md-12 mb-3">
+                    <label class="form-label text-primary font-weight-bold">Shop Name</label>
+                    <input value="{{ $stakeholder->retailer->shop_name ?? '' }}" type="text" name="shop_name" class="form-control border-primary">
+                </div>
+            @endif
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary px-5">
+                <i class="bi bi-save"></i> Update Stakeholder Info
+            </button>
+        </div>
+    </form>
+</div>
 
 @endsection

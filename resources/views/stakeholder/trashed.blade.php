@@ -1,81 +1,64 @@
-
-
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
-    <title>Customer</title>
-    <style>
-
-
-    </style>
-  </head>
-  <body>
-
+@extends("layout.erp.app")
+@section("content")
     <x-alert/>
 
-    <h3>Customer List</h3>
-    <x-button :url="URL('customer/create')"  type="primary">Create Customer</x-button>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Trashed Stakeholders</h3>
+        <div>
+            <a href="{{ URL('stakeholder') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
 
-   <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">name</th>
-      <th scope="col">email</th>
-      <th scope="col">phone</th>
-      <th scope="col">address</th>
-      <th scope="col">photo</th>
-      <th scope="col">Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    @foreach($customers as $customer)
-       <tr>
-      <th scope="row">{{$customer->id}}</th>
-      <td>{{$customer->name}}</td>
-      <td>{{$customer->email}}</td>
-      <td>{{$customer->phone}}</td>
-      <td>{{$customer->address}}</td>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">#ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Role</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Deleted At</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($stakeholders as $stakeholder)
+                <tr>
+                    <td>{{ $stakeholder->id }}</td>
+                    <td>{{ $stakeholder->name }}</td>
+                    <td>
+                        <span class="badge bg-secondary">{{ ucfirst($stakeholder->role) }}</span>
+                    </td>
+                    <td>{{ $stakeholder->phone }}</td>
+                    <td>{{ $stakeholder->deleted_at->format('d M, Y h:i A') }}</td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="{{ URL('stakeholder/restore/'.$stakeholder->id) }}" class="btn btn-sm btn-success">
+                                Restore
+                            </a>
 
-      {{-- <td> <img src="{{asset("storage" )}}/{{$customer->photo}}" alt="" srcset="" width="100">       </td> --}}
-      <td> <img src="{{asset("storage/photo/customer" )}}/{{$customer->photo}}" alt="" srcset="" width="100">       </td>
-      <td class="btn btn-group">
-         <a class="btn btn-secondary" href="{{URL("customer/restore", $customer->id)}}">Restore</a>
+                            <form action="{{ URL('stakeholder/force-delete/'.$stakeholder->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this permanently?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="6" class="text-center py-4 text-muted">
+                        No trashed records found.
+                    </td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
 
-         <form action="{{URL("customer/force-delete", $customer->id)}}" method="post">
-            @csrf
-            @method("delete")
-             <button onclick="return confirm(`Are you sure`)" type="submit" class="btn btn-danger">Delete</button>
-         </form>
-
-
-    </td>
-
-    </tr>
-    @endforeach
-  </tbody>
-</table>
-
-<div class="">
-    {{ $customers->links() }}
-</div>
-
-    <!-- Optional JavaScript; choose one of the two! -->
-
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-    -->
-  </body>
-</html>
+    <div class="mt-3">
+        {{ $stakeholders->links() }}
+    </div>
+@endsection

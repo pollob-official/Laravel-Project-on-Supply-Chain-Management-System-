@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('stakeholders', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique()->nullable();
-            $table->string('phone')->unique();
+            $table->string('email')->nullable();
+            $table->string('phone');
             $table->enum('role', ['farmer', 'miller', 'wholesaler', 'retailer']);
             $table->text('address')->nullable();
             $table->string('nid')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

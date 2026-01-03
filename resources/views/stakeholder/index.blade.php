@@ -2,21 +2,23 @@
 @section("content")
     <x-alert/>
 
-    <h1>Stakeholder List</h1>
+    <h3 class="mb-2">Stakeholder List</h3>
 
     <form action="{{URL("stakeholder")}}" method="GET">
-        <div class="mb-3">
-            <input value="{{request("search")}}" type="text" class="form-control" id="search" name="search" placeholder="Search stakeholders">
+        <div class="mb-3 ">
+            <input value="{{request("search")}}" type="text" class="form-control" id="search" name="search" placeholder="Search by name, phone or role...">
             <button type="submit" class="btn btn-primary">Search</button>
         </div>
     </form>
 
-
     <x-button :url="URL('stakeholder/create')" type="primary">
         <i class="bi bi-plus-lg"></i> Add Stakeholder
     </x-button>
+    <a href="{{ URL('stakeholder/trashed') }}" class="btn btn-outline-danger">
+    <i class="bi bi-trash"></i> View Trash
+</a>
 
-    <table class="table">
+    <table class="table mt-3">
         <thead>
             <tr>
                 <th scope="col">#</th>
@@ -29,36 +31,50 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($stakeholders as $stakeholder)
+            @if(count($stakeholders) > 0)
+                @foreach ($stakeholders as $stakeholder)
+                    <tr>
+                        <td>{{ $stakeholder->id }}</td>
+                        <td>{{ $stakeholder->name }}</td>
+                        <td>
+                            @php
+                                $color = [
+                                    'farmer' => 'success',
+                                    'miller' => 'info',
+                                    'wholesaler' => 'warning',
+                                    'retailer' => 'primary'
+                                ][$stakeholder->role] ?? 'secondary';
+                            @endphp
+                            <span class="badge bg-{{$color}}">{{ ucfirst($stakeholder->role) }}</span>
+                        </td>
+                        <td>{{ $stakeholder->email ?? 'N/A' }}</td>
+                        <td>{{ $stakeholder->phone }}</td>
+                        <td>{{ Str::limit($stakeholder->address, 30) }}</td>
+                        <td>
+                            <div class="d-flex gap-1">
+                                <a href="{{ URL('stakeholder/edit/'.$stakeholder->id) }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <form action="{{ URL('stakeholder/delete/'.$stakeholder->id) }}" method="POST" onsubmit="return confirm('Are you sure?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            @else
                 <tr>
-                    <td>{{ $stakeholder->id }}</td>
-                    <td>{{ $stakeholder->name }}</td>
-                    <td>
-                        {{-- রোল অনুযায়ী ছোট ব্যাজ --}}
-                        <span class="badge {{ $stakeholder->role == 'farmer' ? 'bg-success' : 'bg-info' }}">
-                            {{ ucfirst($stakeholder->role) }}
-                        </span>
-                    </td>
-                    <td>{{ $stakeholder->email }}</td>
-                    <td>{{ $stakeholder->phone }}</td>
-                    <td>{{ $stakeholder->address }}</td>
-                    <td>
-                        <div class="d-flex">
-                            <a href="{{ URL('stakeholder/edit/'.$stakeholder->id) }}" class="btn btn-sm btn-info me-1">Edit</a>
-
-                            <form action="{{ URL('stakeholder/delete/'.$stakeholder->id) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
-                            </form>
-                        </div>
-                    </td>
+                    <td colspan="7" class="text-center text-danger">No Data Found</td>
                 </tr>
-            @endforeach
+            @endif
         </tbody>
     </table>
 
-    <div class="">
+    <div class="mt-3">
         {{ $stakeholders->appends(request()->query())->links() }}
     </div>
 @endsection

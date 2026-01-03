@@ -3,12 +3,7 @@
 @section("content")
     <x-alert/>
 
-<h3>Customer List</h3>
-
-  
-
-
-
+<h1>Customer List</h1>
 
   <form action="{{URL("customer")}}" method="GET">
         <div class="mb-3">
