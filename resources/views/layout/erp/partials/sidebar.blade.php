@@ -82,7 +82,7 @@
                 </a>
                 <div class="collapse" id="sidebarFlow">
                     <ul class="side-nav-second-level">
-                        <li><a href="#">Update Stage (Handover)</a></li>
+                        <li><a href="{{URL("journey")}}">Update Stage (Handover)</a></li>
                         <li><a href="#">Cost & Profit Entry</a></li>
                         <li><a href="#">Live Tracking History</a></li>
                     </ul>

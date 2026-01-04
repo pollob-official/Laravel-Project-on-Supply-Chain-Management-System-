@@ -8,6 +8,7 @@ use App\Http\Controllers\FarmerController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MillersSupplierController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductJourneyController;
 use App\Http\Controllers\RetailerController;
 use App\Http\Controllers\StakeholderController;
 use App\Http\Controllers\StudentController;
@@ -24,7 +25,7 @@ Route::get('/', function () {
 });
 
 
-
+// Student Routes
 Route::get("/students", [StudentController::class, "index"]);
 Route::get("/student/create", [StudentController::class, "create"]);
 Route::get("/student/find/{id}", [StudentController::class, "find"]);
@@ -32,8 +33,7 @@ Route::get("/student/edit/{id}", [StudentController::class, "edit"]);
 Route::get("/student/update/{id}/{name}", [StudentController::class, "update"]);
 Route::delete("/student/delete/{id}", [StudentController::class, "delete"]);
 
-// Event_Type:
-
+// Event Type Routes
 Route::get("/event_type", [EventTypeController::class, "index"]);
 Route::get("/event_type/create", [EventTypeController::class, "create"]);
 Route::post("/event_type/save", [EventTypeController::class, "save"]);
@@ -43,7 +43,7 @@ Route::put("/event_type/update/{id}", [EventTypeController::class, "update"]);
 Route::delete("/event_type/delete/{id}", [EventTypeController::class, "delete"]);
 
 
-
+//customer Routes
 Route::prefix("customer")->controller(CustomerController::class)->group(function(){
     Route::get("/", "index");
     Route::get("create", "create");
@@ -56,6 +56,7 @@ Route::prefix("customer")->controller(CustomerController::class)->group(function
     Route::delete("force-delete/{id}", "force_delete");
 });
 
+// User Routes
 Route::prefix("user")->controller(UserController::class)->group(function(){
     Route::get("/", "index");
     Route::get("create", "create");
@@ -92,6 +93,7 @@ Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard'
 
 // Route::resource('stakeholder', StakeholderController::class);
 
+// Stakeholder Routes
 Route::prefix("stakeholder")->controller(StakeholderController::class)->group(function(){
     Route::get("/", "index");
     Route::get("create", "create");
@@ -105,6 +107,7 @@ Route::prefix("stakeholder")->controller(StakeholderController::class)->group(fu
     Route::delete("force-delete/{id}", "force_delete");
 });
 
+// ১. Farmer Routes
 Route::prefix("farmer")->controller(FarmerController::class)->group(function(){
     Route::get("/", "index");
     Route::get("create", "create");
@@ -160,7 +163,7 @@ Route::prefix("miller")->controller(MillersSupplierController::class)->group(fun
     Route::get("restore/{id}", "restore");
     Route::delete("force-delete/{id}", "force_delete");
 });
-
+// ৫. Product Routes
 Route::prefix("product")->controller(ProductController::class)->group(function(){
     Route::get("/", "index");
     Route::get("create", "create");
@@ -174,6 +177,7 @@ Route::prefix("product")->controller(ProductController::class)->group(function()
     Route::delete("force-delete/{id}", "force_delete");
 });
 
+//Category Routes
 Route::prefix("category")->controller(CategoryController::class)->group(function(){
     Route::get("/", "index");
     Route::get("create", "create");
@@ -184,6 +188,7 @@ Route::prefix("category")->controller(CategoryController::class)->group(function
     Route::delete("delete/{id}", "delete");
 });
 
+// Unit Routes
 Route::prefix("unit")->controller(UnitController::class)->group(function(){
     Route::get("/", "index");
     Route::get("create", "create");
@@ -193,3 +198,18 @@ Route::prefix("unit")->controller(UnitController::class)->group(function(){
     Route::post("update/{id}", "update");
     Route::delete("delete/{id}", "delete");
 });
+
+// Product Journey / Handover Routes
+Route::prefix("journey")->controller(ProductJourneyController::class)->group(function(){
+    Route::get("/", "index");
+    Route::get("create", "create");
+    Route::post("save", "save");
+    Route::get("edit/{id}", "edit");
+    Route::post("update/{id}", "update");
+    Route::delete("delete/{id}", "delete");
+    Route::get("trashed", "trashed");
+    Route::get("restore/{id}", "restore");
+    Route::delete("force-delete/{id}", "force_delete");
+    Route::get("trace/{tracking_no}", "public_trace");
+});
+

@@ -55,6 +55,5 @@ App>Mail> UserNotification >37 no line>
         );
     }
 
-
-
-//amar theme cilo primary stage e farm/field/farmer theke raw material/raw product collect kora, jeta primary stakeholder table e thakbe, farmer seta production cost+benifit dhore ekta base price add kore sell korbe, seta next step e supplier/millers purchase korbe,  then seta wholesaler purchase korbe, then, retailer er kace jabe, tarpor seta final consumer buy korbe,  kono stage e kew abnormal profit na kore & consumer proper price e product kinte pare, last step e product jouney+cost add kore profit margin full info customer QR scanner diye dekhte parbe.  
+// QR code
+composer require simplesoftwareio/simple-qrcode
