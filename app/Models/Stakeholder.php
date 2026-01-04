@@ -11,6 +11,8 @@ class Stakeholder extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $guarded = [];
+
     // ১. কৃষকের তথ্যের সাথে রিলেশন
     public function farmer()
     {

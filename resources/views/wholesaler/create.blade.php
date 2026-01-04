@@ -1,11 +1,16 @@
 @extends("layout.erp.app")
 @section("content")
 
-    <h1>Create Stakeholder</h1>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1><i class="bi bi-shop text-warning"></i> Create Wholesaler</h1>
+        <a href="{{URL('wholesaler')}}" class="btn btn-secondary shadow-sm">
+            <i class="bi bi-arrow-left"></i> Back to List
+        </a>
+    </div>
 
     @if ($errors->any())
     <div class="alert alert-danger">
-        <ul>
+        <ul class="mb-0">
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
             @endforeach
@@ -13,101 +18,72 @@
     </div>
     @endif
 
-<form action="{{URL("stakeholder/save")}}" method="POST" class="p-4 border rounded shadow-sm bg-light">
-   @csrf
+    <form action="{{URL("wholesaler/store")}}" method="POST" class="p-4 border rounded shadow-sm bg-light">
+        @csrf
 
-  <div class="row">
-      <div class="col-md-6 mb-3">
-        <label class="form-label font-weight-bold">Name <span class="text-danger">*</span></label>
-        <input type="text" name="name" class="form-control" placeholder="Enter name" value="{{old('name')}}">
-        @error("name")
-            <span class="text-danger">{{$message}}</span>
-        @enderror
-      </div>
+        <h5 class="text-muted mb-3">General Information</h5>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">Name <span class="text-danger">*</span></label>
+                <input type="text" name="name" class="form-control" placeholder="Enter wholesaler/business name" value="{{old('name')}}">
+                @error("name")
+                    <span class="text-danger small">{{$message}}</span>
+                @enderror
+            </div>
 
-      <div class="col-md-6 mb-3">
-        <label class="form-label font-weight-bold">Stakeholder Type <span class="text-danger">*</span></label>
-        <select name="role" id="role_id" class="form-select form-control" onchange="showFields(this.value)">
-            <option value="">Select Type</option>
-            <option value="farmer">Farmer (কৃষক)</option>
-            <option value="miller">Miller / Supplier (মিলার)</option>
-            <option value="wholesaler">Wholesaler (পাইকার)</option>
-            <option value="retailer">Retailer (খুচরা বিক্রেতা)</option>
-        </select>
-      </div>
-  </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">Phone Number <span class="text-danger">*</span></label>
+                <input type="text" name="phone" class="form-control" placeholder="Enter mobile number" value="{{old('phone')}}">
+                @error("phone")
+                    <span class="text-danger small">{{$message}}</span>
+                @enderror
+            </div>
+        </div>
 
-  <div class="row">
-      <div class="col-md-6 mb-3">
-        <label class="form-label">Email</label>
-        <input type="email" name="email" class="form-control" placeholder="Enter email" value="{{old('email')}}">
-      </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">Email Address</label>
+                <input type="email" name="email" class="form-control" placeholder="Enter email" value="{{old('email')}}">
+            </div>
 
-      <div class="col-md-6 mb-3">
-        <label class="form-label">Phone <span class="text-danger">*</span></label>
-        <input type="text" name="phone" class="form-control" placeholder="Enter phone" value="{{old('phone')}}">
-      </div>
-  </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">NID Number</label>
+                <input type="text" name="nid" class="form-control" placeholder="Enter NID" value="{{old('nid')}}">
+            </div>
+        </div>
 
-  <div class="mb-3">
-    <label class="form-label">NID Number</label>
-    <input type="text" name="nid" class="form-control" placeholder="Enter NID Number">
-  </div>
+        <div class="mb-3">
+            <label class="form-label font-weight-bold">Office/Warehouse Address</label>
+            <textarea name="address" class="form-control" rows="2" placeholder="Enter full address">{{old('address')}}</textarea>
+        </div>
 
-  <div class="mb-3">
-    <label class="form-label">Address</label>
-    <textarea name="address" class="form-control" rows="2" placeholder="Enter full address"></textarea>
-  </div>
+        <hr class="my-4">
 
-  <div id="dynamic_fields" class="p-3 mb-3 border rounded bg-white" style="display:none;">
+        <h5 class="text-warning mb-3"><i class="bi bi-info-circle"></i> Wholesaler Business Details</h5>
+        <div class="row bg-white p-3 border rounded mx-0">
+            <div class="col-md-4 mb-3">
+                <label class="form-label font-weight-bold text-dark">Trade License <span class="text-danger">*</span></label>
+                <input type="text" name="trade_license" class="form-control border-warning" placeholder="License Number" value="{{old('trade_license')}}">
+            </div>
 
-      <div id="farmer_div" class="specific_div" style="display:none;">
-          <h5 class="text-success">Farmer Extra Info</h5>
-          <div class="row">
-              <div class="col-md-6"><input type="text" name="land_area" class="form-control" placeholder="Land Area (e.g. 2 Acre)"></div>
-              <div class="col-md-6"><input type="text" name="farmer_card_no" class="form-control" placeholder="Farmer Card No"></div>
-          </div>
-      </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label font-weight-bold text-dark">Warehouse Location</label>
+                <input type="text" name="warehouse_location" class="form-control border-warning" placeholder="e.g. Dhaka, Karwan Bazar" value="{{old('warehouse_location')}}">
+            </div>
 
-      <div id="miller_div" class="specific_div" style="display:none;">
-          <h5 class="text-info">Miller Extra Info</h5>
-          <input type="text" name="factory_license" class="form-control" placeholder="Factory License Number">
-      </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label font-weight-bold text-dark">Total Manpower</label>
+                <input type="number" name="total_manpower" class="form-control border-warning" placeholder="Number of employees" value="{{old('total_manpower', 0)}}">
+            </div>
+        </div>
 
-      <div id="wholesaler_div" class="specific_div" style="display:none;">
-          <h5 class="text-warning text-dark">Wholesaler Extra Info</h5>
-          <input type="text" name="trade_license" class="form-control" placeholder="Trade License Number">
-      </div>
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary btn-lg px-5">
+                <i class="bi bi-save"></i> Save Wholesaler Profile
+            </button>
+            <button type="reset" class="btn btn-outline-secondary btn-lg">Reset Form</button>
+        </div>
 
-      <div id="retailer_div" class="specific_div" style="display:none;">
-          <h5 class="text-primary">Retailer Extra Info</h5>
-          <input type="text" name="shop_name" class="form-control" placeholder="Shop Name">
-      </div>
-
-  </div>
-
-  <div class="mt-4">
-      <button type="submit" class="btn btn-primary btn-lg">
-        Save Stakeholder
-      </button>
-      <a href="{{URL('stakeholder')}}" class="btn btn-secondary btn-lg">Cancel</a>
-  </div>
-
-</form>
-
-<script>
-    function showFields(role){
-        // প্রথমে সব ডিভ হাইড করো
-        document.getElementById('dynamic_fields').style.display = role ? 'block' : 'none';
-        let divs = document.getElementsByClassName('specific_div');
-        for(let i=0; i<divs.length; i++) divs[i].style.display = 'none';
-
-        // রোল অনুযায়ী ডিভ দেখাও
-        if(role == 'farmer') document.getElementById('farmer_div').style.display = 'block';
-        if(role == 'miller') document.getElementById('miller_div').style.display = 'block';
-        if(role == 'wholesaler') document.getElementById('wholesaler_div').style.display = 'block';
-        if(role == 'retailer') document.getElementById('retailer_div').style.display = 'block';
-    }
-</script>
+    </form>
 
 @endsection

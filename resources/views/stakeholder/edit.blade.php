@@ -35,7 +35,7 @@
                 <label class="form-label font-weight-bold">Address</label>
                 <textarea name="address" class="form-control" rows="2">{{ $stakeholder->address }}</textarea>
             </div>
-           
+
             <div class="col-md-6 mb-3">
                 <label class="form-label font-weight-bold">Role</label>
                 <select name="role" class="form-select" disabled> {{-- রোল সাধারণত এডিট করতে দেয়া হয় না --}}
@@ -83,6 +83,7 @@
             <button type="submit" class="btn btn-primary px-5">
                 <i class="bi bi-save"></i> Update Stakeholder Info
             </button>
+             <a href="{{ URL('stakeholder') }}" class="btn btn-outline-secondary px-4">Cancel</a>
         </div>
     </form>
 </div>

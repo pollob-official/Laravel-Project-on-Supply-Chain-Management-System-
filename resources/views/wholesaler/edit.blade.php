@@ -3,86 +3,69 @@
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3>Edit Stakeholder ({{ ucfirst($stakeholder->role) }})</h3>
-        <a href="{{ URL('stakeholder') }}" class="btn btn-secondary">Back to List</a>
+        <h3><i class="bi bi-pencil-square"></i> Edit Wholesaler Profile</h3>
+        <a href="{{ URL('wholesaler') }}" class="btn btn-secondary shadow-sm">
+            <i class="bi bi-arrow-left"></i> Back to List
+        </a>
     </div>
 
-    <form action="{{ URL('stakeholder/update', $stakeholder->id) }}" method="POST" class="p-4 border rounded shadow-sm bg-light">
+    <form action="{{ URL('wholesaler/update', $wholesaler->id) }}" method="POST" class="p-4 border rounded shadow-sm bg-light">
         @csrf
+        @method('PUT')
 
+        <h5 class="text-muted mb-3">Basic Information</h5>
         <div class="row">
             <div class="col-md-6 mb-3">
-                <label class="form-label font-weight-bold">Name</label>
-                <input value="{{ $stakeholder->name }}" type="text" name="name" class="form-control" required>
+                <label class="form-label font-weight-bold">Wholesaler Name</label>
+                <input value="{{ $wholesaler->name }}" type="text" name="name" class="form-control" required>
             </div>
 
             <div class="col-md-6 mb-3">
                 <label class="form-label font-weight-bold">Email</label>
-                <input value="{{ $stakeholder->email }}" type="email" name="email" class="form-control">
+                <input value="{{ $wholesaler->email }}" type="email" name="email" class="form-control">
             </div>
 
             <div class="col-md-6 mb-3">
                 <label class="form-label font-weight-bold">Phone</label>
-                <input value="{{ $stakeholder->phone }}" type="text" name="phone" class="form-control" required>
+                <input value="{{ $wholesaler->phone }}" type="text" name="phone" class="form-control" required>
             </div>
 
             <div class="col-md-6 mb-3">
                 <label class="form-label font-weight-bold">NID Number</label>
-                <input value="{{ $stakeholder->nid }}" type="text" name="nid" class="form-control">
+                <input value="{{ $wholesaler->nid }}" type="text" name="nid" class="form-control">
             </div>
 
             <div class="col-md-12 mb-3">
-                <label class="form-label font-weight-bold">Address</label>
-                <textarea name="address" class="form-control" rows="2">{{ $stakeholder->address }}</textarea>
+                <label class="form-label font-weight-bold">Full Address</label>
+                <textarea name="address" class="form-control" rows="2">{{ $wholesaler->address }}</textarea>
             </div>
-           
-            <div class="col-md-6 mb-3">
-                <label class="form-label font-weight-bold">Role</label>
-                <select name="role" class="form-select" disabled> {{-- রোল সাধারণত এডিট করতে দেয়া হয় না --}}
-                    <option value="farmer" {{ strtolower($stakeholder->role) == 'farmer' ? 'selected' : '' }}>Farmer</option>
-                    <option value="miller" {{ strtolower($stakeholder->role) == 'miller' ? 'selected' : '' }}>Miller</option>
-                    <option value="wholesaler" {{ strtolower($stakeholder->role) == 'wholesaler' ? 'selected' : '' }}>Wholesaler</option>
-                    <option value="retailer" {{ strtolower($stakeholder->role) == 'retailer' ? 'selected' : '' }}>Retailer</option>
-                </select>
-                <small class="text-muted">Role cannot be changed during update.</small>
+        </div>
+
+        <hr class="my-4">
+
+        <h5 class="text-warning mb-3"><i class="bi bi-shop"></i> Wholesaler Business Details</h5>
+        <div class="row bg-white p-3 border rounded mx-0">
+            <div class="col-md-4 mb-3">
+                <label class="form-label text-warning font-weight-bold">Trade License Number</label>
+                <input value="{{ $wholesaler->wholesaler->trade_license ?? '' }}" type="text" name="trade_license" class="form-control border-warning" placeholder="Enter license no">
             </div>
 
-            <hr>
+            <div class="col-md-4 mb-3">
+                <label class="form-label text-warning font-weight-bold">Warehouse Location</label>
+                <input value="{{ $wholesaler->wholesaler->warehouse_location ?? '' }}" type="text" name="warehouse_location" class="form-control border-warning" placeholder="e.g. Khatunganj, Chattogram">
+            </div>
 
-            @if($stakeholder->role == 'farmer')
-                <div class="col-md-6 mb-3">
-                    <label class="form-label text-success font-weight-bold">Land Area (Acre)</label>
-                    <input value="{{ $stakeholder->farmer->land_area ?? '' }}" type="text" name="land_area" class="form-control border-success">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label text-success font-weight-bold">Farmer Card No</label>
-                    <input value="{{ $stakeholder->farmer->farmer_card_no ?? '' }}" type="text" name="farmer_card_no" class="form-control border-success">
-                </div>
-
-            @elseif($stakeholder->role == 'miller')
-                <div class="col-md-12 mb-3">
-                    <label class="form-label text-info font-weight-bold">Factory License Number</label>
-                    <input value="{{ $stakeholder->miller->factory_license ?? '' }}" type="text" name="factory_license" class="form-control border-info">
-                </div>
-
-            @elseif($stakeholder->role == 'wholesaler')
-                <div class="col-md-12 mb-3">
-                    <label class="form-label text-warning font-weight-bold">Trade License Number</label>
-                    <input value="{{ $stakeholder->wholesaler->trade_license ?? '' }}" type="text" name="trade_license" class="form-control border-warning">
-                </div>
-
-            @elseif($stakeholder->role == 'retailer')
-                <div class="col-md-12 mb-3">
-                    <label class="form-label text-primary font-weight-bold">Shop Name</label>
-                    <input value="{{ $stakeholder->retailer->shop_name ?? '' }}" type="text" name="shop_name" class="form-control border-primary">
-                </div>
-            @endif
+            <div class="col-md-4 mb-3">
+                <label class="form-label text-warning font-weight-bold">Total Manpower</label>
+                <input value="{{ $wholesaler->wholesaler->total_manpower ?? 0 }}" type="number" name="total_manpower" class="form-control border-warning">
+            </div>
         </div>
 
         <div class="mt-4">
-            <button type="submit" class="btn btn-primary px-5">
-                <i class="bi bi-save"></i> Update Stakeholder Info
+            <button type="submit" class="btn btn-primary px-5 shadow-sm">
+                <i class="bi bi-save"></i> Update Wholesaler Info
             </button>
+            <a href="{{ URL('wholesaler') }}" class="btn btn-outline-secondary px-4">Cancel</a>
         </div>
     </form>
 </div>

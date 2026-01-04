@@ -17,7 +17,7 @@
         <ul class="side-nav">
 
             <li class="side-nav-item">
-                <a href="#" class="side-nav-link">
+                <a href="/" class="side-nav-link">
                     <i class="ri-dashboard-3-line"></i>
                     <span> Dashboard </span>
                 </a>
@@ -33,10 +33,10 @@
                 </a>
                 <div class="collapse" id="sidebarUsers">
                     <ul class="side-nav-second-level">
-                        <li><a href="#">Farmer List</a></li>
-                        <li><a href="#">Suppliers / Millers</a></li>
-                        <li><a href="#">Wholesalers</a></li>
-                        <li><a href="#">Retailers</a></li>
+                        <li><a href="{{URL("farmer")}}">Farmer List</a></li>
+                        <li><a href="{{URL("miller")}}">Suppliers / Millers</a></li>
+                        <li><a href="{{URL("wholesaler")}}">Wholesalers</a></li>
+                        <li><a href="{{URL("retailer")}}">Retailers</a></li>
                         <li><a href="{{URL("stakeholder")}}">All Stakeholders</a></li>
                     </ul>
                 </div>

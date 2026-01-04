@@ -108,6 +108,7 @@ Route::prefix("stakeholder")->controller(StakeholderController::class)->group(fu
 Route::prefix("farmer")->controller(FarmerController::class)->group(function(){
     Route::get("/", "index");
     Route::get("create", "create");
+    Route::post("save", "save");
     Route::post("store", "store");
     Route::get("edit/{id}", "edit");
     Route::post("update/{id}", "update");
@@ -122,9 +123,10 @@ Route::prefix("farmer")->controller(FarmerController::class)->group(function(){
 Route::prefix("wholesaler")->controller(WholesalerController::class)->group(function(){
     Route::get("/", "index");
     Route::get("create", "create");
+    Route::post("save", "save");
     Route::post("store", "store");
     Route::get("edit/{id}", "edit");
-    Route::post("update/{id}", "update");
+    Route::put("update/{id}", "update");
     Route::delete("delete/{id}", "delete");
     Route::get("trashed", "trashed");
     Route::get("restore/{id}", "restore");
@@ -135,6 +137,7 @@ Route::prefix("wholesaler")->controller(WholesalerController::class)->group(func
 Route::prefix("retailer")->controller(RetailerController::class)->group(function(){
     Route::get("/", "index");
     Route::get("create", "create");
+    Route::post("save", "save");
     Route::post("store", "store");
     Route::get("edit/{id}", "edit");
     Route::post("update/{id}", "update");
@@ -148,6 +151,7 @@ Route::prefix("retailer")->controller(RetailerController::class)->group(function
 Route::prefix("miller")->controller(MillersSupplierController::class)->group(function(){
     Route::get("/", "index");
     Route::get("create", "create");
+    Route::post("save", "save");
     Route::post("store", "store");
     Route::get("edit/{id}", "edit");
     Route::post("update/{id}", "update");

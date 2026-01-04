@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Stakeholder;
 use App\Models\Farmer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB; // Transaction ব্যবহারের জন্য
 
 class FarmerController extends Controller
 {
-    // ১. শুধুমাত্র কৃষকদের তালিকা দেখানো (Search সহ)
+    // ১. কৃষকদের তালিকা (Search + Crop History সহ)
     public function index(Request $request)
     {
         $farmers = Stakeholder::with('farmer')
@@ -26,7 +27,7 @@ class FarmerController extends Controller
         return view("farmer.index", compact("farmers"));
     }
 
-    // ২. ট্র্যাশ লিস্ট (সফট ডিলিট হওয়া কৃষক)
+    // ২. ট্র্যাশ লিস্ট
     public function trashed()
     {
         $farmers = Stakeholder::onlyTrashed()
@@ -42,72 +43,75 @@ class FarmerController extends Controller
         return view("farmer.create");
     }
 
-    // ৩. নতুন কৃষক সেভ করা
+    // ৩. নতুন কৃষক সেভ করা (Crop History সহ)
     public function store(Request $request)
     {
-        // স্টেকহোল্ডার টেবিলে ডাটা সেভ
-        $stakeholder = new Stakeholder();
-        $stakeholder->name    = $request->name;
-        $stakeholder->email   = $request->email;
-        $stakeholder->phone   = $request->phone;
-        $stakeholder->role    = 'farmer'; // ফিক্সড রোল
-        $stakeholder->address = $request->address;
-        $stakeholder->nid     = $request->nid;
-        $stakeholder->save();
+        // ডাটাবেস ট্রানজেকশন ব্যবহার করা নিরাপদ যাতে এক টেবিলে ডাটা সেভ হয়ে অন্যটায় ফেইল না করে
+        DB::transaction(function () use ($request) {
+            $stakeholder = Stakeholder::create([
+                'name'    => $request->name,
+                'email'   => $request->email,
+                'phone'   => $request->phone,
+                'role'    => 'farmer',
+                'address' => $request->address,
+                'nid'     => $request->nid,
+            ]);
 
-        // ফারমার টেবিলে অতিরিক্ত ডাটা সেভ
-        Farmer::create([
-            'stakeholder_id' => $stakeholder->id,
-            'land_area'      => $request->land_area,
-            'farmer_card_no' => $request->farmer_card_no
-        ]);
+            Farmer::create([
+                'stakeholder_id' => $stakeholder->id,
+                'land_area'      => $request->land_area,
+                'farmer_card_no' => $request->farmer_card_no,
+                'crop_history'   => $request->crop_history // ক্রপ হিস্ট্রি অ্যাড করা হলো
+            ]);
+        });
 
-        return redirect()->route('farmer.index')->with("success", "Farmer Created successfully!");
+        return redirect('farmer')->with("success", "Farmer Created successfully!");
     }
 
-    // ৪. এডিট পেজ (রিলেশনসহ)
+    // ৪. এডিট পেজ
     public function edit($id)
     {
         $farmer = Stakeholder::with('farmer')->where('role', 'farmer')->findOrFail($id);
         return view("farmer.edit", compact("farmer"));
     }
 
-    // ৫. আপডেট মেথড (updateOrCreate ব্যবহার করা হয়েছে সেফটির জন্য)
+    // ৫. আপডেট মেথড (Crop History সহ)
     public function update(Request $request, $id)
     {
         $stakeholder = Stakeholder::findOrFail($id);
 
-        // মেইন ডাটা আপডেট
-        $stakeholder->update([
-            'name'    => $request->name,
-            'email'   => $request->email,
-            'phone'   => $request->phone,
-            'address' => $request->address,
-            'nid'     => $request->nid,
-        ]);
+        DB::transaction(function () use ($request, $stakeholder, $id) {
+            $stakeholder->update([
+                'name'    => $request->name,
+                'email'   => $request->email,
+                'phone'   => $request->phone,
+                'address' => $request->address,
+                'nid'     => $request->nid,
+            ]);
 
-        // ফারমার টেবিল আপডেট (ডাটা না থাকলে তৈরি হবে)
-        Farmer::updateOrCreate(
-            ['stakeholder_id' => $id],
-            [
-                'land_area'      => $request->land_area,
-                'farmer_card_no' => $request->farmer_card_no
-            ]
-        );
+            Farmer::updateOrCreate(
+                ['stakeholder_id' => $id],
+                [
+                    'land_area'      => $request->land_area,
+                    'farmer_card_no' => $request->farmer_card_no,
+                    'crop_history'   => $request->crop_history // ক্রপ হিস্ট্রি আপডেট করা হলো
+                ]
+            );
+        });
 
-        return redirect()->route('farmer.index')->with("success", "Farmer updated successfully");
+        return redirect('farmer')->with("success", "Farmer updated successfully");
     }
 
     // ৬. সফট ডিলিট
-    public function destroy($id)
+    public function delete($id)
     {
         $stakeholder = Stakeholder::findOrFail($id);
-        $stakeholder->delete(); // মেইন টেবিল ডিলিট
+        $stakeholder->delete();
 
-        // সাব-টেবিল ফারমার ডিলিট
+        // সাব-টেবিল সফট ডিলিট (মডেলে SoftDeletes ট্রেইট থাকলে)
         Farmer::where('stakeholder_id', $id)->delete();
 
-        return redirect()->route('farmer.index')->with("success", "Farmer moved to trash");
+        return redirect('farmer')->with("success", "Farmer moved to trash");
     }
 
     // ৭. রিস্টোর করা
@@ -116,20 +120,15 @@ class FarmerController extends Controller
         Stakeholder::withTrashed()->where('id', $id)->restore();
         Farmer::withTrashed()->where('stakeholder_id', $id)->restore();
 
-        return redirect()->route('farmer.index')->with("success", "Farmer restored successfully");
+        return redirect('farmer')->with("success", "Farmer restored successfully");
     }
 
-    // ৮. পার্মানেন্ট ডিলিট
-    public function forceDelete($id)
+    // ৮. পার্মানেন্ট ডিলিট (আপনার forceDelete ফাংশন নাম অনুযায়ী)
+    public function force_delete($id)
     {
-        $stakeholder = Stakeholder::withTrashed()->findOrFail($id);
-
-        // ফারমার টেবিল থেকে স্থায়ীভাবে মুছে ফেলা
         Farmer::withTrashed()->where('stakeholder_id', $id)->forceDelete();
+        Stakeholder::withTrashed()->findOrFail($id)->forceDelete();
 
-        // স্টেকহোল্ডার টেবিল থেকে স্থায়ীভাবে মুছে ফেলা
-        $stakeholder->forceDelete();
-
-        return redirect()->route('farmer.trashed')->with("success", "Farmer permanently deleted");
+        return redirect('farmer/trashed')->with("success", "Farmer permanently deleted");
     }
 }
