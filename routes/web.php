@@ -1,14 +1,17 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EventTypeController;
 use App\Http\Controllers\FarmerController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MillersSupplierController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RetailerController;
 use App\Http\Controllers\StakeholderController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WholesalerController;
 use App\Mail\UserNotification;
@@ -53,21 +56,18 @@ Route::prefix("customer")->controller(CustomerController::class)->group(function
     Route::delete("force-delete/{id}", "force_delete");
 });
 
-// Route::get("/customer", [CustomerController::class, "index"]);
-// Route::get("/customer/create", [CustomerController::class, "create"]);
-// Route::post("/customer/save", [CustomerController::class, "save"]);
-// Route::delete("/customer/delete/{id}", [CustomerController::class, "delete"]);
-// Route::get("/customer/edit/{id}", [CustomerController::class, "edit"]);
-// Route::post("/customer/update/{id}", [CustomerController::class, "update"]);
-
-Route::prefix("system")->group(function(){
-    Route::resource('users', UserController::class);
+Route::prefix("user")->controller(UserController::class)->group(function(){
+    Route::get("/", "index");
+    Route::get("create", "create");
+    Route::post("save", "save");
+    Route::delete("delete/{id}", "delete");
+    Route::get("edit/{id}", "edit");
+    Route::post("update/{id}", "update");
+    Route::get("trashed", "trashed");
+    Route::get("restore/{id}", "restore");
+    Route::delete("force-delete/{id}", "force_delete");
 });
 
-
-Route::get("users/trashed", [UserController::class,"trashed"])->name("user.trashed");
-Route::get("users/restore/{id}", [UserController::class,"restore"])->name("user.restore");
-Route::delete("users/force-delete/{id}", [UserController::class,"force_delete"])->name("user.delete");
 
 Route::fallback(function(){
     return "404 No Route matched";
@@ -159,4 +159,37 @@ Route::prefix("miller")->controller(MillersSupplierController::class)->group(fun
     Route::get("trashed", "trashed");
     Route::get("restore/{id}", "restore");
     Route::get("force-delete/{id}", "force_delete");
+});
+
+Route::prefix("product")->controller(ProductController::class)->group(function(){
+    Route::get("/", "index");
+    Route::get("create", "create");
+    Route::post("save", "save");
+    Route::post("store", "store");
+    Route::get("edit/{id}", "edit");
+    Route::post("update/{id}", "update");
+    Route::delete("delete/{id}", "delete");
+    Route::get("trashed", "trashed");
+    Route::get("restore/{id}", "restore");
+    Route::get("force-delete/{id}", "force_delete");
+});
+
+Route::prefix("category")->controller(CategoryController::class)->group(function(){
+    Route::get("/", "index");
+    Route::get("create", "create");
+    Route::post("save", "save");
+    Route::post("store", "store");
+    Route::get("edit/{id}", "edit");
+    Route::post("update/{id}", "update");
+    Route::delete("delete/{id}", "delete");
+});
+
+Route::prefix("unit")->controller(UnitController::class)->group(function(){
+    Route::get("/", "index");
+    Route::get("create", "create");
+    Route::post("save", "save");
+    Route::post("store", "store");
+    Route::get("edit/{id}", "edit");
+    Route::post("update/{id}", "update");
+    Route::delete("delete/{id}", "delete");
 });
