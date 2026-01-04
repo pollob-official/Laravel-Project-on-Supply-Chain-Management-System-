@@ -2,18 +2,12 @@
 @section("content")
     <x-alert/>
 
-    <h3 class="mb-2">Retailer Trash List</h3>
-
-    <form action="{{URL("retailer/trashed")}}" method="GET">
-        <div class="mb-3 d-flex gap-2">
-            <input value="{{request("search")}}" type="text" class="form-control" id="search" name="search" placeholder="Search in trash by name, phone or shop...">
-            <button type="submit" class="btn btn-primary">Search</button>
-        </div>
-    </form>
-
-    <a href="{{ URL('retailer') }}" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left"></i> Back to List
-    </a>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0 text-danger"><i class="bi bi-trash3"></i> Trashed Retailers</h3>
+        <a href="{{ URL('retailer') }}" class="btn btn-secondary shadow-sm">
+            <i class="bi bi-arrow-left"></i> Back to Retailer List
+        </a>
+    </div>
 
     <table class="table mt-3 table-hover">
         <thead class="table-dark">
@@ -54,12 +48,15 @@
                                 </a>
 
                                 {{-- আপনার রাউট অনুযায়ী Force Delete (GET) --}}
-                                <a href="{{ URL('retailer/force-delete/'.$retailer->id) }}"
-                                   class="btn btn-sm btn-outline-danger"
-                                   title="Permanent Delete"
-                                   onclick="return confirm('Are you sure you want to delete this permanently?')">
-                                    <i class="bi bi-x-circle"></i> Delete
-                                </a>
+                                <form action="{{ URL('retailer/force-delete/'.$retailer->id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE') {{-- এটিই সবচেয়ে গুরুত্বপূর্ণ --}}
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('Are you sure you want to delete this permanently?')"
+                                            title="Permanent Delete">
+                                        <i class="bi bi-x-circle"></i> Delete
+                                    </button>
+                                </form>
                             </div>
                         </td>
                     </tr>

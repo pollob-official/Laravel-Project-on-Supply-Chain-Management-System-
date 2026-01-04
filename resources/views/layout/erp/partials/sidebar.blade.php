@@ -51,8 +51,8 @@
                 <div class="collapse" id="sidebarProducts">
                     <ul class="side-nav-second-level">
                         <li><a href="{{URL("category")}}">Categories</a></li>
-                        <li><a href="#">Product List</a></li>
-                        <li><a href="#">Units (KG, Ton, Sack)</a></li>
+                        <li><a href="{{URL("product")}}">Product List</a></li>
+                        <li><a href="{{URL("unit")}}">Units (KG, Ton, Sack)</a></li>
                     </ul>
                 </div>
             </li>

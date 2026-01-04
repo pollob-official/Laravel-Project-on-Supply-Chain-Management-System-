@@ -30,7 +30,7 @@ Route::get("/student/create", [StudentController::class, "create"]);
 Route::get("/student/find/{id}", [StudentController::class, "find"]);
 Route::get("/student/edit/{id}", [StudentController::class, "edit"]);
 Route::get("/student/update/{id}/{name}", [StudentController::class, "update"]);
-Route::get("/student/delete/{id}", [StudentController::class, "delete"]);
+Route::delete("/student/delete/{id}", [StudentController::class, "delete"]);
 
 // Event_Type:
 
@@ -130,7 +130,7 @@ Route::prefix("wholesaler")->controller(WholesalerController::class)->group(func
     Route::delete("delete/{id}", "delete");
     Route::get("trashed", "trashed");
     Route::get("restore/{id}", "restore");
-    Route::get("force-delete/{id}", "force_delete");
+    Route::delete("force-delete/{id}", "force_delete");
 });
 
 // ৩. Retailer Routes
@@ -144,7 +144,7 @@ Route::prefix("retailer")->controller(RetailerController::class)->group(function
     Route::delete("delete/{id}", "delete");
     Route::get("trashed", "trashed");
     Route::get("restore/{id}", "restore");
-    Route::get("force-delete/{id}", "force_delete");
+    Route::delete("force-delete/{id}", "force_delete");
 });
 
 // ৪. Millers & Supplier Routes
@@ -158,7 +158,7 @@ Route::prefix("miller")->controller(MillersSupplierController::class)->group(fun
     Route::delete("delete/{id}", "delete");
     Route::get("trashed", "trashed");
     Route::get("restore/{id}", "restore");
-    Route::get("force-delete/{id}", "force_delete");
+    Route::delete("force-delete/{id}", "force_delete");
 });
 
 Route::prefix("product")->controller(ProductController::class)->group(function(){
@@ -171,7 +171,7 @@ Route::prefix("product")->controller(ProductController::class)->group(function()
     Route::delete("delete/{id}", "delete");
     Route::get("trashed", "trashed");
     Route::get("restore/{id}", "restore");
-    Route::get("force-delete/{id}", "force_delete");
+    Route::delete("force-delete/{id}", "force_delete");
 });
 
 Route::prefix("category")->controller(CategoryController::class)->group(function(){

@@ -2,10 +2,10 @@
 @section("content")
     <x-alert/>
 
-    <h1 class="mb-2">Stakeholder List</h1>
+    <h3 class="mb-2">Stakeholder List</h3>
 
     <form action="{{URL("stakeholder")}}" method="GET">
-        <div class="mb-3 ">
+        <div class="mb-3  d-flex gap-2">
             <input value="{{request("search")}}" type="text" class="form-control" id="search" name="search" placeholder="Search by name, phone or role...">
             <button type="submit" class="btn btn-primary">Search</button>
         </div>
