@@ -19,7 +19,7 @@
 </a>
 
     <table class="table mt-3">
-        <thead>
+        <thead class="table-border-dark">
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>

@@ -41,19 +41,14 @@
                             <div class="d-flex flex-column h-100">
 
                                 <!-- LOGO -->
-                                <div class="auth-brand p-3">
-                                    <a href="{{ url('/') }}" class="logo-light">
-                                        <img src="{{ asset('assets/images/logo.png') }}" style="height:80px;width:200px;">
-                                    </a>
-                                    <a href="{{ url('/') }}" class="logo-dark">
-                                        <img src="{{ asset('assets/images/logo-dark.png') }}" style="height:80px;width:200px;">
-                                    </a>
+                                <div class="auth-brand p-3" style="text-align: center;">
+                                        <img src="{{ asset('assets/images/logo.png') }}" style="height:65px;width:250px;">
                                 </div>
 
-                                <div class="p-3 my-auto">
+                                <div class="p-3 my-auto"  style="color: steelblue"  >
                                     <h4 class="fs-20">Sign In</h4>
                                     <p class="text-muted mb-3">
-                                        Enter your email address and password to access account.
+                                        Enter your email and password to access account.
                                     </p>
 
                                     <!-- LOGIN FORM -->
@@ -112,8 +107,21 @@
                                             </button>
                                         </div>
 
+                                                <!-- REGISTER LINK -->
+                                        <div class="row">
+                                            <div class="col-12 text-center" style="margin-top: 15px;">
+                                                <p class="text-dark-emphasis">
+                                                    Don't have an account?
+                                                    <a href="{{ route('register') }}"
+                                                    class="text-dark fw-bold ms-1 text-decoration-underline">
+                                                        Sign up
+                                                    </a>
+                                                </p>
+                                            </div>
+                                        </div>
+
                                         <!-- SOCIAL LOGIN -->
-                                        <div class="text-center mt-4">
+                                        <div class="text-center mt-2">
                                             <p class="text-muted fs-16">Sign in with</p>
                                             <div class="d-flex gap-2 justify-content-center mt-3">
                                                 <a href="javascript:void(0);" class="btn btn-soft-primary">
@@ -142,20 +150,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- REGISTER LINK -->
-        <div class="row">
-            <div class="col-12 text-center">
-                <p class="text-dark-emphasis">
-                    Don't have an account?
-                    <a href="{{ route('register') }}"
-                       class="text-dark fw-bold ms-1 text-decoration-underline">
-                        Sign up
-                    </a>
-                </p>
-            </div>
-        </div>
-
     </div>
 </div>
 

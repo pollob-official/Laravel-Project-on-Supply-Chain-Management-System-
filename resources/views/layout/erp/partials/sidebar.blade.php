@@ -1,7 +1,29 @@
+<style>
+/* ১. যখন বাম পাশের মেনু ছোট থাকবে তখন ইউজার বক্স এবং বর্ডার হাইড হবে */
+body[data-leftbar-compact-mode="condensed"] .leftside-menu .user-box,
+body[data-leftbar-compact-mode="condensed"] .leftside-menu hr {
+    display: none !important;
+}
+
+/* ২. বড় স্ক্রিনে যখন নরমাল অবস্থায় থাকবে তখন দেখাবে */
+.user-box {
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* ৩. টেক্সট যাতে এক লাইনের বাইরে গিয়ে নিচে না নামে */
+.user-info h5, .user-info p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+</style>
+
+
 <div class="leftside-menu">
 
     <a href="/" class="logo logo-light text-center">
-        <span class="logo-lg"><img src="{{ asset('assets/images/logo.png') }}" alt="logo" style="height: 50px; width: 180px;"></span>
+        <span class="logo-lg"><img src="{{ asset('assets/images/logo.png') }}" alt="logo" style="height: 60px; width: 190px;"></span>
         <span class="logo-sm"><img src="{{ asset('assets/images/logo-sm.png') }}" alt="small logo" style="height: 30px; width: 40px;"></span>
     </a>
 

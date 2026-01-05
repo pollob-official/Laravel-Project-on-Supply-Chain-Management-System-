@@ -5,7 +5,7 @@
 <!-- Mirrored from techzaa.in/velonic/layouts/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 16 Nov 2024 06:16:49 GMT -->
 <head>
         <meta charset="utf-8" />
-        <title>Dashboard | Velonic - Bootstrap 5 Admin & Dashboard Template</title>
+        <title>Supply Chain Management System Laravel</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="A fully responsive admin theme which can be used to build CRM, CMS,ERP etc." name="description" />
         <meta content="Techzaa" name="author" />
