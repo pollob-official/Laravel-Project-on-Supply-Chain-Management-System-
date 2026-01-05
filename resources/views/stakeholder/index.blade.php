@@ -19,7 +19,7 @@
 </a>
 
     <table class="table mt-3">
-        <thead class="table-border-dark">
+        <thead style="background-color:#0ae264;">
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>

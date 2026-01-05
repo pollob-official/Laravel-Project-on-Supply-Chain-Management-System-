@@ -21,7 +21,7 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light">
+                    <thead style="background-color:#0ae264;">
                         <tr>
                             <th scope="col" style="width: 80px;">#ID</th>
                             <th scope="col">Category Name</th>

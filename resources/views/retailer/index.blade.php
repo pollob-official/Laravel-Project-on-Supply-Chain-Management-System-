@@ -19,7 +19,7 @@
     </a>
 
     <table class="table mt-3 table-hover">
-        <thead class="table-light">
+        <thead style="background-color:#0ae264;">
             <tr>
                 <th scope="col">#ID</th>
                 <th scope="col">Retailer Details</th>

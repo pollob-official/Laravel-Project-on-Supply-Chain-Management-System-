@@ -1,5 +1,5 @@
 <table class="table">
-    <thead>
+    <thead style="background-color:#0ae264;">
         <tr>
             <th scope="col">#</th>
             <th scope="col">name</th>

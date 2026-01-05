@@ -22,7 +22,7 @@
     </div>
 
     <table class="table mt-3 table-hover border">
-        <thead style="background-color:#0ae264; ">
+        <thead style="background-color:#0ae264;">
             <tr>
                 <th scope="col">Tracking No</th>
                 <th scope="col">Product</th>
