@@ -33,7 +33,7 @@ body[data-leftbar-compact-mode="condensed"] .leftside-menu hr {
 
     <div class="user-box px-3 mt-3 mb-2">
         <div class="user-info">
-            <h5 class="text-white mb-0" style="font-size: 14px; font-weight: 700; letter-spacing: 0.5px;">POLLOB AHMED SAGOR</h5>
+            <h5 class="text-muted mb-0" style="font-size: 14px; font-weight: 700; letter-spacing: 0.5px;">POLLOB AHMED SAGOR</h5>
             <p class="text-muted mb-0" style="font-size: 12px;">pollob.workmail@gmail.com</p>
         </div>
     </div>
