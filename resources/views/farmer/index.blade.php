@@ -104,7 +104,7 @@
         </div>
     </div>
 
-    <div class="mt-3">
+    <div class="mt-2">
         {{ $farmers->appends(request()->query())->links() }}
     </div>
 @endsection

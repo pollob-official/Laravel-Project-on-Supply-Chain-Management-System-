@@ -1,27 +1,34 @@
-@extends("layout.erp.app")
-@section("content")
-    <x-alert/>
+@extends('layout.erp.app')
+@section('content')
+    <x-alert />
 
-    <h3 class="mb-2">Product Handover History (Supply Chain)</h3>
+    <h2 class="text-success mb-2 mt-2">Product Handover History (Supply Chain)</h2>
 
-    <form action="{{URL("journey")}}" method="GET">
-        <div class="mb-3 d-flex gap-2">
-            <input value="{{request("search")}}" type="text" class="form-control" id="search" name="search" placeholder="Search by Tracking No or Stage...">
-            <button type="submit" class="btn btn-primary">Search</button>
+    <div class="mb-1">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+            <!-- Left side buttons -->
+            <div class="d-flex gap-2">
+                <x-button :url="URL('journey/create')" type="primary">
+                    <i class="bi bi-plus-lg"></i> New Handover (Entry)
+                </x-button>
+
+                <a href="{{ URL('journey/trashed') }}" class="btn btn-outline-danger">
+                    <i class="bi bi-trash"></i> View Trash
+                </a>
+            </div>
+
+            <!-- Right side search -->
+            <form action="{{ URL('journey') }}" method="GET" class="d-flex gap-1">
+                <input value="{{ request('search') }}" type="text" class="form-control" style="width: 280px;"
+                    name="search" placeholder="Search by Tracking No or Stage...">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+
         </div>
-    </form>
-
-    <div class="d-flex gap-2 mb-3">
-        <x-button :url="URL('journey/create')" type="primary">
-            <i class="bi bi-plus-lg"></i> New Handover (Entry)
-        </x-button>
-
-        <a href="{{ URL('journey/trashed') }}" class="btn btn-outline-danger">
-            <i class="bi bi-trash"></i> View Trash
-        </a>
     </div>
 
-    <table class="table mt-3 table-hover border">
+    <table class="table mt-2 table-hover border">
         <thead style="background-color:#0ae264;">
             <tr>
                 <th scope="col">Tracking No</th>
@@ -34,7 +41,7 @@
             </tr>
         </thead>
         <tbody>
-            @if(count($journeys) > 0)
+            @if (count($journeys) > 0)
                 @foreach ($journeys as $journey)
                     <tr>
                         <td>
@@ -56,22 +63,24 @@
                         </td>
                         <td>
                             @php
-                                $stageColor = [
-                                    'Farmer' => 'success',
-                                    'Miller' => 'info',
-                                    'Wholesaler' => 'warning',
-                                    'Retailer' => 'primary'
-                                ][$journey->current_stage] ?? 'secondary';
+                                $stageColor =
+                                    [
+                                        'Farmer' => 'success',
+                                        'Miller' => 'info',
+                                        'Wholesaler' => 'warning',
+                                        'Retailer' => 'primary',
+                                    ][$journey->current_stage] ?? 'secondary';
                             @endphp
-                            <span class="badge bg-{{$stageColor}}">{{ $journey->current_stage }}</span>
+                            <span class="badge bg-{{ $stageColor }}">{{ $journey->current_stage }}</span>
                         </td>
                         <td>
                             <div class="d-flex gap-1">
-                                <a href="{{ URL('journey/edit/'.$journey->id) }}" class="btn btn-sm btn-outline-primary">
+                                <a href="{{ URL('journey/edit/' . $journey->id) }}" class="btn btn-sm btn-outline-primary">
                                     <i class="bi bi-pencil"></i>
                                 </a>
 
-                                <form action="{{ URL('journey/delete/'.$journey->id) }}" method="POST" onsubmit="return confirm('Move to trash?')">
+                                <form action="{{ URL('journey/delete/' . $journey->id) }}" method="POST"
+                                    onsubmit="return confirm('Move to trash?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-outline-danger">
@@ -79,22 +88,25 @@
                                     </button>
                                 </form>
 
-                                <button class="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#qrModal{{$journey->id}}">
+                                <button class="btn btn-sm btn-outline-dark" data-bs-toggle="modal"
+                                    data-bs-target="#qrModal{{ $journey->id }}">
                                     <i class="bi bi-qr-code text-dark"></i>
                                 </button>
                             </div>
 
-                            <div class="modal fade" id="qrModal{{$journey->id}}" tabindex="-1" aria-hidden="true">
+                            <div class="modal fade" id="qrModal{{ $journey->id }}" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog modal-sm modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header py-2">
                                             <h6 class="modal-title">QR Trace: {{ $journey->tracking_no }}</h6>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
                                         </div>
-                                        <div class="modal-body text-center bg-white p-4" id="qrPrintArea{{$journey->id}}">
+                                        <div class="modal-body text-center bg-white p-4"
+                                            id="qrPrintArea{{ $journey->id }}">
                                             <div class="d-inline-block border p-2 mb-2 bg-white">
-                                               {{-- কিউআর কোড জেনারেশন (লিঙ্কসহ) --}}
-                                           {!! QrCode::size(150)->generate(url('journey/trace/' . $journey->tracking_no)) !!}
+                                                {{-- কিউআর কোড জেনারেশন (লিঙ্কসহ) --}}
+                                                {!! QrCode::size(150)->generate(url('journey/trace/' . $journey->tracking_no)) !!}
                                             </div>
                                             <h5 class="mt-2 mb-0">{{ $journey->product->name }}</h5>
                                             <p class="small text-muted mb-0">Stage: {{ $journey->current_stage }}</p>
@@ -102,7 +114,8 @@
                                             <small class="text-primary fw-bold">Scan to Verify Product History</small>
                                         </div>
                                         <div class="modal-footer py-1 justify-content-center">
-                                            <button type="button" class="btn btn-sm btn-primary" onclick="printQR('qrPrintArea{{$journey->id}}')">
+                                            <button type="button" class="btn btn-sm btn-primary"
+                                                onclick="printQR('qrPrintArea{{ $journey->id }}')">
                                                 <i class="bi bi-printer"></i> Print QR
                                             </button>
                                         </div>
@@ -120,7 +133,7 @@
         </tbody>
     </table>
 
-    <div class="mt-3">
+    <div class="mt-2">
         {{ $journeys->appends(request()->query())->links() }}
     </div>
 
@@ -130,7 +143,9 @@
             var printContents = document.getElementById(divName).innerHTML;
             var originalContents = document.body.innerHTML;
 
-            document.body.innerHTML = "<html><head><title>Print QR</title><link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css'></head><body class='text-center p-5'>" + printContents + "</body></html>";
+            document.body.innerHTML =
+                "<html><head><title>Print QR</title><link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css'></head><body class='text-center p-5'>" +
+                printContents + "</body></html>";
 
             window.print();
             document.body.innerHTML = originalContents;

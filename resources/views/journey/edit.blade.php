@@ -1,10 +1,10 @@
 @extends("layout.erp.app")
 @section("content")
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>Edit Product Journey</h1>
-    <a href="{{URL('journey')}}" class="btn btn-secondary">
-        <i class="bi bi-arrow-left"></i> Back to History
+<div class="d-flex justify-content-between align-items-center mb-2 mt-2">
+    <h3><i class="bi bi-pencil-square me-2"></i>Edit Product Journey</h3>
+    <a href="{{URL('journey')}}" class="btn btn-secondary btn-sm">
+        <i class="bi bi-arrow-left"></i> Back to Handover History
     </a>
 </div>
 
@@ -23,12 +23,12 @@
     @method('POST') {{-- আপনার কন্ট্রোলারে যদি আলাদা মেথড থাকে তবে এখানে PUT দিতে পারেন --}}
 
     <div class="row">
-        <div class="col-md-3 mb-3">
+        <div class="col-md-3 mb-2">
             <label class="form-label font-weight-bold text-muted">Tracking No</label>
             <input type="text" class="form-control bg-white" value="{{ $journey->tracking_no }}" readonly>
         </div>
 
-        <div class="col-md-3 mb-3">
+        <div class="col-md-3 mb-2">
             <label class="form-label font-weight-bold">Product <span class="text-danger">*</span></label>
             <select name="product_id" class="form-select" required>
                 @foreach($products as $product)
@@ -39,7 +39,7 @@
             </select>
         </div>
 
-        <div class="col-md-3 mb-3">
+        <div class="col-md-3 mb-2">
             <label class="form-label font-weight-bold">Seller (From) <span class="text-danger">*</span></label>
             <select name="seller_id" class="form-select" required>
                 @foreach($stakeholders as $stakeholder)
@@ -50,7 +50,7 @@
             </select>
         </div>
 
-        <div class="col-md-3 mb-3">
+        <div class="col-md-3 mb-2">
             <label class="form-label font-weight-bold">Buyer (To) <span class="text-danger">*</span></label>
             <select name="buyer_id" class="form-select" required>
                 @foreach($stakeholders as $stakeholder)
@@ -62,20 +62,20 @@
         </div>
     </div>
 
-    <hr>
+    <hr class="my-2">
 
     <div class="row">
-        <div class="col-md-3 mb-3">
+        <div class="col-md-3 mb-2">
             <label class="form-label font-weight-bold text-primary">Buying Price (৳)</label>
             <input type="number" step="0.01" name="buying_price" id="buying_price" class="form-control calc-trigger" value="{{ $journey->buying_price }}" required>
         </div>
 
-        <div class="col-md-2 mb-3">
+        <div class="col-md-2 mb-2">
             <label class="form-label font-weight-bold text-info">Extra Cost (৳)</label>
             <input type="number" step="0.01" name="extra_cost" id="extra_cost" class="form-control calc-trigger" value="{{ $journey->extra_cost }}">
         </div>
 
-        <div class="col-md-2 mb-3">
+        <div class="col-md-2 mb-2">
             <label class="form-label font-weight-bold text-warning">Profit Margin (%)</label>
             @php
                 $base = $journey->buying_price + $journey->extra_cost;
@@ -84,19 +84,19 @@
             <input type="number" step="0.1" name="profit_percent" id="profit_percent" class="form-control calc-trigger" value="{{ round($old_percent, 2) }}" required>
         </div>
 
-        <div class="col-md-2 mb-3">
+        <div class="col-md-2 mb-2">
             <label class="form-label font-weight-bold text-warning">Profit (৳)</label>
             <input type="number" id="profit_margin_val" class="form-control bg-light" readonly value="{{ $journey->profit_margin }}">
         </div>
 
-        <div class="col-md-3 mb-3">
+        <div class="col-md-3 mb-2">
             <label class="form-label font-weight-bold text-success">Selling Price (Final)</label>
             <input type="number" step="0.01" name="selling_price" id="selling_price" class="form-control bg-white fw-bold" readonly value="{{ $journey->selling_price }}">
         </div>
     </div>
 
     <div class="row">
-        <div class="col-md-6 mb-3">
+        <div class="col-md-6 mb-2">
             <label class="form-label font-weight-bold">Current Stage <span class="text-danger">*</span></label>
             <select name="current_stage" class="form-select" required>
                 <option value="Farmer" {{ $journey->current_stage == 'Farmer' ? 'selected' : '' }}>Farmer (কৃষক পর্যায়)</option>
@@ -107,7 +107,7 @@
         </div>
     </div>
 
-    <div class="mt-4">
+    <div class="mt-2">
         <button type="submit" class="btn btn-primary btn-lg">
             <i class="bi bi-save"></i> Update Journey Record
         </button>
