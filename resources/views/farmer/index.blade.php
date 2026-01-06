@@ -1,30 +1,46 @@
-@extends("layout.erp.app")
-@section("content")
-    <x-alert/>
+@extends('layout.erp.app')
+@section('content')
+    <x-alert />
 
-    <h3 class="mb-2">Farmer List</h3>
+    <h2 class="text-success mb-2 mt-2">Farmer List</h2>
 
-    <form action="{{URL("farmer")}}" method="GET">
-        <div class="mb-3 d-flex gap-2">
-            <input value="{{request("search")}}" type="text" class="form-control" id="search" name="search" placeholder="Search by name, phone, NID or card no...">
+    {{-- <form action="{{URL("farmer")}}" method="GET">
+        <div class="mb-3 d-flex justify-content-center">
+            <input value="{{request("search")}}" type="text" class="form-control w-25 me-2" id="search" name="search" placeholder="Search by name, phone, NID or card no...">
             <button type="submit" class="btn btn-primary">Search</button>
         </div>
-    </form>
+    </form> --}}
 
-    <div class="mb-3">
-        <x-button :url="URL('farmer/create')" type="primary">
-            <i class="bi bi-plus-lg"></i> Add Farmer
-        </x-button>
-        <a href="{{ URL('farmer/trashed') }}" class="btn btn-outline-danger">
-            <i class="bi bi-trash"></i> View Trash
-        </a>
+    <div class="mb-1">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+            <!-- Left side buttons -->
+            <div class="d-flex gap-2">
+                <x-button :url="URL('farmer/create')" type="primary">
+                    <i class="bi bi-plus-lg"></i> Add Farmer
+                </x-button>
+
+                <a href="{{ URL('farmer/trashed') }}" class="btn btn-outline-danger">
+                    <i class="bi bi-trash"></i> View Trash
+                </a>
+            </div>
+
+            <!-- Right side search -->
+            <form action="{{ URL('farmer') }}" method="GET" class="d-flex gap-1">
+                <input value="{{ request('search') }}" type="text" class="form-control" style="width: 280px;"
+                    name="search" placeholder="Search by name, phone, NID or card no...">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+
+        </div>
     </div>
+
 
     <div class="card shadow-sm border-0">
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
-                    <thead class="text-white" style="background-color:#0ae264;">
+                    <thead class="text-white " style="background-color:#0ae264;">
                         <tr>
                             <th scope="col">#ID</th>
                             <th scope="col">Farmer Name</th>
@@ -61,11 +77,13 @@
                                 <td>{{ $farmer->address }}</td>
                                 <td>
                                     <div class="d-flex gap-1 justify-content-center">
-                                        <a href="{{ URL('farmer/edit/'.$farmer->id) }}" class="btn btn-sm btn-outline-primary">
+                                        <a href="{{ URL('farmer/edit/' . $farmer->id) }}"
+                                            class="btn btn-sm btn-outline-primary">
                                             <i class="bi bi-pencil"></i>
                                         </a>
 
-                                        <form action="{{ URL('farmer/delete/'.$farmer->id) }}" method="POST" onsubmit="return confirm('Are you sure?')">
+                                        <form action="{{ URL('farmer/delete/' . $farmer->id) }}" method="POST"
+                                            onsubmit="return confirm('Are you sure?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-outline-danger">

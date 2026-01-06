@@ -55,5 +55,4 @@ App>Mail> UserNotification >37 no line>
         );
     }
 
-// QR code
-composer require simplesoftwareio/simple-qrcode
+

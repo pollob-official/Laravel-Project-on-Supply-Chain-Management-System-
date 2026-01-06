@@ -26,6 +26,10 @@ body[data-leftbar-compact-mode="condensed"] .leftside-menu hr {
         <span class="logo-lg"><img src="{{ asset('assets/images/logo.png') }}" alt="logo" style="height: 60px; width: 190px;"></span>
         <span class="logo-sm"><img src="{{ asset('assets/images/logo-sm.png') }}" alt="small logo" style="height: 30px; width: 40px;"></span>
     </a>
+    <a href="/" class="logo logo-dark text-center">
+        <span class="logo-lg"><img src="{{ asset('assets/images/logo.png') }}" alt="logo" style="height: 60px; width: 190px;"></span>
+        <span class="logo-sm"><img src="{{ asset('assets/images/logo-sm.png') }}" alt="small logo" style="height: 30px; width: 40px;"></span>
+    </a>
 
     <div class="user-box px-3 mt-3 mb-2">
         <div class="user-info">

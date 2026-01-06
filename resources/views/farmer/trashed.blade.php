@@ -2,9 +2,9 @@
 @section("content")
     <x-alert/>
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3 class="mb-0 text-danger"><i class="bi bi-trash3"></i> Trashed Farmers</h3>
-        <a href="{{ URL('farmer') }}" class="btn btn-secondary shadow-sm">
+    <div class="d-flex justify-content-between align-items-center mb-1 mt-2">
+        <h2 class="mb-0 text-danger mt-2"><i class="bi bi-trash3"></i> Trashed Farmers</h2>
+        <a href="{{ URL('farmer') }}" class="btn btn-secondary shadow-sm mt-2">
             <i class="bi bi-arrow-left"></i> Back to Farmer List
         </a>
     </div>

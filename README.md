@@ -205,14 +205,18 @@ search $customers = Customer::when($request->search, function($query) use($reque
 
 php artisan make:controller RoleController --resource
 
-<!-- { In a Laravel project, node_modules is handled via Node.js (npm / yarn / pnpm) for frontend assets (Vite, Mix, Tailwind, etc.).->
+{ In a Laravel project, node_modules is handled via Node.js (npm / yarn / pnpm) for frontend assets (Vite, Mix, Tailwind, etc.).->
 npm install
 npm run dev
-npm run build } -->
+npm run build }
 
 
 composer require laravel/ui
 php artisan ui bootstrap --auth
 
 
+// QR code
+composer require simplesoftwareio/simple-qrcode
 
+
+Code Arrange= "shift+alt+f"
