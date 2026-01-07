@@ -15,15 +15,15 @@ class UnitController extends Controller
                              ->orWhere("short_name", "LIKE", "%" . $request->search . "%");
             })
             ->orderBy("id", "desc")
-            ->paginate(8);
+            ->paginate(5);
 
-        return view("unit.index", compact("units"));
+        return view("admin.unit.index", compact("units"));
     }
 
     // ২. ক্রিয়েট পেজ
     public function create()
     {
-        return view("unit.create");
+        return view("admin.unit.create");
     }
 
     // ৩. নতুন ইউনিট সেভ করা
@@ -48,7 +48,7 @@ class UnitController extends Controller
     public function edit($id)
     {
         $unit = Unit::findOrFail($id);
-        return view("unit.edit", compact("unit"));
+        return view("admin.unit.edit", compact("unit"));
     }
 
     // ৫. আপডেট মেথড

@@ -23,9 +23,9 @@ class WholesalerController extends Controller
                 });
             })
             ->orderBy("id", "desc")
-            ->paginate(8);
+            ->paginate(5);
 
-        return view("wholesaler.index", compact("wholesalers"));
+        return view("admin.wholesaler.index", compact("wholesalers"));
     }
 
     // ২. ট্র্যাশ লিস্ট (সফট ডিলিট ডাটা)
@@ -37,12 +37,12 @@ class WholesalerController extends Controller
             ->orderBy("id", "desc")
             ->paginate(8);
 
-        return view("wholesaler.trashed", compact("wholesalers"));
+        return view("admin.wholesaler.trashed", compact("wholesalers"));
     }
 
     public function create()
     {
-        return view("wholesaler.create");
+        return view("admin.wholesaler.create");
     }
 
     // ৩. ডাটা সেভ করা (Stakeholder + Wholesaler Table)
@@ -72,7 +72,7 @@ class WholesalerController extends Controller
     public function edit($id)
     {
         $wholesaler = Stakeholder::with('wholesaler')->findOrFail($id);
-        return view("wholesaler.edit", compact("wholesaler"));
+        return view("admin.wholesaler.edit", compact("wholesaler"));
     }
 
     // ৫. আপডেট (updateOrCreate ব্যবহার করা হয়েছে যাতে ডাটা মিসিং থাকলেও এরর না দেয়)

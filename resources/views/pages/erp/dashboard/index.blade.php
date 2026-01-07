@@ -1,4 +1,4 @@
-@extends("layout.erp.app")
+@extends("admin.layout.erp.app")
 
 @section("content")
 
@@ -203,7 +203,7 @@
                                                     <ul class="conversation-list">
                                                         <li class="clearfix">
                                                             <div class="chat-avatar">
-                                                                <img src="{{asset('assets')}}/images/users/avatar-5.jpg" alt="male">
+                                                                <img src="{{ asset('assets/images/users/avatar-5.jpg') }}" alt="male">
                                                                 <i>10:00</i>
                                                             </div>
                                                             <div class="conversation-text">
@@ -217,7 +217,7 @@
                                                         </li>
                                                         <li class="clearfix odd">
                                                             <div class="chat-avatar">
-                                                                <img src="{{asset('assets')}}/images/users/avatar-1.jpg" alt="Female">
+                                                                <img src="{{ asset('assets/images/users/avatar-1.jpg') }}" alt="Female">
                                                                 <i>10:01</i>
                                                             </div>
                                                             <div class="conversation-text">
@@ -231,7 +231,7 @@
                                                         </li>
                                                         <li class="clearfix">
                                                             <div class="chat-avatar">
-                                                                <img src="{{asset('assets')}}/images/users/avatar-5.jpg" alt="male">
+                                                                <img src="{{ asset('assets/images/users/avatar-5.jpg') }}" alt="male">
                                                                 <i>10:01</i>
                                                             </div>
                                                             <div class="conversation-text">
@@ -245,7 +245,7 @@
                                                         </li>
                                                         <li class="clearfix odd">
                                                             <div class="chat-avatar">
-                                                                <img src="{{asset('assets')}}/images/users/avatar-1.jpg" alt="male">
+                                                                <img src="{{ asset('assets/images/users/avatar-1.jpg') }}" alt="male">
                                                                 <i>10:02</i>
                                                             </div>
                                                             <div class="conversation-text">

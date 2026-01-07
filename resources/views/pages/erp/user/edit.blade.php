@@ -1,3 +1,6 @@
+@extends("admin.layout.erp.app")
+@section("content")
+
 <form action="{{ URL('system/users', $user->id) }}" method="POST">
   @csrf
   @method("PUT")
@@ -56,3 +59,4 @@
     </tbody>
   </table>
 </form>
+@endsection

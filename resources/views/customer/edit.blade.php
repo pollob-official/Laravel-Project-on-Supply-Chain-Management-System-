@@ -1,5 +1,5 @@
 
-@extends("layout.erp.app")
+@extends("admin.layout.erp.app")
 @section("content")
 
 

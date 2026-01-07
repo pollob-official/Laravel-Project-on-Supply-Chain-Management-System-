@@ -1,3 +1,6 @@
+@extends("admin.layout.erp.app")
+@section("content")
+
 <table class="table">
     <thead style="background-color:#0ae264;">
         <tr>
@@ -32,3 +35,4 @@
         @endforelse
   </tbody>
 </table>
+@endsection

@@ -55,4 +55,16 @@ App>Mail> UserNotification >37 no line>
         );
     }
 
-
+resources/
+└── views/
+    ├── admin/                <-- ড্যাশবোর্ড ও সব ম্যানেজমেন্ট এখানে
+    │   ├── batches/
+    │   │   ├── index.blade.php
+    │   │   ├── create.blade.php
+    │   │   └── trashed.blade.php
+    │   ├── stakeholders/     <-- আপনার করা আগের ফাইলগুলো এখানে মুভ করবেন
+    │   └── products/
+    ├── track/                <-- কিউআর স্ক্যান করলে যে পেজ আসবে
+    │   └── result.blade.php
+    └── layouts/              <-- আপনার সেই সিএসএস ঠিক করা মাস্টার ফাইল
+        └── admin_master.blade.php

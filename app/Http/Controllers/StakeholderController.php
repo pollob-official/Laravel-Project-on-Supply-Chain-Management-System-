@@ -19,21 +19,21 @@ class StakeholderController extends Controller
                 return $query->whereAny([
                     "name", "email", "phone", "role", "address"
                 ], "LIKE", "%" . $request->search . "%");
-            })->orderBy("id", "desc")->paginate(8);
+            })->orderBy("id", "desc")->paginate(5);
 
-        return view("stakeholder.index", compact("stakeholders"));
+        return view("admin.stakeholder.index", compact("stakeholders"));
     }
 
     // ২. ট্র্যাশ লিস্ট (সফট ডিলিট হওয়া ডাটা দেখার জন্য)
     public function trashed()
     {
         $stakeholders = Stakeholder::onlyTrashed()->orderBy("id", "desc")->paginate(8);
-        return view("stakeholder.trashed", compact("stakeholders"));
+        return view("admin.stakeholder.trashed", compact("stakeholders"));
     }
 
     public function create()
     {
-        return view("stakeholder.create");
+        return view("admin.stakeholder.create");
     }
 
     // ৩. সেভ করার মেথড
@@ -73,7 +73,7 @@ class StakeholderController extends Controller
             return redirect("stakeholder")->with("error", "Stakeholder not found!");
         }
 
-        return view("stakeholder.edit", compact("stakeholder"));
+        return view("admin.stakeholder.edit", compact("stakeholder"));
     }
 
     // ৫. আপডেট মেথড (Safe Side: updateOrCreate ব্যবহার করা হয়েছে)

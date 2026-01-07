@@ -22,9 +22,9 @@ class MillersSupplierController extends Controller
                 });
             })
             ->orderBy("id", "desc")
-            ->paginate(10);
+            ->paginate(5);
 
-        return view("miller.index", compact("millers"));
+        return view("admin.miller.index", compact("millers"));
     }
 
     // ২. ট্র্যাশ লিস্ট
@@ -35,12 +35,12 @@ class MillersSupplierController extends Controller
             ->orderBy("id", "desc")
             ->paginate(10);
 
-        return view("miller.trashed", compact("millers"));
+        return view("admin.miller.trashed", compact("millers"));
     }
 
     public function create()
     {
-        return view("miller.create");
+        return view("admin.miller.create");
     }
 
     // ৩. নতুন মিলার সেভ করা
@@ -71,7 +71,7 @@ class MillersSupplierController extends Controller
     public function edit($id)
     {
         $miller = Stakeholder::with('miller')->where('role', 'miller')->findOrFail($id);
-        return view("miller.edit", compact("miller"));
+        return view("admin.miller.edit", compact("miller"));
     }
 
     // ৫. আপডেট মেথড

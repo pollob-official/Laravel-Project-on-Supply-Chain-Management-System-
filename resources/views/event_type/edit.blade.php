@@ -1,5 +1,5 @@
 
-@extends("layout.erp.app")
+@extends("admin.layout.erp.app")
 @section("content")
 
 <form action="{{URL("event_type/update", $event_type->id)}}" method="post" enctype="multipart/form-data" class="p-4 border rounded">

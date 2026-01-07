@@ -16,15 +16,15 @@ class CategoryController extends Controller
                              ->orWhere("slug", "LIKE", "%" . $request->search . "%");
             })
             ->orderBy("id", "desc")
-            ->paginate(8);
+            ->paginate(5);
 
-        return view("category.index", compact("categories"));
+        return view("admin.category.index", compact("categories"));
     }
 
     // ২. ক্রিয়েট পেজ
     public function create()
     {
-        return view("category.create");
+        return view("admin.category.create");
     }
 
     // ৩. নতুন ক্যাটাগরি সেভ করা
@@ -48,7 +48,7 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $category = Category::findOrFail($id);
-        return view("category.edit", compact("category"));
+        return view("admin.category.edit", compact("category"));
     }
 
     // ৫. আপডেট মেথড

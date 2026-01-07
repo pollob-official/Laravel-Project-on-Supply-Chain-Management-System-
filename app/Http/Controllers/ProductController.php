@@ -24,9 +24,9 @@ class ProductController extends Controller
                 });
             })
             ->orderBy("id", "desc")
-            ->paginate(8);
+            ->paginate(5);
 
-        return view("product.index", compact("products"));
+        return view("admin.product.index", compact("products"));
     }
 
     // ২. ট্র্যাশ লিস্ট
@@ -34,14 +34,14 @@ class ProductController extends Controller
      public function trashed()
     {
         $products = Product::onlyTrashed()->with(['category', 'unit'])->orderBy("id", "desc")->paginate(10);
-        return view("product.trashed", compact("products"));
+        return view("admin.product.trashed", compact("products"));
     }
 
     public function create()
     {
         $categories = Category::where('is_active', 1)->get();
         $units = Unit::all();
-        return view("product.create", compact('categories', 'units'));
+        return view("admin.product.create", compact('categories', 'units'));
     }
 
     // ৩. সেভ মেথড (Image handling as per your CustomerController style)
@@ -82,7 +82,7 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $categories = Category::where('is_active', 1)->get();
         $units = Unit::all();
-        return view("product.edit", compact("product", "categories", "units"));
+        return view("admin.product.edit", compact("product", "categories", "units"));
     }
 
     // ৫. আপডেট মেথড

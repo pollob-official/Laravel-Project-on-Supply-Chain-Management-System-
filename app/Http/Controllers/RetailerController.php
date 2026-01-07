@@ -24,9 +24,9 @@ class RetailerController extends Controller
                 });
             })
             ->orderBy("id", "desc")
-            ->paginate(8);
+            ->paginate(5);
 
-        return view("retailer.index", compact("retailers"));
+        return view("admin.retailer.index", compact("retailers"));
     }
 
     // ২. ট্র্যাশ লিস্ট (সফট ডিলিট ডাটা)
@@ -38,12 +38,12 @@ class RetailerController extends Controller
             ->orderBy("id", "desc")
             ->paginate(8);
 
-        return view("retailer.trashed", compact("retailers"));
+        return view("admin.retailer.trashed", compact("retailers"));
     }
 
     public function create()
     {
-        return view("retailer.create");
+        return view("admin.retailer.create");
     }
 
     // ৩. ডাটা সংরক্ষণ (Stakeholder + Retailer Table)
@@ -73,7 +73,7 @@ class RetailerController extends Controller
     public function edit($id)
     {
         $retailer = Stakeholder::with('retailer')->findOrFail($id);
-        return view("retailer.edit", compact("retailer"));
+        return view("admin.retailer.edit", compact("retailer"));
     }
 
     // ৫. আপডেট (updateOrCreate লজিক নিশ্চিত করা হয়েছে)

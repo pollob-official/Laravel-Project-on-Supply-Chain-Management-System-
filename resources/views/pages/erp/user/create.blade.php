@@ -1,4 +1,5 @@
-
+@extends("admin.layout.erp.app")
+@section("content")
 
 
 <form  action="{{URL("system/users")}}" method="POST">
@@ -21,3 +22,4 @@
 
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+@endsection

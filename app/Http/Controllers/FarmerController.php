@@ -22,9 +22,9 @@ class FarmerController extends Controller
                 });
             })
             ->orderBy("id", "desc")
-            ->paginate(10);
+            ->paginate(5);
 
-        return view("farmer.index", compact("farmers"));
+        return view("admin.farmer.index", compact("farmers"));
     }
 
     // ২. ট্র্যাশ লিস্ট
@@ -35,12 +35,12 @@ class FarmerController extends Controller
             ->orderBy("id", "desc")
             ->paginate(10);
 
-        return view("farmer.trashed", compact("farmers"));
+        return view("admin.farmer.trashed", compact("farmers"));
     }
 
     public function create()
     {
-        return view("farmer.create");
+        return view("admin.farmer.create");
     }
 
     // ৩. নতুন কৃষক সেভ করা (Crop History সহ)
@@ -72,7 +72,7 @@ class FarmerController extends Controller
     public function edit($id)
     {
         $farmer = Stakeholder::with('farmer')->where('role', 'farmer')->findOrFail($id);
-        return view("farmer.edit", compact("farmer"));
+        return view("admin.farmer.edit", compact("farmer"));
     }
 
     // ৫. আপডেট মেথড (Crop History সহ)

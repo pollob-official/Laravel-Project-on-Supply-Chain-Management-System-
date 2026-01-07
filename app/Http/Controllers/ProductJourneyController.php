@@ -19,16 +19,16 @@ class ProductJourneyController extends Controller
                              ->orWhere("current_stage", "LIKE", "%" . $request->search . "%");
             })
             ->orderBy("id", "desc")
-            ->paginate(10);
+            ->paginate(5);
 
-        return view("journey.index", compact("journeys"));
+        return view("admin.journey.index", compact("journeys"));
     }
 
     // ২. ট্র্যাশ লিস্ট (সফট ডিলিট হওয়া ডাটা)
     public function trashed()
     {
         $journeys = ProductJourney::onlyTrashed()->orderBy("id", "desc")->paginate(10);
-        return view("journey.trashed", compact("journeys"));
+        return view("admin.journey.trashed", compact("journeys"));
     }
 
     // ৩. নতুন হ্যান্ডওভার পেজ
@@ -36,7 +36,7 @@ class ProductJourneyController extends Controller
     {
         $products = Product::all();
         $stakeholders = Stakeholder::all();
-        return view("journey.create", compact("products", "stakeholders"));
+        return view("admin.journey.create", compact("products", "stakeholders"));
     }
 
     // ৪. ডাটা সেভ করার মেথড (পার্সেন্টেজ লজিকসহ)
@@ -77,7 +77,7 @@ class ProductJourneyController extends Controller
             return redirect("journey")->with("error", "Record not found!");
         }
 
-        return view("journey.edit", compact("journey", "products", "stakeholders"));
+        return view("admin.journey.edit", compact("journey", "products", "stakeholders"));
     }
 
     // ৬. আপডেট মেথড (পার্সেন্টেজ লজিকসহ)
@@ -149,6 +149,6 @@ class ProductJourneyController extends Controller
         }
 
         // আপনার বর্তমান ফাইল লোকেশন অনুযায়ী পাথটি হবে:
-        return view("journey.trace", compact("history", "tracking_no"));
+        return view("admin.journey.trace", compact("history", "tracking_no"));
     }
 }

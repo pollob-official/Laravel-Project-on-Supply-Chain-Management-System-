@@ -35,7 +35,7 @@ class CustomerController extends Controller
              "phone"
         ], "LIKE" , "%".$request->search."%" );
 
-        })->orderBy("id", "desc")->paginate(8);
+        })->orderBy("id", "desc")->paginate(5);
 
 
 
