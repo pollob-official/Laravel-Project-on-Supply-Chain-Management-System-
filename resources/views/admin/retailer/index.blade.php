@@ -4,17 +4,17 @@
 
     <h3 class="mb-2">Retailer List</h3>
 
-    <form action="{{URL("retailer")}}" method="GET">
+    <form action="{{URL("admin/retailer")}}" method="GET">
         <div class="mb-3 d-flex gap-2">
             <input value="{{request("search")}}" type="text" class="form-control" id="search" name="search" placeholder="Search by name, phone, shop or market...">
             <button type="submit" class="btn btn-primary">Search</button>
         </div>
     </form>
 
-    <x-button :url="URL('retailer/create')" type="primary">
+    <x-button :url="URL('admin/retailer/create')" type="primary">
         <i class="bi bi-plus-lg"></i> Add Retailer
     </x-button>
-    <a href="{{ URL('retailer/trashed') }}" class="btn btn-outline-danger">
+    <a href="{{ URL('admin/retailer/trashed') }}" class="btn btn-outline-danger">
         <i class="bi bi-trash"></i> View Trash
     </a>
 
@@ -51,10 +51,10 @@
                         <td>{{ $retailer->phone }}</td>
                         <td>
                             <div class="d-flex gap-1">
-                                <a href="{{ URL('retailer/edit/'.$retailer->id) }}" class="btn btn-sm btn-outline-primary">
+                                <a href="{{ URL('admin/retailer/edit/'.$retailer->id) }}" class="btn btn-sm btn-outline-primary">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-                                <form action="{{ URL('retailer/delete/'.$retailer->id) }}" method="POST" onsubmit="return confirm('Move to trash?')">
+                                <form action="{{ URL('admin/retailer/delete/'.$retailer->id) }}" method="POST" onsubmit="return confirm('Move to trash?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-outline-danger">

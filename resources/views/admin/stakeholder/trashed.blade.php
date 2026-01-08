@@ -5,7 +5,7 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3>Trashed Stakeholders</h3>
         <div>
-            <a href="{{ URL('stakeholder') }}" class="btn btn-secondary">
+            <a href="{{ URL('admin/stakeholder') }}" class="btn btn-secondary">
                 <i class="bi bi-arrow-left"></i> Back to List
             </a>
         </div>
@@ -34,11 +34,11 @@
                     <td>{{ $stakeholder->deleted_at->format('d M, Y h:i A') }}</td>
                     <td>
                         <div class="btn-group">
-                            <a href="{{ URL('stakeholder/restore/'.$stakeholder->id) }}" class="btn btn-sm btn-success">
+                            <a href="{{ URL('admin/stakeholder/restore/'.$stakeholder->id) }}" class="btn btn-sm btn-success">
                                 Restore
                             </a>
 
-                            <form action="{{ URL('stakeholder/force-delete/'.$stakeholder->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this permanently?')">
+                            <form action="{{ URL('admin/stakeholder/force-delete/'.$stakeholder->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this permanently?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger">

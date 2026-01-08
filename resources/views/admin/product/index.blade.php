@@ -5,7 +5,7 @@
     <h1 class="mb-2">Product List</h1>
 
     {{-- Search Form --}}
-    <form action="{{URL("product")}}" method="GET">
+    <form action="{{URL("admin/product")}}" method="GET">
         <div class="mb-3 d-flex gap-2">
             <input value="{{request("search")}}" type="text" class="form-control" id="search" name="search" placeholder="Search by name, SKU or type...">
             <button type="submit" class="btn btn-primary">Search</button>
@@ -13,10 +13,10 @@
     </form>
 
     <div class="mb-3">
-        <x-button :url="URL('product/create')" type="primary">
+        <x-button :url="URL('admin/product/create')" type="primary">
             <i class="bi bi-plus-lg"></i> Add Product
         </x-button>
-        <a href="{{ URL('product/trashed') }}" class="btn btn-outline-danger">
+        <a href="{{ URL('admin/product/trashed') }}" class="btn btn-outline-danger">
             <i class="bi bi-trash"></i> View Trash
         </a>
     </div>
@@ -72,10 +72,10 @@
                         </td>
                         <td>
                             <div class="d-flex gap-1 justify-content-center">
-                                <a href="{{ URL('product/edit/'.$product->id) }}" class="btn btn-sm btn-outline-primary" title="Edit">
+                                <a href="{{ URL('admin/product/edit/'.$product->id) }}" class="btn btn-sm btn-outline-primary" title="Edit">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-                                <form action="{{ URL('product/delete/'.$product->id) }}" method="POST" onsubmit="return confirm('Move to trash?')">
+                                <form action="{{ URL('admin/product/delete/'.$product->id) }}" method="POST" onsubmit="return confirm('Move to trash?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-outline-danger" title="Soft Delete">

@@ -13,7 +13,7 @@
     </div>
     @endif
 
-<form action="{{URL("stakeholder/save")}}" method="POST" class="p-4 border rounded shadow-sm bg-light">
+<form action="{{URL("admin/stakeholder/save")}}" method="POST" class="p-4 border rounded shadow-sm bg-light">
    @csrf
 
   <div class="row">
@@ -90,7 +90,7 @@
       <button type="submit" class="btn btn-primary btn-lg">
         Save Stakeholder
       </button>
-      <a href="{{URL('stakeholder')}}" class="btn btn-secondary btn-lg">Cancel</a>
+      <a href="{{URL('admin/stakeholder')}}" class="btn btn-secondary btn-lg">Cancel</a>
   </div>
 
 </form>

@@ -4,10 +4,10 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3>Edit Stakeholder ({{ ucfirst($stakeholder->role) }})</h3>
-        <a href="{{ URL('stakeholder') }}" class="btn btn-secondary">Back to List</a>
+        <a href="{{ URL('admin/stakeholder') }}" class="btn btn-secondary">Back to List</a>
     </div>
 
-    <form action="{{ URL('stakeholder/update', $stakeholder->id) }}" method="POST" class="p-4 border rounded shadow-sm bg-light">
+    <form action="{{ URL('admin/stakeholder/update', $stakeholder->id) }}" method="POST" class="p-4 border rounded shadow-sm bg-light">
         @csrf
 
         <div class="row">
@@ -83,7 +83,7 @@
             <button type="submit" class="btn btn-primary px-5">
                 <i class="bi bi-save"></i> Update Stakeholder Info
             </button>
-             <a href="{{ URL('stakeholder') }}" class="btn btn-outline-secondary px-4">Cancel</a>
+             <a href="{{ URL('admin/stakeholder') }}" class="btn btn-outline-secondary px-4">Cancel</a>
         </div>
     </form>
 </div>

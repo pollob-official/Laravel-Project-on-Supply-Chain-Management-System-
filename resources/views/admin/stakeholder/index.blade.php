@@ -4,17 +4,17 @@
 
     <h3 class="mb-2">Stakeholder List</h3>
 
-    <form action="{{URL("stakeholder")}}" method="GET">
+    <form action="{{URL("admin/stakeholder")}}" method="GET">
         <div class="mb-3  d-flex gap-2">
             <input value="{{request("search")}}" type="text" class="form-control" id="search" name="search" placeholder="Search by name, phone or role...">
             <button type="submit" class="btn btn-primary">Search</button>
         </div>
     </form>
 
-    <x-button :url="URL('stakeholder/create')" type="primary">
+    <x-button :url="URL('admin/stakeholder/create')" type="primary">
         <i class="bi bi-plus-lg"></i> Add Stakeholder
     </x-button>
-    <a href="{{ URL('stakeholder/trashed') }}" class="btn btn-outline-danger">
+    <a href="{{ URL('admin/stakeholder/trashed') }}" class="btn btn-outline-danger">
     <i class="bi bi-trash"></i> View Trash
 </a>
 
@@ -52,10 +52,10 @@
                         <td>{{ Str::limit($stakeholder->address, 30) }}</td>
                         <td>
                             <div class="d-flex gap-1">
-                                <a href="{{ URL('stakeholder/edit/'.$stakeholder->id) }}" class="btn btn-sm btn-outline-primary">
+                                <a href="{{ URL('admin/stakeholder/edit/'.$stakeholder->id) }}" class="btn btn-sm btn-outline-primary">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-                                <form action="{{ URL('stakeholder/delete/'.$stakeholder->id) }}" method="POST" onsubmit="return confirm('Are you sure?')">
+                                <form action="{{ URL('admin/stakeholder/delete/'.$stakeholder->id) }}" method="POST" onsubmit="return confirm('Are you sure?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-outline-danger">

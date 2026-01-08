@@ -61,7 +61,7 @@ class StakeholderController extends Controller
             Retailer::create(['stakeholder_id' => $id, 'shop_name' => $request->shop_name]);
         }
 
-        return redirect("stakeholder")->with("success", "Stakeholder Created successfully!");
+        return redirect("admin/stakeholder")->with("success", "Stakeholder Created successfully!");
     }
 
     // ৪. এডিট মেথড (Eager Loading ব্যবহার করা হয়েছে যাতে রিলেশন ডাটা null না আসে)
@@ -70,7 +70,7 @@ class StakeholderController extends Controller
         $stakeholder = Stakeholder::with(['farmer', 'miller', 'wholesaler', 'retailer'])->find($id);
 
         if (!$stakeholder) {
-            return redirect("stakeholder")->with("error", "Stakeholder not found!");
+            return redirect("admin/stakeholder")->with("error", "Stakeholder not found!");
         }
 
         return view("admin.stakeholder.edit", compact("stakeholder"));
@@ -113,7 +113,7 @@ class StakeholderController extends Controller
             );
         }
 
-        return redirect("stakeholder")->with("success", "Updated successfully");
+        return redirect("admin/stakeholder")->with("success", "Updated successfully");
     }
 
     // ৬. সফট ডিলিট (সাব-টেবিলসহ)
@@ -129,7 +129,7 @@ class StakeholderController extends Controller
             if ($role == 'wholesaler') Wholesaler::where('stakeholder_id', $id)->delete();
             if ($role == 'retailer') Retailer::where('stakeholder_id', $id)->delete();
         }
-        return redirect("stakeholder")->with("success", "Moved to Trash");
+        return redirect("admin/stakeholder")->with("success", "Moved to Trash");
     }
 
     // ৭. রিস্টোর (সাব-টেবিলসহ)
@@ -145,7 +145,7 @@ class StakeholderController extends Controller
             if ($role == 'wholesaler') Wholesaler::withTrashed()->where('stakeholder_id', $id)->restore();
             if ($role == 'retailer') Retailer::withTrashed()->where('stakeholder_id', $id)->restore();
         }
-        return redirect("stakeholder")->with("success", "Restored successfully");
+        return redirect("admin/stakeholder")->with("success", "Restored successfully");
     }
 
     // ৮. পার্মানেন্ট ডিলিট
@@ -161,6 +161,6 @@ class StakeholderController extends Controller
 
             $stakeholder->forceDelete();
         }
-        return redirect("stakeholder/trashed")->with("success", "Permanently Deleted");
+        return redirect("admin/stakeholder/trashed")->with("success", "Permanently Deleted");
     }
 }

@@ -4,7 +4,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3 class="mb-0 text-danger"><i class="bi bi-trash3"></i> Trashed Retailers</h3>
-        <a href="{{ URL('retailer') }}" class="btn btn-secondary shadow-sm">
+        <a href="{{ URL('admin/retailer') }}" class="btn btn-secondary shadow-sm">
             <i class="bi bi-arrow-left"></i> Back to Retailer List
         </a>
     </div>
@@ -43,12 +43,12 @@
                         <td>
                             <div class="d-flex gap-1">
                                 {{-- আপনার রাউট অনুযায়ী Restore (GET) --}}
-                                <a href="{{ URL('retailer/restore/'.$retailer->id) }}" class="btn btn-sm btn-outline-success" title="Restore">
+                                <a href="{{ URL('admin/retailer/restore/'.$retailer->id) }}" class="btn btn-sm btn-outline-success" title="Restore">
                                     <i class="bi bi-arrow-counterclockwise"></i> Restore
                                 </a>
 
-                                {{-- আপনার রাউট অনুযায়ী Force Delete (GET) --}}
-                                <form action="{{ URL('retailer/force-delete/'.$retailer->id) }}" method="POST" class="d-inline">
+                                {{-- আপনার রাউট অনুযায়ী Force Delete (GET) --}}
+                                <form action="{{ URL('admin/retailer/force-delete/'.$retailer->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE') {{-- এটিই সবচেয়ে গুরুত্বপূর্ণ --}}
                                     <button type="submit" class="btn btn-sm btn-outline-danger"

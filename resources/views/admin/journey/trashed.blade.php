@@ -4,7 +4,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-1 mt-2">
         <h2 class="text-danger mb-0 mt-2"><i class="bi bi-trash3"></i> Trashed Handover Records</h2>
-        <a href="{{ URL('journey') }}" class="btn btn-secondary shadow-sm mt-2">
+        <a href="{{ URL('admin/journey') }}" class="btn btn-secondary shadow-sm mt-2">
             <i class="bi bi-arrow-left"></i> Back to Product Handover History
         </a>
     </div>
@@ -37,12 +37,12 @@
                         <td>
                             <div class="d-flex gap-2 justify-content-center">
                                 {{-- Restore Button --}}
-                                <a href="{{ URL('journey/restore/'.$journey->id) }}" class="btn btn-sm btn-outline-success" title="Restore Data">
+                                <a href="{{ URL('admin/journey/restore/'.$journey->id) }}" class="btn btn-sm btn-outline-success" title="Restore Data">
                                     <i class="bi bi-arrow-counterclockwise"></i> Restore
                                 </a>
 
                                 {{-- Permanent Delete Button --}}
-                                <form action="{{ URL('journey/force-delete/'.$journey->id) }}" method="POST" onsubmit="return confirm('Warning! This will delete the data permanently. Are you sure?')">
+                                <form action="{{ URL('admin/journey/force-delete/'.$journey->id) }}" method="POST" onsubmit="return confirm('Warning! This will delete the data permanently. Are you sure?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-outline-danger">

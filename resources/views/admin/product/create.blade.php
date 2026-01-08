@@ -4,7 +4,7 @@
 <div class="container-fluid mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3><i class="bi bi-box-seam"></i> Add New Product</h3>
-        <a href="{{ URL('product') }}" class="btn btn-secondary shadow-sm">
+        <a href="{{ URL('admin/product') }}" class="btn btn-secondary shadow-sm">
             <i class="bi bi-arrow-left"></i> Back to List
         </a>
     </div>
@@ -21,7 +21,7 @@
 
     <div class="card shadow-sm border-0">
         <div class="card-body p-4 bg-light">
-            <form action="{{ URL('product/save') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ URL('admin/product/save') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="row">

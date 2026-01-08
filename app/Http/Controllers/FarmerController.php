@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Stakeholder;
 use App\Models\Farmer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB; // Transaction ব্যবহারের জন্য
+use Illuminate\Support\Facades\DB;
 
 class FarmerController extends Controller
 {
-    // ১. কৃষকদের তালিকা (Search + Crop History সহ)
+    // ১. কৃষকদের তালিকা
     public function index(Request $request)
     {
         $farmers = Stakeholder::with('farmer')
@@ -33,7 +33,7 @@ class FarmerController extends Controller
         $farmers = Stakeholder::onlyTrashed()
             ->where('role', 'farmer')
             ->orderBy("id", "desc")
-            ->paginate(10);
+            ->paginate(5);
 
         return view("admin.farmer.trashed", compact("farmers"));
     }
@@ -43,10 +43,8 @@ class FarmerController extends Controller
         return view("admin.farmer.create");
     }
 
-    // ৩. নতুন কৃষক সেভ করা (Crop History সহ)
-    public function store(Request $request)
+    public function save(Request $request)
     {
-        // ডাটাবেস ট্রানজেকশন ব্যবহার করা নিরাপদ যাতে এক টেবিলে ডাটা সেভ হয়ে অন্যটায় ফেইল না করে
         DB::transaction(function () use ($request) {
             $stakeholder = Stakeholder::create([
                 'name'    => $request->name,
@@ -61,21 +59,21 @@ class FarmerController extends Controller
                 'stakeholder_id' => $stakeholder->id,
                 'land_area'      => $request->land_area,
                 'farmer_card_no' => $request->farmer_card_no,
-                'crop_history'   => $request->crop_history // ক্রপ হিস্ট্রি অ্যাড করা হলো
+                'crop_history'   => $request->crop_history
             ]);
         });
 
-        return redirect('farmer')->with("success", "Farmer Created successfully!");
+        // এখানে . এর বদলে / ব্যবহার করতে হবে
+        return redirect('admin/farmer')->with("success", "Farmer Created successfully!");
     }
 
-    // ৪. এডিট পেজ
     public function edit($id)
     {
         $farmer = Stakeholder::with('farmer')->where('role', 'farmer')->findOrFail($id);
         return view("admin.farmer.edit", compact("farmer"));
     }
 
-    // ৫. আপডেট মেথড (Crop History সহ)
+    // ৪. আপডেট - Redirect URL ঠিক করা হয়েছে
     public function update(Request $request, $id)
     {
         $stakeholder = Stakeholder::findOrFail($id);
@@ -94,41 +92,39 @@ class FarmerController extends Controller
                 [
                     'land_area'      => $request->land_area,
                     'farmer_card_no' => $request->farmer_card_no,
-                    'crop_history'   => $request->crop_history // ক্রপ হিস্ট্রি আপডেট করা হলো
+                    'crop_history'   => $request->crop_history
                 ]
             );
         });
 
-        return redirect('farmer')->with("success", "Farmer updated successfully");
+        return redirect('admin/farmer')->with("success", "Farmer updated successfully");
     }
 
-    // ৬. সফট ডিলিট
+    // ৫. সফট ডিলিট
     public function delete($id)
     {
         $stakeholder = Stakeholder::findOrFail($id);
         $stakeholder->delete();
-
-        // সাব-টেবিল সফট ডিলিট (মডেলে SoftDeletes ট্রেইট থাকলে)
         Farmer::where('stakeholder_id', $id)->delete();
 
-        return redirect('farmer')->with("success", "Farmer moved to trash");
+        return redirect('admin/farmer')->with("success", "Farmer moved to trash");
     }
 
-    // ৭. রিস্টোর করা
+    // ৬. রিস্টোর
     public function restore($id)
     {
         Stakeholder::withTrashed()->where('id', $id)->restore();
         Farmer::withTrashed()->where('stakeholder_id', $id)->restore();
 
-        return redirect('farmer')->with("success", "Farmer restored successfully");
+        return redirect('admin/farmer')->with("success", "Farmer restored successfully");
     }
 
-    // ৮. পার্মানেন্ট ডিলিট (আপনার forceDelete ফাংশন নাম অনুযায়ী)
+    // ৭. পার্মানেন্ট ডিলিট
     public function force_delete($id)
     {
         Farmer::withTrashed()->where('stakeholder_id', $id)->forceDelete();
         Stakeholder::withTrashed()->findOrFail($id)->forceDelete();
 
-        return redirect('farmer/trashed')->with("success", "Farmer permanently deleted");
+        return redirect('admin/farmer/trashed')->with("success", "Farmer permanently deleted");
     }
 }

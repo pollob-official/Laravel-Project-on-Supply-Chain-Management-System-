@@ -3,7 +3,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-2 mt-2">
         <h3><i class="bi bi-truck me-2"></i>Record Product Handover (New Journey)</h3>
-        <a href="{{ URL('journey') }}" class="btn btn-secondary btn-sm">
+        <a href="{{ URL('admin/journey') }}" class="btn btn-secondary btn-sm">
             <i class="bi bi-arrow-left"></i> Back to Product Handover History
         </a>
     </div>
@@ -18,7 +18,7 @@
         </div>
     @endif
 
-    <form action="{{ URL('journey/save') }}" method="POST" class="p-4 border rounded shadow-sm bg-light">
+    <form action="{{ URL('admin/journey/save') }}" method="POST" class="p-4 border rounded shadow-sm bg-light">
         @csrf
 
         <div class="row">
@@ -102,7 +102,7 @@
 
         <div class="mt-2">
             <button type="submit" class="btn btn-primary btn-lg"><i class="bi bi-check-circle"></i> Save Handover</button>
-            <a href="{{ URL('journey') }}" class="btn btn-secondary btn-lg">Cancel</a>
+            <a href="{{ URL('admin/journey') }}" class="btn btn-secondary btn-lg">Cancel</a>
         </div>
     </form>
 

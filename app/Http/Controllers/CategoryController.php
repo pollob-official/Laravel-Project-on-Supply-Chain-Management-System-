@@ -41,7 +41,7 @@ class CategoryController extends Controller
             'is_active'   => $request->is_active ?? 1,
         ]);
 
-        return redirect('category')->with("success", "Category created successfully!");
+        return redirect('admin/category')->with("success", "Category created successfully!");
     }
 
     // ৪. এডিট পেজ
@@ -67,7 +67,7 @@ class CategoryController extends Controller
             'is_active'   => $request->is_active,
         ]);
 
-        return redirect('category')->with("success", "Category updated successfully");
+        return redirect('admin/category')->with("success", "Category updated successfully");
     }
 
     // ৬. সরাসরি ডিলিট (যেহেতু Soft Delete নেই)
@@ -76,6 +76,6 @@ class CategoryController extends Controller
         $category = Category::findOrFail($id);
         $category->delete();
 
-        return redirect('category')->with("success", "Category deleted permanently");
+        return redirect('admin/category')->with("success", "Category deleted permanently");
     }
 }

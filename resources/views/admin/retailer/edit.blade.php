@@ -4,13 +4,13 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3><i class="bi bi-pencil-square"></i> Edit Retailer Profile</h3>
-        <a href="{{ URL('retailer') }}" class="btn btn-secondary shadow-sm">
+        <a href="{{ URL('admin/retailer') }}" class="btn btn-secondary shadow-sm">
             <i class="bi bi-arrow-left"></i> Back to List
         </a>
     </div>
 
     {{-- পূর্বের MethodNotAllowedHttpException এড়াতে রাউটটি PUT মেথডে দেয়া হয়েছে --}}
-    <form action="{{ URL('retailer/update', $retailer->id) }}" method="POST" class="p-4 border rounded shadow-sm bg-light">
+    <form action="{{ URL('admin/retailer/update', $retailer->id) }}" method="POST" class="p-4 border rounded shadow-sm bg-light">
         @csrf
         @method('POST')
 
@@ -66,7 +66,7 @@
             <button type="submit" class="btn btn-primary px-5 shadow-sm">
                 <i class="bi bi-save"></i> Update Retailer Info
             </button>
-            <a href="{{ URL('retailer') }}" class="btn btn-outline-secondary px-4">Cancel</a>
+            <a href="{{ URL('admin/retailer') }}" class="btn btn-outline-secondary px-4">Cancel</a>
         </div>
     </form>
 </div>

@@ -4,7 +4,7 @@
 
     <h3 class="mb-2">Measurement Unit List</h3>
 
-    <form action="{{URL("unit")}}" method="GET">
+    <form action="{{URL("admin/unit")}}" method="GET">
         <div class="mb-3 d-flex gap-2">
             <input value="{{request("search")}}" type="text" class="form-control" id="search" name="search" placeholder="Search by unit name or short name...">
             <button type="submit" class="btn btn-primary">Search</button>
@@ -12,7 +12,7 @@
     </form>
 
     <div class="mb-3">
-        <x-button :url="URL('unit/create')" type="primary">
+        <x-button :url="URL('admin/unit/create')" type="primary">
             <i class="bi bi-plus-lg"></i> Add New Unit
         </x-button>
     </div>
@@ -43,11 +43,11 @@
                                 </td>
                                 <td>
                                     <div class="d-flex gap-1 justify-content-center">
-                                        <a href="{{ URL('unit/edit/'.$unit->id) }}" class="btn btn-sm btn-outline-primary">
+                                        <a href="{{ URL('admin/unit/edit/'.$unit->id) }}" class="btn btn-sm btn-outline-primary">
                                             <i class="bi bi-pencil"></i>
                                         </a>
 
-                                        <form action="{{ URL('unit/delete/'.$unit->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this unit?')">
+                                        <form action="{{ URL('admin/unit/delete/'.$unit->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this unit?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-outline-danger">

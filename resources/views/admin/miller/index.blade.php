@@ -4,17 +4,17 @@
 
     <h3 class="mb-2">Miller List</h3>
 
-    <form action="{{URL("miller")}}" method="GET">
+    <form action="{{URL("admin/miller")}}" method="GET">
         <div class="mb-3 d-flex gap-2">
             <input value="{{request("search")}}" type="text" class="form-control" id="search" name="search" placeholder="Search by name, phone, or license...">
             <button type="submit" class="btn btn-primary">Search</button>
         </div>
     </form>
 
-    <x-button :url="URL('miller/create')" type="primary">
+    <x-button :url="URL('admin/miller/create')" type="primary">
         <i class="bi bi-plus-lg"></i> Add Miller
     </x-button>
-    <a href="{{ URL('miller/trashed') }}" class="btn btn-outline-danger">
+    <a href="{{ URL('admin/miller/trashed') }}" class="btn btn-outline-danger">
         <i class="bi bi-trash"></i> View Trash
     </a>
 
@@ -51,10 +51,10 @@
                         <td>{{ $miller->phone }}</td>
                         <td>
                             <div class="d-flex gap-1">
-                                <a href="{{ URL('miller/edit/'.$miller->id) }}" class="btn btn-sm btn-outline-primary">
+                                <a href="{{ URL('admin/miller/edit/'.$miller->id) }}" class="btn btn-sm btn-outline-primary">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-                                <form action="{{ URL('miller/delete/'.$miller->id) }}" method="POST" onsubmit="return confirm('Are you sure?')">
+                                <form action="{{ URL('admin/miller/delete/'.$miller->id) }}" method="POST" onsubmit="return confirm('Are you sure?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-outline-danger">

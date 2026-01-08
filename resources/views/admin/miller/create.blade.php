@@ -3,7 +3,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1>Create Miller / Supplier</h1>
-        <a href="{{URL('miller')}}" class="btn btn-secondary">
+        <a href="{{URL('admin/miller')}}" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Back to List
         </a>
     </div>
@@ -18,7 +18,7 @@
     </div>
     @endif
 
-    <form action="{{URL("miller/store")}}" method="POST" class="p-4 border rounded shadow-sm bg-light">
+    <form action="{{URL("admin/miller/save")}}" method="POST" class="p-4 border rounded shadow-sm bg-light">
         @csrf
 
         <h5 class="text-muted mb-3">Basic Information</h5>

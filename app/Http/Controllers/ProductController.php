@@ -73,7 +73,7 @@ class ProductController extends Controller
             'image'          => $imgname,
         ]);
 
-        return redirect("product")->with("success", "Product added to inventory!");
+        return redirect("admin/product")->with("success", "Product added to inventory!");
     }
 
     // ৪. এডিট পেজ
@@ -112,21 +112,21 @@ class ProductController extends Controller
             'alert_quantity' => $request->alert_quantity,
         ]);
 
-        return redirect("product")->with("success", "Product updated successfully");
+        return redirect("admin/product")->with("success", "Product updated successfully");
     }
 
     // ৬. সফট ডিলিট (ফাইল ডিলিট করবেন না, কারণ এটি ট্র্যাশে থাকবে)
     public function delete($id)
     {
         Product::findOrFail($id)->delete();
-        return redirect("product")->with("success", "Product moved to trash");
+        return redirect("admin/product")->with("success", "Product moved to trash");
     }
 
     // ৭. রিস্টোর
     public function restore($id)
     {
         Product::withTrashed()->find($id)->restore();
-        return redirect("product")->with("success", "Product restored successfully");
+        return redirect("admin/product")->with("success", "Product restored successfully");
     }
 
     // ৮. পার্মানেন্ট ডিলিট (ইমেজসহ ডিলিট)
@@ -139,6 +139,6 @@ class ProductController extends Controller
         }
 
         $product->forceDelete();
-        return redirect("product/trashed")->with("success", "Product permanently deleted");
+        return redirect("admin/product/trashed")->with("success", "Product permanently deleted");
     }
 }

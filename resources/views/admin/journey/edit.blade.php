@@ -3,7 +3,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-2 mt-2">
     <h3><i class="bi bi-pencil-square me-2"></i>Edit Product Journey</h3>
-    <a href="{{URL('journey')}}" class="btn btn-secondary btn-sm">
+    <a href="{{URL('admin/journey')}}" class="btn btn-secondary btn-sm">
         <i class="bi bi-arrow-left"></i> Back to Handover History
     </a>
 </div>
@@ -18,7 +18,7 @@
 </div>
 @endif
 
-<form action="{{URL("journey/update/".$journey->id)}}" method="POST" class="p-4 border rounded shadow-sm bg-light">
+<form action="{{URL("admin/journey/update/".$journey->id)}}" method="POST" class="p-4 border rounded shadow-sm bg-light">
     @csrf
     @method('POST') {{-- আপনার কন্ট্রোলারে যদি আলাদা মেথড থাকে তবে এখানে PUT দিতে পারেন --}}
 

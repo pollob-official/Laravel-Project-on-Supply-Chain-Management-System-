@@ -4,7 +4,7 @@
 <div class="container-fluid mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3>Add New Category</h3>
-        <a href="{{ URL('category') }}" class="btn btn-secondary shadow-sm">
+        <a href="{{ URL('admin/category') }}" class="btn btn-secondary shadow-sm">
             <i class="bi bi-arrow-left"></i> Back to List
         </a>
     </div>
@@ -21,7 +21,7 @@
 
     <div class="card shadow-sm border-0">
         <div class="card-body p-4 bg-light">
-            <form action="{{ URL('category/store') }}" method="POST">
+            <form action="{{ URL('admin/category/save') }}" method="POST">
                 @csrf
 
                 <div class="row">

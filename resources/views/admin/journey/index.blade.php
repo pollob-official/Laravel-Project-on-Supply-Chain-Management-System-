@@ -9,17 +9,17 @@
 
             <!-- Left side buttons -->
             <div class="d-flex gap-2">
-                <x-button :url="URL('journey/create')" type="primary">
+                <x-button :url="URL('admin/journey/create')" type="primary">
                     <i class="bi bi-plus-lg"></i> New Handover (Entry)
                 </x-button>
 
-                <a href="{{ URL('journey/trashed') }}" class="btn btn-outline-danger">
+                <a href="{{ URL('admin/journey/trashed') }}" class="btn btn-outline-danger">
                     <i class="bi bi-trash"></i> View Trash
                 </a>
             </div>
 
             <!-- Right side search -->
-            <form action="{{ URL('journey') }}" method="GET" class="d-flex gap-1">
+            <form action="{{ URL('admin/journey') }}" method="GET" class="d-flex gap-1">
                 <input value="{{ request('search') }}" type="text" class="form-control" style="width: 280px;"
                     name="search" placeholder="Search by Tracking No or Stage...">
                 <button type="submit" class="btn btn-primary">Search</button>
@@ -75,11 +75,11 @@
                         </td>
                         <td>
                             <div class="d-flex gap-1">
-                                <a href="{{ URL('journey/edit/' . $journey->id) }}" class="btn btn-sm btn-outline-primary">
+                                <a href="{{ URL('admin/journey/edit/' . $journey->id) }}" class="btn btn-sm btn-outline-primary">
                                     <i class="bi bi-pencil"></i>
                                 </a>
 
-                                <form action="{{ URL('journey/delete/' . $journey->id) }}" method="POST"
+                                <form action="{{ URL('admin/journey/delete/' . $journey->id) }}" method="POST"
                                     onsubmit="return confirm('Move to trash?')">
                                     @csrf
                                     @method('DELETE')
@@ -106,7 +106,7 @@
                                             id="qrPrintArea{{ $journey->id }}">
                                             <div class="d-inline-block border p-2 mb-2 bg-white">
                                                 {{-- কিউআর কোড জেনারেশন (লিঙ্কসহ) --}}
-                                                {!! QrCode::size(150)->generate(url('journey/trace/' . $journey->tracking_no)) !!}
+                                                {!! QrCode::size(150)->generate(url('admin/journey/trace/' . $journey->tracking_no)) !!}
                                             </div>
                                             <h5 class="mt-2 mb-0">{{ $journey->product->name }}</h5>
                                             <p class="small text-muted mb-0">Stage: {{ $journey->current_stage }}</p>

@@ -4,7 +4,7 @@
 
     <h3 class="mb-2">Product Category List</h3>
 
-    <form action="{{URL("category")}}" method="GET">
+    <form action="{{URL("admin/category")}}" method="GET">
         <div class="mb-3 d-flex gap-2">
             <input value="{{request("search")}}" type="text" class="form-control" id="search" name="search" placeholder="Search by category name or slug...">
             <button type="submit" class="btn btn-primary">Search</button>
@@ -12,7 +12,7 @@
     </form>
 
     <div class="mb-3">
-        <x-button :url="URL('category/create')" type="primary">
+        <x-button :url="URL('admin/category/create')" type="primary">
             <i class="bi bi-plus-lg"></i> Add New Category
         </x-button>
     </div>
@@ -55,12 +55,12 @@
                                 </td>
                                 <td>
                                     <div class="d-flex gap-1 justify-content-center">
-                                        <a href="{{ URL('category/edit/'.$category->id) }}" class="btn btn-sm btn-outline-primary" title="Edit">
+                                        <a href="{{ URL('admin/category/edit/'.$category->id) }}" class="btn btn-sm btn-outline-primary" title="Edit">
                                             <i class="bi bi-pencil"></i>
                                         </a>
 
                                         {{-- সরাসরি ডিলিট লজিক (যেহেতু সফট ডিলিট নেই) --}}
-                                        <form action="{{ URL('category/delete/'.$category->id) }}" method="POST" onsubmit="return confirm('Are you sure? This will delete the category permanently.')">
+                                        <form action="{{ URL('admin/category/delete/'.$category->id) }}" method="POST" onsubmit="return confirm('Are you sure? This will delete the category permanently.')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete Permanent">

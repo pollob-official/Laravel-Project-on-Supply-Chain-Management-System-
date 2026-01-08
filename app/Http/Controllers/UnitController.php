@@ -27,7 +27,7 @@ class UnitController extends Controller
     }
 
     // ৩. নতুন ইউনিট সেভ করা
-    public function store(Request $request)
+    public function save(Request $request)
     {
         $request->validate([
             'name' => 'required|max:255',
@@ -41,7 +41,7 @@ class UnitController extends Controller
             'base_unit_value' => $request->base_unit_value,
         ]);
 
-        return redirect('unit')->with("success", "Unit created successfully!");
+        return redirect('admin/unit')->with("success", "Unit created successfully!");
     }
 
     // ৪. এডিট পেজ
@@ -68,7 +68,7 @@ class UnitController extends Controller
             'base_unit_value' => $request->base_unit_value,
         ]);
 
-        return redirect('unit')->with("success", "Unit updated successfully");
+        return redirect('admin/unit')->with("success", "Unit updated successfully");
     }
 
     // ৬. সরাসরি ডিলিট
@@ -77,6 +77,6 @@ class UnitController extends Controller
         $unit = Unit::findOrFail($id);
         $unit->delete();
 
-        return redirect('unit')->with("success", "Unit deleted permanently");
+        return redirect('admin/unit')->with("success", "Unit deleted permanently");
     }
 }

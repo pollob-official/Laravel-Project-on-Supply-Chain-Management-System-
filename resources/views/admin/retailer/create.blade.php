@@ -4,7 +4,7 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3><i class="bi bi-plus-circle"></i> Create New Retailer</h3>
-        <a href="{{ URL('retailer') }}" class="btn btn-secondary shadow-sm">
+        <a href="{{ URL('admin/retailer') }}" class="btn btn-secondary shadow-sm">
             <i class="bi bi-arrow-left"></i> Back to List
         </a>
     </div>
@@ -20,7 +20,7 @@
     @endif
 
     {{-- আপনার রাউট অনুযায়ী retailer/store রুটে ডাটা যাবে --}}
-    <form action="{{ URL('retailer/store') }}" method="POST" class="p-4 border rounded shadow-sm bg-light">
+    <form action="{{ URL('admin/retailer/save') }}" method="POST" class="p-4 border rounded shadow-sm bg-light">
         @csrf
 
         <h5 class="text-muted mb-3">Basic Information</h5>
@@ -77,7 +77,7 @@
             <button type="submit" class="btn btn-primary btn-lg px-5 shadow-sm">
                 <i class="bi bi-save"></i> Save Retailer
             </button>
-            <a href="{{ URL('retailer') }}" class="btn btn-outline-secondary btn-lg px-4">Cancel</a>
+            <a href="{{ URL('admin/retailer') }}" class="btn btn-outline-secondary btn-lg px-4">Cancel</a>
         </div>
     </form>
 </div>

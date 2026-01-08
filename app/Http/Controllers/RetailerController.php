@@ -36,7 +36,7 @@ class RetailerController extends Controller
             ->onlyTrashed()
             ->with('retailer')
             ->orderBy("id", "desc")
-            ->paginate(8);
+            ->paginate(5);
 
         return view("admin.retailer.trashed", compact("retailers"));
     }
@@ -47,7 +47,7 @@ class RetailerController extends Controller
     }
 
     // ৩. ডাটা সংরক্ষণ (Stakeholder + Retailer Table)
-    public function store(Request $request)
+    public function save(Request $request)
     {
         $stakeholder = new Stakeholder();
         $stakeholder->name    = $request->name;
@@ -66,7 +66,7 @@ class RetailerController extends Controller
             'market_name'    => $request->market_name,
         ]);
 
-        return redirect("retailer")->with("success", "Retailer added successfully!");
+        return redirect("admin/retailer")->with("success", "Retailer added successfully!");
     }
 
     // ৪. এডিট পেজ
@@ -97,7 +97,7 @@ class RetailerController extends Controller
             ]
         );
 
-        return redirect("retailer")->with("success", "Retailer updated successfully");
+        return redirect("admin/retailer")->with("success", "Retailer updated successfully");
     }
 
     // ৬. সফট ডিলিট
@@ -108,7 +108,7 @@ class RetailerController extends Controller
             $stakeholder->delete();
             Retailer::where('stakeholder_id', $id)->delete();
         }
-        return redirect("retailer")->with("success", "Moved to Trash");
+        return redirect("admin/retailer")->with("success", "Moved to Trash");
     }
 
     // ৭. রিস্টোর (ট্র্যাশ থেকে ফেরত আনা)
@@ -119,7 +119,7 @@ class RetailerController extends Controller
             $stakeholder->restore();
             Retailer::withTrashed()->where('stakeholder_id', $id)->restore();
         }
-        return redirect("retailer")->with("success", "Retailer restored successfully");
+        return redirect("admin/retailer")->with("success", "Retailer restored successfully");
     }
 
     // ৮. পার্মানেন্ট ডিলিট
@@ -130,6 +130,6 @@ class RetailerController extends Controller
             Retailer::withTrashed()->where('stakeholder_id', $id)->forceDelete();
             $stakeholder->forceDelete();
         }
-        return redirect("retailer/trashed")->with("success", "Retailer permanently deleted");
+        return redirect("admin/retailer/trashed")->with("success", "Retailer permanently deleted");
     }
 }

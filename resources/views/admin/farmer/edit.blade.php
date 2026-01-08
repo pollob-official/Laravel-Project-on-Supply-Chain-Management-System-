@@ -9,7 +9,7 @@
         </a>
     </div>
 
-    <form action="{{ URL('farmer/update', $farmer->id) }}" method="POST" class="p-4 border rounded shadow-sm bg-light">
+    <form action="{{ URL('admin/farmer/update', $farmer->id) }}" method="POST" class="p-4 border rounded shadow-sm bg-light">
         @csrf
 
         <h4 class="text-muted mb-3">Basic Information</h4>

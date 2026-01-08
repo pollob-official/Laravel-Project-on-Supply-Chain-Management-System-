@@ -99,9 +99,9 @@ Route::prefix("admin")->group(function () {
 
     // Farmer Routes
     Route::prefix("farmer")->controller(FarmerController::class)->group(function(){
-        Route::get("/", "index");
-        Route::get("create", "create");
-        Route::post("save", "save");
+        Route::get("/", "index")->name('farmer.index');
+        Route::get("create", "create")->name('farmer.create');
+        Route::post("save", "save")->name('farmer.save');
         Route::get("edit/{id}", "edit");
         Route::post("update/{id}", "update");
         Route::delete("delete/{id}", "delete");
@@ -120,6 +120,7 @@ Route::prefix("admin")->group(function () {
         Route::delete("delete/{id}", "delete");
         Route::get("trashed", "trashed");
         Route::get("restore/{id}", "restore");
+        Route::delete("force-delete/{id}", "force_delete");
     });
 
     // Retailer Routes
@@ -131,6 +132,8 @@ Route::prefix("admin")->group(function () {
         Route::post("update/{id}", "update");
         Route::delete("delete/{id}", "delete");
         Route::get("trashed", "trashed");
+        Route::get("restore/{id}", "restore");
+        Route::delete("force-delete/{id}", "force_delete");
     });
 
     // Miller & Supplier Routes
@@ -142,6 +145,8 @@ Route::prefix("admin")->group(function () {
         Route::post("update/{id}", "update");
         Route::delete("delete/{id}", "delete");
         Route::get("trashed", "trashed");
+        Route::get("restore/{id}", "restore");
+        Route::delete("force-delete/{id}", "force_delete");
     });
 
     // Product Master
@@ -153,6 +158,8 @@ Route::prefix("admin")->group(function () {
         Route::post("update/{id}", "update");
         Route::delete("delete/{id}", "delete");
         Route::get("trashed", "trashed");
+        Route::get("restore/{id}", "restore");
+        Route::delete("force-delete/{id}", "force_delete");
     });
 
     Route::prefix("category")->controller(CategoryController::class)->group(function(){

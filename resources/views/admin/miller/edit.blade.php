@@ -4,12 +4,12 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3><i class="bi bi-pencil-square"></i> Edit Miller Profile</h3>
-        <a href="{{ URL('miller') }}" class="btn btn-secondary shadow-sm">
+        <a href="{{ URL('admin/miller') }}" class="btn btn-secondary shadow-sm">
             <i class="bi bi-arrow-left"></i> Back to List
         </a>
     </div>
 
-    <form action="{{ URL('miller/update', $miller->id) }}" method="POST" class="p-4 border rounded shadow-sm bg-light">
+    <form action="{{ URL('admin/miller/update', $miller->id) }}" method="POST" class="p-4 border rounded shadow-sm bg-light">
         @csrf
         @method('POST') {{-- আপডেট করার জন্য PUT মেথড ব্যবহার করা হয়েছে --}}
 
@@ -70,7 +70,7 @@
             <button type="submit" class="btn btn-primary px-5 shadow-sm">
                 <i class="bi bi-save"></i> Update Miller Profile
             </button>
-            <a href="{{ URL('miller') }}" class="btn btn-outline-secondary px-4">Cancel</a>
+            <a href="{{ URL('admin/miller') }}" class="btn btn-outline-secondary px-4">Cancel</a>
         </div>
     </form>
 </div>

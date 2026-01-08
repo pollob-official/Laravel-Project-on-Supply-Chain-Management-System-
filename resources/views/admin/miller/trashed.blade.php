@@ -4,7 +4,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3 class="mb-0 text-danger"><i class="bi bi-trash"></i> Trashed Miller List</h3>
-        <a href="{{ URL('miller') }}" class="btn btn-secondary shadow-sm">
+        <a href="{{ URL('admin/miller') }}" class="btn btn-secondary shadow-sm">
             <i class="bi bi-arrow-left"></i> Back to Miller List
         </a>
     </div>
@@ -48,11 +48,11 @@
                                 </td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
-                                        <a href="{{ URL('miller/restore/'.$miller->id) }}" class="btn btn-sm btn-success px-3" onclick="return confirm('Restore this miller profile?')">
+                                        <a href="{{ URL('admin/miller/restore/'.$miller->id) }}" class="btn btn-sm btn-success px-3" onclick="return confirm('Restore this miller profile?')">
                                             <i class="bi bi-arrow-counterclockwise"></i> Restore
                                         </a>
 
-                                        <form action="{{ URL('miller/force-delete/'.$miller->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this permanently?')">
+                                        <form action="{{ URL('admin/miller/force-delete/'.$miller->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this permanently?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger px-3">

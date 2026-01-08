@@ -4,14 +4,14 @@
 <div class="container-fluid mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3>Add New Measurement Unit</h3>
-        <a href="{{ URL('unit') }}" class="btn btn-secondary shadow-sm">
+        <a href="{{ URL('admin/unit') }}" class="btn btn-secondary shadow-sm">
             <i class="bi bi-arrow-left"></i> Back to List
         </a>
     </div>
 
     <div class="card shadow-sm border-0">
         <div class="card-body p-4 bg-light">
-            <form action="{{ URL('unit/store') }}" method="POST">
+            <form action="{{ URL('admin/unit/save') }}" method="POST">
                 @csrf
                 <div class="row">
                     <div class="col-md-6 mb-3">

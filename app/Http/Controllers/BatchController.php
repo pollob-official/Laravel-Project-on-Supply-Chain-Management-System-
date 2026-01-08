@@ -55,8 +55,8 @@ class BatchController extends Controller
             File::makeDirectory($path, 0777, true, true);
         }
 
-        $qrName = $batchNo . '.png';
-        QrCode::format('png')->size(250)->margin(1)->generate(url('/trace/'.$batchNo), $path . $qrName);
+        $qrName = $batchNo . '.svg';
+        QrCode::format('svg')->size(250)->margin(1)->generate(url('/trace/'.$batchNo), $path . $qrName);
 
         Batch::create([
             'batch_no'           => $batchNo,

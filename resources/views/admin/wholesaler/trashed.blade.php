@@ -4,7 +4,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3 class="mb-0 text-danger"><i class="bi bi-trash"></i> Trashed Wholesalers</h3>
-        <a href="{{ URL('wholesaler') }}" class="btn btn-secondary shadow-sm">
+        <a href="{{ URL('admin/wholesaler') }}" class="btn btn-secondary shadow-sm">
             <i class="bi bi-arrow-left"></i> Back to Wholesaler List
         </a>
     </div>
@@ -44,11 +44,11 @@
                                 </td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
-                                        <a href="{{ URL('wholesaler/restore/'.$wholesaler->id) }}" class="btn btn-sm btn-outline-success px-3" title="Restore Wholesaler">
+                                        <a href="{{ URL('admin/wholesaler/restore/'.$wholesaler->id) }}" class="btn btn-sm btn-outline-success px-3" title="Restore Wholesaler">
                                             <i class="bi bi-arrow-counterclockwise"></i> Restore
                                         </a>
 
-                                        <form action="{{ URL('wholesaler/force-delete/'.$wholesaler->id) }}" method="POST" onsubmit="return confirm('WARNING: This will delete the wholesaler permanently! Are you sure?')">
+                                        <form action="{{ URL('admin/wholesaler/force-delete/'.$wholesaler->id) }}" method="POST" onsubmit="return confirm('WARNING: This will delete the wholesaler permanently! Are you sure?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-outline-danger px-3" title="Permanent Delete">

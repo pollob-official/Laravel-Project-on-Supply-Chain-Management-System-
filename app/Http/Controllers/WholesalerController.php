@@ -46,7 +46,7 @@ class WholesalerController extends Controller
     }
 
     // ৩. ডাটা সেভ করা (Stakeholder + Wholesaler Table)
-    public function store(Request $request)
+    public function save(Request $request)
     {
         $stakeholder = new Stakeholder();
         $stakeholder->name    = $request->name;
@@ -65,7 +65,7 @@ class WholesalerController extends Controller
             'total_manpower'     => $request->total_manpower ?? 0,
         ]);
 
-        return redirect("wholesaler")->with("success", "Wholesaler added successfully!");
+        return redirect("admin/wholesaler")->with("success", "Wholesaler added successfully!");
     }
 
     // ৪. এডিট পেজ
@@ -96,7 +96,7 @@ class WholesalerController extends Controller
             ]
         );
 
-        return redirect("wholesaler")->with("success", "Wholesaler updated successfully");
+        return redirect("admin/wholesaler")->with("success", "Wholesaler updated successfully");
     }
 
     // ৬. সফট ডিলিট
@@ -107,7 +107,7 @@ class WholesalerController extends Controller
             $stakeholder->delete(); // Stakeholder সফট ডিলিট
             Wholesaler::where('stakeholder_id', $id)->delete(); // সাব-টেবিল সফট ডিলিট
         }
-        return redirect("wholesaler")->with("success", "Moved to Trash");
+        return redirect("admin/wholesaler")->with("success", "Moved to Trash");
     }
 
     // ৭. রিস্টোর (ফেরত আনা)
@@ -118,7 +118,7 @@ class WholesalerController extends Controller
             $stakeholder->restore();
             Wholesaler::withTrashed()->where('stakeholder_id', $id)->restore();
         }
-        return redirect("wholesaler")->with("success", "Wholesaler restored successfully");
+        return redirect("admin/wholesaler")->with("success", "Wholesaler restored successfully");
     }
 
     // ৮. পার্মানেন্ট ডিলিট (ডাটাবেস থেকে চিরতরে মুছে ফেলা)
@@ -129,6 +129,6 @@ class WholesalerController extends Controller
             Wholesaler::withTrashed()->where('stakeholder_id', $id)->forceDelete();
             $stakeholder->forceDelete();
         }
-        return redirect("wholesaler/trashed")->with("success", "Wholesaler permanently deleted");
+        return redirect("admin/wholesaler/trashed")->with("success", "Wholesaler permanently deleted");
     }
 }

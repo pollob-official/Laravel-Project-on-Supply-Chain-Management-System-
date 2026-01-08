@@ -3,7 +3,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1><i class="bi bi-shop text-warning"></i> Create Wholesaler</h1>
-        <a href="{{URL('wholesaler')}}" class="btn btn-secondary shadow-sm">
+        <a href="{{URL('admin/wholesaler')}}" class="btn btn-secondary shadow-sm">
             <i class="bi bi-arrow-left"></i> Back to List
         </a>
     </div>
@@ -18,7 +18,7 @@
     </div>
     @endif
 
-    <form action="{{URL("wholesaler/store")}}" method="POST" class="p-4 border rounded shadow-sm bg-light">
+    <form action="{{URL("admin/wholesaler/save")}}" method="POST" class="p-4 border rounded shadow-sm bg-light">
         @csrf
 
         <h5 class="text-muted mb-3">General Information</h5>

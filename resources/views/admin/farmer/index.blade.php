@@ -16,17 +16,17 @@
 
             <!-- Left side buttons -->
             <div class="d-flex gap-2">
-                <x-button :url="URL('farmer/create')" type="primary">
+                <x-button :url="URL('admin/farmer/create')" type="primary">
                     <i class="bi bi-plus-lg"></i> Add Farmer
                 </x-button>
 
-                <a href="{{ URL('farmer/trashed') }}" class="btn btn-outline-danger">
+                <a href="{{ URL('admin/farmer/trashed') }}" class="btn btn-outline-danger">
                     <i class="bi bi-trash"></i> View Trash
                 </a>
             </div>
 
             <!-- Right side search -->
-            <form action="{{ URL('farmer') }}" method="GET" class="d-flex gap-1">
+            <form action="{{ URL('admin/farmer') }}" method="GET" class="d-flex gap-1">
                 <input value="{{ request('search') }}" type="text" class="form-control" style="width: 280px;"
                     name="search" placeholder="Search by name, phone, NID or card no...">
                 <button type="submit" class="btn btn-primary">Search</button>
@@ -77,12 +77,12 @@
                                 <td>{{ $farmer->address }}</td>
                                 <td>
                                     <div class="d-flex gap-1 justify-content-center">
-                                        <a href="{{ URL('farmer/edit/' . $farmer->id) }}"
+                                        <a href="{{ URL('admin/farmer/edit/' . $farmer->id) }}"
                                             class="btn btn-sm btn-outline-primary">
                                             <i class="bi bi-pencil"></i>
                                         </a>
 
-                                        <form action="{{ URL('farmer/delete/' . $farmer->id) }}" method="POST"
+                                        <form action="{{ URL('admin/farmer/delete/' . $farmer->id) }}" method="POST"
                                             onsubmit="return confirm('Are you sure?')">
                                             @csrf
                                             @method('DELETE')

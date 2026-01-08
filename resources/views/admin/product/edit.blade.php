@@ -4,7 +4,7 @@
 <div class="container-fluid mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3><i class="bi bi-pencil-square"></i> Edit Product: {{ $product->name }}</h3>
-        <a href="{{ URL('product') }}" class="btn btn-secondary shadow-sm">
+        <a href="{{ URL('admin/product') }}" class="btn btn-secondary shadow-sm">
             <i class="bi bi-arrow-left"></i> Back to List
         </a>
     </div>
@@ -21,7 +21,7 @@
 
     <div class="card shadow-sm border-0">
         <div class="card-body p-4 bg-light">
-            <form action="{{ URL('product/update/'.$product->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ URL('admin/product/update/'.$product->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('POST')
 
@@ -110,7 +110,7 @@
                 </div>
 
                 <div class="mt-4 border-top pt-3 text-end">
-                    <a href="{{ URL('product') }}" class="btn btn-outline-secondary btn-lg px-4">Cancel</a>
+                    <a href="{{ URL('admin/product') }}" class="btn btn-outline-secondary btn-lg px-4">Cancel</a>
                     <button type="submit" class="btn btn-success btn-lg px-5 shadow-sm">
                         <i class="bi bi-check-circle"></i> Update Product
                     </button>

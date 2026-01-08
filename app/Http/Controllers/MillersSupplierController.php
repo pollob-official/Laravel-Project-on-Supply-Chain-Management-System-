@@ -44,7 +44,7 @@ class MillersSupplierController extends Controller
     }
 
     // ৩. নতুন মিলার সেভ করা
-    public function store(Request $request)
+    public function save(Request $request)
     {
         DB::transaction(function () use ($request) {
             $stakeholder = Stakeholder::create([
@@ -64,7 +64,7 @@ class MillersSupplierController extends Controller
             ]);
         });
 
-        return redirect('miller')->with("success", "Miller profile created successfully!");
+        return redirect('admin/miller')->with("success", "Miller profile created successfully!");
     }
 
     // ৪. এডিট পেজ
@@ -98,7 +98,7 @@ class MillersSupplierController extends Controller
             );
         });
 
-        return redirect('miller')->with("success", "Miller profile updated successfully");
+        return redirect('admin/miller')->with("success", "Miller profile updated successfully");
     }
 
     // ৬. সফট ডিলিট
@@ -110,7 +110,7 @@ class MillersSupplierController extends Controller
         // সাব-টেবিল সফট ডিলিট
         MillersSupplier::where('stakeholder_id', $id)->delete();
 
-        return redirect('miller')->with("success", "Miller moved to trash");
+        return redirect('admin/miller')->with("success", "Miller moved to trash");
     }
 
     // ৭. রিস্টোর করা
@@ -119,7 +119,7 @@ class MillersSupplierController extends Controller
         Stakeholder::withTrashed()->where('id', $id)->restore();
         MillersSupplier::withTrashed()->where('stakeholder_id', $id)->restore();
 
-        return redirect('miller')->with("success", "Miller profile restored successfully");
+        return redirect('admin/miller')->with("success", "Miller profile restored successfully");
     }
 
     // ৮. পার্মানেন্ট ডিলিট
@@ -128,6 +128,6 @@ class MillersSupplierController extends Controller
         MillersSupplier::withTrashed()->where('stakeholder_id', $id)->forceDelete();
         Stakeholder::withTrashed()->findOrFail($id)->forceDelete();
 
-        return redirect('miller/trashed')->with("success", "Miller permanently deleted");
+        return redirect('admin/miller/trashed')->with("success", "Miller permanently deleted");
     }
 }

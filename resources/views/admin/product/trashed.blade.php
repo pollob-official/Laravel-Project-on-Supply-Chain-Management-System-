@@ -4,7 +4,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3><i class="bi bi-trash3 text-danger"></i> Trashed Products</h3>
-        <a href="{{ URL('product') }}" class="btn btn-secondary shadow-sm">
+        <a href="{{ URL('admin/product') }}" class="btn btn-secondary shadow-sm">
             <i class="bi bi-arrow-left"></i> Back to Product List
         </a>
     </div>
@@ -48,12 +48,12 @@
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
                                         {{-- Restore Action --}}
-                                        <a href="{{ URL('product/restore/'.$product->id) }}" class="btn btn-sm btn-outline-success" title="Restore Product">
+                                        <a href="{{ URL('admin/product/restore/'.$product->id) }}" class="btn btn-sm btn-outline-success" title="Restore Product">
                                             <i class="bi bi-arrow-counterclockwise"></i> Restore
                                         </a>
 
                                         {{-- Permanent Delete Action --}}
-                                        <form action="{{ URL('product/force-delete/'.$product->id) }}" method="POST" onsubmit="return confirm('WARNING: This will permanently delete the product and its image. Are you sure?')">
+                                        <form action="{{ URL('admin/product/force-delete/'.$product->id) }}" method="POST" onsubmit="return confirm('WARNING: This will permanently delete the product and its image. Are you sure?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete Permanently">

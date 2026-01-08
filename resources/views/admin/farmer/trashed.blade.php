@@ -4,7 +4,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-1 mt-2">
         <h2 class="mb-0 text-danger mt-2"><i class="bi bi-trash3"></i> Trashed Farmers</h2>
-        <a href="{{ URL('farmer') }}" class="btn btn-secondary shadow-sm mt-2">
+        <a href="{{ URL('admin/farmer') }}" class="btn btn-secondary shadow-sm mt-2">
             <i class="bi bi-arrow-left"></i> Back to Farmer List
         </a>
     </div>
@@ -54,11 +54,11 @@
                                 </td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
-                                        <a href="{{ URL('farmer/restore/'.$farmer->id) }}" class="btn btn-sm btn-outline-success px-3" title="Restore Farmer">
+                                        <a href="{{ URL('admin/farmer/restore/'.$farmer->id) }}" class="btn btn-sm btn-outline-success px-3" title="Restore Farmer">
                                             <i class="bi bi-arrow-counterclockwise"></i> Restore
                                         </a>
 
-                                        <form action="{{ URL('farmer/force-delete/'.$farmer->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this permanently? This cannot be undone!')">
+                                        <form action="{{ URL('admin/farmer/force-delete/'.$farmer->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this permanently? This cannot be undone!')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-outline-danger px-3" title="Permanent Delete">

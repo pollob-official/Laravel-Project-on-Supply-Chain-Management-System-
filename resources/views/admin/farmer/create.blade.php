@@ -4,12 +4,12 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-2">
         <h3><i class="bi bi-person-plus"></i> Add New Farmer</h3>
-        <a href="{{ URL('farmer') }}" class="btn btn-secondary btn-sm">
+        <a href="{{ URL('admin/farmer') }}" class="btn btn-secondary btn-sm">
             <i class="bi bi-arrow-left"></i> Back to Farmer List
         </a>
     </div>
 
-    <form action="{{ URL('farmer/store') }}" method="POST" class="p-4 border rounded shadow-sm bg-light">
+    <form action="{{ URL('admin/farmer/save') }}" method="POST" class="p-4 border rounded shadow-sm bg-light">
         @csrf
 
         <h4 class="text-muted mb-3">Basic Information</h4>

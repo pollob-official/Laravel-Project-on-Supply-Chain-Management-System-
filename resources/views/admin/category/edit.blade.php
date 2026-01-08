@@ -4,7 +4,7 @@
 <div class="container-fluid mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3>Edit Category: {{ $category->name }}</h3>
-        <a href="{{ URL('category') }}" class="btn btn-secondary shadow-sm">
+        <a href="{{ URL('admin/category') }}" class="btn btn-secondary shadow-sm">
             <i class="bi bi-arrow-left"></i> Back to List
         </a>
     </div>
@@ -19,7 +19,7 @@
     </div>
     @endif
 
-    <form action="{{ URL('category/update/'.$category->id) }}" method="POST" class="p-4 border rounded shadow-sm bg-light">
+    <form action="{{ URL('admin/category/update/'.$category->id) }}" method="POST" class="p-4 border rounded shadow-sm bg-light">
         @csrf
         @method('POST')
 
@@ -54,7 +54,7 @@
             <button type="submit" class="btn btn-primary btn-lg px-5 shadow-sm">
                 <i class="bi bi-check-circle"></i> Update Category
             </button>
-            <a href="{{ URL('category') }}" class="btn btn-outline-secondary btn-lg px-4">Cancel</a>
+            <a href="{{ URL('admin/category') }}" class="btn btn-outline-secondary btn-lg px-4">Cancel</a>
         </div>
     </form>
 </div>

@@ -4,12 +4,12 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3><i class="bi bi-pencil-square"></i> Edit Wholesaler Profile</h3>
-        <a href="{{ URL('wholesaler') }}" class="btn btn-secondary shadow-sm">
+        <a href="{{ URL('admin/wholesaler') }}" class="btn btn-secondary shadow-sm">
             <i class="bi bi-arrow-left"></i> Back to List
         </a>
     </div>
 
-    <form action="{{ URL('wholesaler/update', $wholesaler->id) }}" method="POST" class="p-4 border rounded shadow-sm bg-light">
+    <form action="{{ URL('admin/wholesaler/update', $wholesaler->id) }}" method="POST" class="p-4 border rounded shadow-sm bg-light">
         @csrf
         @method('PUT')
 
@@ -65,7 +65,7 @@
             <button type="submit" class="btn btn-primary px-5 shadow-sm">
                 <i class="bi bi-save"></i> Update Wholesaler Info
             </button>
-            <a href="{{ URL('wholesaler') }}" class="btn btn-outline-secondary px-4">Cancel</a>
+            <a href="{{ URL('admin/wholesaler') }}" class="btn btn-outline-secondary px-4">Cancel</a>
         </div>
     </form>
 </div>

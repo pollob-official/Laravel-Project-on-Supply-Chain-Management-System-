@@ -63,7 +63,7 @@ class ProductJourneyController extends Controller
         $journey->current_stage = $request->current_stage;
         $journey->save();
 
-        return redirect("journey")->with("success", "Product Handover recorded with " . $profit_percent . "% profit!");
+        return redirect("admin/journey")->with("success", "Product Handover recorded with " . $profit_percent . "% profit!");
     }
 
     // ৫. এডিট মেথড
@@ -74,7 +74,7 @@ class ProductJourneyController extends Controller
         $stakeholders = Stakeholder::all();
 
         if (!$journey) {
-            return redirect("journey")->with("error", "Record not found!");
+            return redirect("admin/journey")->with("error", "Record not found!");
         }
 
         return view("admin.journey.edit", compact("journey", "products", "stakeholders"));
@@ -104,7 +104,7 @@ class ProductJourneyController extends Controller
             'current_stage' => $request->current_stage,
         ]);
 
-        return redirect("journey")->with("success", "Record updated successfully with " . $profit_percent . "% profit.");
+        return redirect("admin/journey")->with("success", "Record updated successfully with " . $profit_percent . "% profit.");
     }
 
     // ৭. সফট ডিলিট
@@ -114,7 +114,7 @@ class ProductJourneyController extends Controller
         if ($journey) {
             $journey->delete();
         }
-        return redirect("journey")->with("success", "Moved to Trash");
+        return redirect("admin/journey")->with("success", "Moved to Trash");
     }
 
     // ৮. রিস্টোর
@@ -124,7 +124,7 @@ class ProductJourneyController extends Controller
         if ($journey) {
             $journey->restore();
         }
-        return redirect("journey")->with("success", "Restored successfully");
+        return redirect("admin/journey")->with("success", "Restored successfully");
     }
 
     // ৯. পার্মানেন্ট ডিলিট
@@ -134,7 +134,7 @@ class ProductJourneyController extends Controller
         if ($journey) {
             $journey->forceDelete();
         }
-        return redirect("journey/trashed")->with("success", "Permanently Deleted");
+        return redirect("admin/journey/trashed")->with("success", "Permanently Deleted");
     }
     public function public_trace($tracking_no)
     {
@@ -145,7 +145,7 @@ class ProductJourneyController extends Controller
                     ->get();
 
         if ($history->isEmpty()) {
-            return redirect('/journey')->with('error', 'Invalid Tracking Number!');
+            return redirect('/admin/journey')->with('error', 'Invalid Tracking Number!');
         }
 
         // আপনার বর্তমান ফাইল লোকেশন অনুযায়ী পাথটি হবে:
