@@ -185,12 +185,14 @@ Route::prefix("admin")->group(function () {
         Route::get("/", "index")->name('batches.index');
         Route::get("create", "create")->name('batches.create');
         Route::post("store", "store")->name('batches.store');
+        Route::post("save", "save");
         Route::get("edit/{id}", "edit");
         Route::post("update/{id}", "update");
         Route::delete("delete/{id}", "delete");
         Route::get("trashed", "trashed")->name('batches.trashed');
         Route::get("restore/{id}", "restore");
         Route::delete("force-delete/{id}", "force_delete");
+        Route::get('trace/{batch_no}', 'traceProduct')->name('public.trace');
     });
 
     // Journey / Handover
@@ -209,7 +211,9 @@ Route::prefix("admin")->group(function () {
 }); // End Admin Prefix Group
 
 
+
 // --- ৪. Fallback ---
 Route::fallback(function(){
     return "404 No Route matched";
 });
+
