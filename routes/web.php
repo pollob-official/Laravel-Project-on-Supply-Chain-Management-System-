@@ -181,19 +181,42 @@ Route::prefix("admin")->group(function () {
     });
 
     // Batch & QR Engine
-    Route::prefix("batches")->controller(BatchController::class)->group(function(){
-        Route::get("/", "index")->name('batches.index');
-        Route::get("create", "create")->name('batches.create');
-        Route::post("store", "store")->name('batches.store');
-        Route::post("save", "save");
-        Route::get("edit/{id}", "edit");
-        Route::post("update/{id}", "update");
-        Route::delete("delete/{id}", "delete");
-        Route::get("trashed", "trashed")->name('batches.trashed');
-        Route::get("restore/{id}", "restore");
-        Route::delete("force-delete/{id}", "force_delete");
-        Route::get('trace/{batch_no}', 'traceProduct')->name('public.trace');
-    });
+    // Route::prefix("batches")->controller(BatchController::class)->group(function(){
+    //     Route::get("/", "index")->name('batches.index');
+    //     Route::get("create", "create")->name('batches.create');
+    //     Route::post("store", "store")->name('batches.store');
+    //     Route::post("save", "save");
+    //     Route::get("edit/{id}", "edit");
+    //     Route::post("update/{id}", "update");
+    //     Route::delete("delete/{id}", "delete");
+    //     Route::get("trashed", "trashed")->name('batches.trashed');
+    //     Route::get("restore/{id}", "restore");
+    //     Route::delete("force-delete/{id}", "force_delete");
+    //     Route::get('trace/{batch_no}', 'traceProduct')->name('public.trace');
+    //     Route::post("approve/{id}", "approve")->name('batches.approve');
+    // });
+
+    // Batch & QR Engine (এই অংশটুকু আপডেট করুন)
+Route::prefix("batches")->controller(BatchController::class)->group(function(){
+    Route::get("/", "index")->name('batches.index');
+    Route::get("create", "create")->name('batches.create');
+    Route::post("store", "store")->name('batches.store');
+    Route::post("save", "save"); // যদি এটা store এর মতো হয় তবে দরকার নেই
+
+    // নিচের নামগুলো অ্যাড করা হয়েছে (edit এবং update)
+    Route::get("edit/{id}", "edit")->name('batches.edit');
+    Route::post("update/{id}", "update")->name('batches.update');
+
+    // ডিলিট এর নাম ঠিক করা হয়েছে
+    Route::delete("delete/{id}", "delete")->name('batches.delete');
+
+    Route::get("trashed", "trashed")->name('batches.trashed');
+    Route::get("restore/{id}", "restore")->name('batches.restore');
+    Route::delete("force-delete/{id}", "force_delete")->name('batches.force_delete');
+
+    Route::get('trace/{batch_no}', 'traceProduct')->name('public.trace');
+    Route::post("approve/{id}", "approve")->name('batches.approve');
+});
 
     // Journey / Handover
     Route::prefix("journey")->controller(ProductJourneyController::class)->group(function(){

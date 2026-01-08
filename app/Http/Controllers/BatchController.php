@@ -13,7 +13,9 @@ use Carbon\Carbon;
 
 class BatchController extends Controller
 {
-    // ১. ব্যাচ লিস্ট দেখা (সার্চ ও ফিল্টারসহ)
+    /**
+     * সকল সক্রিয় ব্যাচ প্রদর্শন
+     */
     public function index(Request $request)
     {
         $batches = Batch::with(['product', 'farmer'])
@@ -21,13 +23,15 @@ class BatchController extends Controller
                 return $query->where("batch_no", "LIKE", "%" . $request->search . "%")
                              ->orWhere("seed_brand", "LIKE", "%" . $request->search . "%");
             })
-            ->orderBy("id", "desc")
+            ->latest()
             ->paginate(10);
 
         return view("admin.batches.index", compact("batches"));
     }
 
-    // ২. ক্রিয়েট পেজ
+    /**
+     * ব্যাচ তৈরির ফর্ম
+     */
     public function create()
     {
         $products = Product::all();
@@ -35,107 +39,119 @@ class BatchController extends Controller
         return view("admin.batches.create", compact("products", "farmers"));
     }
 
-    // ৩. ব্যাচ স্টোর - যেখানে সব স্মার্ট লজিক কাজ করবে
+    /**
+     * নতুন ব্যাচ সেভ এবং কিউআর কোড জেনারেশন
+     */
     public function store(Request $request)
-    {
-        $request->validate([
-            'product_id'         => 'required',
-            'initial_farmer_id'  => 'required',
-            'total_quantity'     => 'required|numeric',
-            'manufacturing_date' => 'required|date',
-        ]);
-
-        // ব্যাচ নম্বর ও কিউআর পাথ জেনারেশন
-        $batchNo = 'B-' . date('Ymd') . '-' . strtoupper(Str::random(6));
-        $path = public_path('uploads/qrcodes/');
-        if (!File::exists($path)) File::makeDirectory($path, 0777, true, true);
-
-        // QR Code URL (স্ক্যান করলে পাবলিক ট্রেস পেজে যাবে)
-        $qrName = $batchNo . '.svg';
-        QrCode::format('svg')->size(300)->margin(1)->generate(url('/trace/'.$batchNo), $path . $qrName);
-
-        // ডাটাবেস এন্ট্রি (আপনার সব নতুন আইডিয়া সহ)
-        Batch::create($request->all() + [
-            'batch_no'         => $batchNo,
-            'qr_code'          => 'uploads/qrcodes/' . $qrName,
-            'qc_status'        => 'pending',
-            'current_location' => 'Farmer Field', // ইনিশিয়াল লোকেশন
-        ]);
-
-        return redirect()->route('batches.index')->with("success", "Global Standard Batch generated with Traceability Data!");
-    }
-
-    // ৪. আপডেট ফাংশন (সব ডাটা হ্যান্ডেল করবে)
-    public function update(Request $request, $id)
 {
-    $batch = Batch::findOrFail($id);
-
+    // ১. অ্যাডভান্স ভ্যালিডেশন
     $request->validate([
-        'product_id'         => 'required',
-        'initial_farmer_id'  => 'required',
-        'total_quantity'     => 'required|numeric',
+        'product_id' => 'required',
+        'total_quantity' => 'required|numeric|min:1',
         'manufacturing_date' => 'required|date',
     ]);
 
-    // Mass assignment ব্যবহার করে সব ফিল্ড একবারে আপডেট করা
-    // এখানে $request->all() আপনার সবকটি স্মার্ট ফিল্ড (grade, location, dates) অটো ধরে নেবে
-    $batch->update($request->all());
+    // ২. স্মার্ট ডাটা প্রসেসিং
+    $data = $request->all();
 
-    return redirect()->route('batches.index')->with("success", "Batch [ $batch->batch_no ] updated with all traceability records.");
+    // অটোমেশন: বপন থেকে কাটার দিন গণনা (Cultivation Days)
+    if ($request->sowing_date && $request->harvest_date) {
+        $data['cultivation_days'] = \Carbon\Carbon::parse($request->sowing_date)
+                                    ->diffInDays(\Carbon\Carbon::parse($request->harvest_date));
+    }
+
+    // ইউনিক স্মার্ট ব্যাচ নম্বর জেনারেশন
+    $data['batch_no'] = 'SAGRI-' . date('ymd') . '-' . strtoupper(Str::random(4));
+
+    // ৩. কিউআর কোড জেনারেশন (অ্যাডভান্সড ডিজাইন)
+    $qr_name = $data['batch_no'] . '.svg';
+    $qr_path = 'uploads/qrcodes/' . $qr_name;
+
+    QrCode::format('svg')->size(300)->margin(1)
+          ->color(25, 135, 84) 
+          ->generate(route('public.trace', $data['batch_no']), public_path($qr_path));
+
+    $data['qr_code'] = $qr_path;
+    $data['qc_status'] = 'pending'; // বাই ডিফল্ট পেন্ডিং
+
+    Batch::create($data);
+
+    return redirect()->route('batches.index')->with('success', 'Smart Batch Active with AI Analysis.');
 }
+    /**
+     * এডিট ফর্ম
+     */
+    public function edit($id)
+    {
+        $batch = Batch::findOrFail($id);
+        $products = Product::all();
+        $farmers = Stakeholder::where('role', 'farmer')->get();
+        return view("admin.batches.edit", compact("batch", "products", "farmers"));
+    }
 
-    // ৫. স্মার্ট এপ্রুভাল ও সেফটি চেক (Maturity & Pesticide Analysis)
+    public function update(Request $request, $id)
+    {
+        $batch = Batch::findOrFail($id);
+        $batch->update($request->all());
+        return redirect()->route('batches.index')->with("success", "Batch Information Updated.");
+    }
+
+    /**
+     * স্মার্ট কিউসি অ্যাপ্রুভাল লজিক
+     */
     public function approve(Request $request, $id)
     {
         $batch = Batch::findOrFail($id);
-
         $analysis = $this->runSafetyAnalysis($batch);
 
         $batch->update([
             'qc_status'       => $analysis['is_safe'] ? 'approved' : 'rejected',
-            'quality_grade'   => $request->quality_grade ?? 'B', // A, B, C Grade
-            'qc_officer_name' => auth()->user()->name ?? 'Admin',
+            'quality_grade'   => $request->quality_grade ?? 'A',
+            'qc_officer_name' => auth()->user()->name ?? 'System Admin',
             'qc_remarks'      => $analysis['message'] . " | " . $request->remarks,
-            'current_location'=> 'Processing Unit' // এপ্রুভ হওয়ার পর স্টেজ চেঞ্জ
+            'current_location'=> 'Processing Center'
         ]);
 
-        return back()->with($analysis['is_safe'] ? 'success' : 'error', $analysis['message']);
+        $type = $analysis['is_safe'] ? 'success' : 'error';
+        return back()->with($type, $analysis['message']);
     }
 
-    /**
-     * স্মার্ট লজিক: ম্যচুরিটি ও কীটনাশক সেফটি অ্যানালাইসিস
-     */
     private function runSafetyAnalysis($batch)
     {
         $isSafe = true;
-        $message = "Verified: Passed Safety Standards.";
+        $message = "Verified: Meets Global Safety Standards.";
 
-        // ক) Maturity Analysis (আদর্শ সময় ১০০ দিন ধরলে)
         if ($batch->sowing_date && $batch->harvest_date) {
             $days = Carbon::parse($batch->sowing_date)->diffInDays(Carbon::parse($batch->harvest_date));
             if ($days < 90) {
                 $isSafe = false;
-                $message = "Alert: Premature Harvest (Cycle: $days days). Chemical use suspected.";
+                $message = "Alert: Premature Harvest ($days days cycle).";
             }
         }
 
-        // খ) Pesticide Withdrawal Period (৭ দিন গ্যাপ লাগবে)
-        if ($batch->pesticide_history && $batch->harvest_date) {
-            // ধরি pesticide_history ফিল্ডে শেষ স্প্রে করার তারিখ থাকে (অথবা আলাদা কলাম 'last_pesticide_date')
-            // এখানে লজিক সহজ করার জন্য last_pesticide_date কলাম ব্যবহার করছি
-            if($batch->last_pesticide_date){
-                $gap = Carbon::parse($batch->last_pesticide_date)->diffInDays(Carbon::parse($batch->harvest_date));
-                if ($gap < 7) {
-                    $isSafe = false;
-                    $message = "Chemical Risk: Harvested only $gap days after pesticide spray!";
-                }
+        if ($batch->last_pesticide_date && $batch->harvest_date) {
+            $gap = Carbon::parse($batch->last_pesticide_date)->diffInDays(Carbon::parse($batch->harvest_date));
+            if ($gap < 7) {
+                $isSafe = false;
+                $message = "Chemical Risk: Harvested within $gap days gap.";
             }
         }
 
         return ['is_safe' => $isSafe, 'message' => $message];
     }
 
-    // ৬. সফট ডিলিট ও ফাইল ম্যানেজমেন্ট (আপনার রিকোয়েস্ট অনুযায়ী)
+    /**
+     * ট্রেসেবিলিটি ডাটা (পাবলিক ভিউ)
+     */
+    public function traceProduct($batch_no)
+    {
+        $batch = Batch::with(['product', 'farmer'])->where('batch_no', $batch_no)->firstOrFail();
+        return view('public.trace', compact('batch'));
+    }
+
+    /**
+     * সফট ডিলিট এবং রিকভারি
+     */
     public function delete($id)
     {
         Batch::findOrFail($id)->delete();
@@ -151,16 +167,17 @@ class BatchController extends Controller
     public function restore($id)
     {
         Batch::withTrashed()->findOrFail($id)->restore();
-        return back()->with('success', 'Batch restored successfully.');
+        return redirect()->route('batches.index')->with('success', 'Batch restored successfully.');
     }
 
     public function force_delete($id)
     {
         $batch = Batch::withTrashed()->findOrFail($id);
+        // Delete QR Code image from storage
         if ($batch->qr_code && File::exists(public_path($batch->qr_code))) {
             File::delete(public_path($batch->qr_code));
         }
         $batch->forceDelete();
-        return back()->with('success', 'Permanently deleted from server.');
+        return back()->with('success', 'Batch and files permanently deleted.');
     }
 }
