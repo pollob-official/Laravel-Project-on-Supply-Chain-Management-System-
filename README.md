@@ -220,3 +220,5 @@ composer require simplesoftwareio/simple-qrcode
 
 
 Code Arrange= "shift+alt+f"
+
+tree /f > structure.txt

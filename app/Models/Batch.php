@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon;
 
 class Batch extends Model
 {
     use HasFactory, SoftDeletes;
 
-    // আপনার ২১টি কলাম + ৫টি স্মার্ট আইডিয়া কলাম সব এখানে আছে
     protected $fillable = [
         'batch_no',
         'product_id',
@@ -29,28 +29,37 @@ class Batch extends Model
         'harvest_date',
         'moisture_level',
         'expiry_date',
-
-        // --- স্মার্ট এগ্রিকালচার ফিচার কলাম ---
-        'last_pesticide_date', // কীটনাশক সেফটি চেক করার জন্য
-        'latitude',            // লোকেশন ট্র্যাকিং
-        'longitude',           // লোকেশন ট্র্যাকিং
-        'quality_grade',       // এ-গ্রেড, বি-গ্রেড
-        'current_location',    // সাপ্লাই চেইন স্টেজ (Field, Processing, Market)
+        'production_cost_per_unit',
+        'certification_type',
+        'storage_condition',
+        'water_footprint',
+        'target_market',
+        'safety_score',
+        'inspector_id',
+        'last_pesticide_date',
+        'latitude',
+        'longitude',
+        'quality_grade',
+        'current_location',
+        'farmer_price',
+        'processing_cost',
+        'target_retail_price',
     ];
 
-    /**
-     * প্রোডাক্টের সাথে রিলেশন
-     * প্রতিটি ব্যাচ একটি নির্দিষ্ট প্রোডাক্টের (যেমন: মিনিকেট চাল) আন্ডারে থাকে।
-     */
+    // ডেট কাস্টিং (এটি করলে ব্লেড ফাইলে সরাসরি format() ব্যবহার করতে পারবেন)
+    protected $casts = [
+        'sowing_date' => 'date',
+        'harvest_date' => 'date',
+        'manufacturing_date' => 'date',
+        'expiry_date' => 'date',
+        'last_pesticide_date' => 'date',
+    ];
+
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
 
-    /**
-     * কৃষকের সাথে রিলেশন
-     * স্টেকহোল্ডার টেবিল থেকে শুধুমাত্র 'farmer' রোলের ডাটা আসবে।
-     */
     public function farmer()
     {
         return $this->belongsTo(Stakeholder::class, 'initial_farmer_id');
@@ -58,14 +67,12 @@ class Batch extends Model
 
     /**
      * স্মার্ট এট্রিবিউট: ম্যচুরিটি ডেইজ ক্যালকুলেশন
-     * এটি ব্যবহার করে আপনি ব্লেড ফাইলে সরাসরি কতদিন চাষ হয়েছে তা দেখাতে পারবেন।
+     * এখন $batch->cultivation_days দিলেই ভ্যালু চলে আসবে
      */
     public function getCultivationDaysAttribute()
     {
         if ($this->sowing_date && $this->harvest_date) {
-            $sowing = \Carbon\Carbon::parse($this->sowing_date);
-            $harvest = \Carbon\Carbon::parse($this->harvest_date);
-            return $sowing->diffInDays($harvest);
+            return $this->sowing_date->diffInDays($this->harvest_date);
         }
         return null;
     }

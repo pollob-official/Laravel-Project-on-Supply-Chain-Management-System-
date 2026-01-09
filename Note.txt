@@ -68,3 +68,237 @@ resources/
     │   └── result.blade.php
     └── layouts/              <-- আপনার সেই সিএসএস ঠিক করা মাস্টার ফাইল
         └── admin_master.blade.php
+
+
+tree /f > structure.txt
+
+
+
+amar kace tomar agear deya code ace, sob e ace.
+
+tomake ami file structure diyeci, jekhane resources/view/admin/batches then-> create, edit, index, trashed blade file gulo ace.
+
+
+
+
+
+ami tomake tomar deya idea abar dissi, amake first db batches table er data head gulo abar extra aro beshi info input deya jay seta korbo,
+
+
+
+ami existing db table structure dissi,
+
+
+
+
+
+#NameTypeCollationAttributesNullDefaultCommentsExtraAction1id bigint(20)UNSIGNEDNoNoneAUTO_INCREMENT Change Drop2batch_novarchar(255)utf8mb4_unicode_ciNoNone Change Drop3product_idbigint(20)YesNULL Change Drop4initial_farmer_idbigint(20)YesNULL Change Drop5seed_brandvarchar(255)utf8mb4_unicode_ciYesNULL Change Drop6seed_varietyvarchar(255)utf8mb4_unicode_ciYesNULL Change Drop7sowing_datedateYesNULL Change Drop8pesticide_historytextutf8mb4_unicode_ciYesNULL Change Drop9fertilizer_historytextutf8mb4_unicode_ciYesNULL Change Drop10total_quantitydecimal(15,2)No0.00 Change Drop11qr_codevarchar(255)utf8mb4_unicode_ciYesNULL Change Drop12qc_statusenum('pending', 'approved', 'rejected')utf8mb4_unicode_ciNopending Change Drop13qc_officer_namevarchar(255)utf8mb4_unicode_ciYesNULL Change Drop14qc_remarkstextutf8mb4_unicode_ciYesNULL Change Drop15manufacturing_datedateYesNULL Change Drop16harvest_datedateYesNULL Change Drop17moisture_levelvarchar(255)utf8mb4_unicode_ciYesNULL Change Drop18expiry_datedateYesNULL Change Drop19last_pesticide_datedateYesNULL Change Drop20latitudedecimal(10,8)YesNULL Change Drop21longitudedecimal(11,8)YesNULL Change Drop22quality_gradevarchar(255)utf8mb4_unicode_ciYesNULL Change Drop23current_locationvarchar(255)utf8mb4_unicode_ciYesNULL Change Drop24created_attimestampYesNULL Change Drop25updated_attimestampYesNULL Change Drop26deleted_attimestampYesNULL Change Drop
+
+
+
+
+
+ebar tomar plan disssi,
+
+. মাল্টি-ভেন্ডর স্ট্যান্ডার্ডে ব্যাচ টেবিলের প্রয়োজনীয় তথ্য
+
+বর্তমানে আপনি যা পাচ্ছেন তার বাইরে নিচের তথ্যগুলো যোগ করলে এটি একটি কমপ্লিট ইকোসিস্টেম হবে:
+
+Vendor/Owner ID: প্রতিটি ব্যাচ কোন ভেন্ডরের মালিকানাধীন তা নিশ্চিত করা (যা আপনার farmer_id দিয়ে অলরেডি শুরু হয়েছে)।
+
+Production Cost per Unit: ভেন্ডরের খরচ কত হয়েছে, যা পরবর্তীতে প্রফিট অ্যানালিটিক্সে কাজে লাগবে।
+
+Compliance/Certification: ভেন্ডরের পণ্যটি কি অর্গানিক বা কোনো নির্দিষ্ট সার্টিফিকেট প্রাপ্ত? (যেমন: GAP - Good Agricultural Practices)।
+
+Storage Assignment: ব্যাচটি কোন ওয়্যারহাউস বা স্টোরেজে আছে তার নির্দিষ্ট লোকেশন বা বিন নম্বর।
+
+
+৩. World-class স্ট্যান্ডার্ড হতে যা যা "Missing" বা যোগ করা উচিত
+
+একটি আন্তর্জাতিক মানের সাপ্লাই চেইন প্রজেক্টে নিচের ডেটাগুলো থাকা বাধ্যতামূলক:
+
+ক) ব্যাচ টেবিলে আরও যেসব কলাম বা তথ্য থাকা উচিত:
+
+Manufacturing & Expiry Date: কৃষি বা ফুড প্রসেসিং পণ্যের জন্য এটি সবচেয়ে গুরুত্বপূর্ণ তথ্য।
+
+Storage Condition (Temperature/Humidity): পণ্যটি কত তাপমাত্রায় রাখা হয়েছে তা ব্যাচ রিপোর্টে থাকা উচিত (যেমন: 18
+
+∘
+
+C or 25
+
+∘
+
+C).
+
+Current Stage: ব্যাচটি বর্তমানে কোন অবস্থায় আছে? (যেমন: Harvesting -> Processing -> Warehousing -> Shipped).
+
+Assigned Inspector: কোন অফিসার এই ব্যাচটির QC চেক করেছেন তার নাম।
+
+খ) ফিচারের দিক থেকে সাজেশন:
+
+Bulk Print: আপনার মোডালে একটি করে প্রিন্ট অপশন আছে। একসাথে ৫-১০টি ব্যাচ সিলেক্ট করে "Bulk QR Print" করার সুবিধা থাকা উচিত।
+
+Status Timeline: ব্যাচ ডিটেইলসে ক্লিক করলে একটি টাইমলাইন দেখাবে—কখন হার্ভেস্ট হলো, কখন প্রসেসিং সেন্টারে আসলো এবং কখন অ্যাপ্রুভ হলো।
+
+Alert System: যদি কোনো ব্যাচের এক্সপায়ারি ডেট কাছে চলে আসে, তবে ড্যাশবোর্ডে রেড অ্যালার্ট দেখানো।
+
+৪. টেকনিক্যাল সাজেশন (World-class Execution)
+
+আপনি যে Update QC & Grade মোডালটি ব্যবহার করছেন, সেখানে "QC Feedback" বা একটি নোট সেকশন রাখুন। এতে করে যদি কোনো ব্যাচ 'Rejected' হয়, তবে কেন রিজেক্ট হলো তার কারণ ইনস্পেক্টর লিখে দিতে পারবেন।
+
+প্রজেক্টকে শুধুমাত্র একটি "Supply Chain" থেকে "Smart & Traceable Agriculture Ecosystem"-এ নিয়ে যাচ্ছেন। গ্লোবাল স্ট্যান্ডার্ডে (যেমন: EU বা USDA Organic standard) কোনো পণ্যের মান বিচার করা হয় তার "Seed to Shelf" ডাটা দেখে।
+
+
+
+আপনি ঠিকই বলেছেন, ডাটা যত বেশি হবে, কনজিউমারের কাছে বিশ্বস্ততা তত বাড়বে এবং আপনার প্রজেক্টের ভ্যালু অনেক গুণ বেড়ে যাবে।
+
+
+
+আপনার lav_batches টেবিলের বর্তমান স্ট্রাকচার পরিবর্তন করে এবং নতুন কিছু ফিচার যোগ করে আপনার প্রজেক্টকে কিভাবে ওয়ার্ল্ড-ওয়াইড স্ট্যান্ডার্ডে নেওয়া যায়, তার একটি পূর্ণাঙ্গ গাইডলাইন নিচে দিচ্ছি:
+
+
+
+১. ব্যাচ টেবিলে নতুন যে ফিল্ডগুলো যোগ করা প্রয়োজন (Database Upgrade)
+
+
+
+আপনার বর্তমান টেবিল স্ট্রাকচারে নিচের ফিল্ডগুলো Migration ফাইলের মাধ্যমে যোগ করতে পারেন:
+
+
+
+
+
+
+
+Seed Information: seed_source (Brand/Company), seed_variety (জাত)।
+
+
+
+Farming Process: sowing_date (বীজ বপনের তারিখ), irrigation_info (সেচ পদ্ধতি)।
+
+
+
+Chemical Inputs: fertilizer_used (সারের নাম), pesticide_log (কীটনাশকের বিবরণ ও ব্যবহারের মাত্রা)।
+
+
+
+Growth Timeline: estimated_harvest_days (কত দিনে ফসল হওয়ার কথা)।
+
+
+
+Harvesting Info: harvest_date (ফসল তোলার তারিখ - এখান থেকেই বোঝা যাবে সময়ের আগে তোলা হয়েছে কিনা)।
+
+
+
+QC & Safety: qc_status (Pending/Approved/Rejected), qc_officer_id, moisture_level (ফসল শুকানোর মান)।
+
+
+
+২. প্রোজেক্টকে 'Worldwide Standard' করার ৫টি স্মার্ট আইডিয়া
+
+
+
+আপনার প্রজেক্টে এই ফিচারগুলো থাকলে এটি আন্তর্জাতিক মানের একটি গবেষণাপত্র বা স্টার্টআপ আইডিয়া হতে পারে:
+
+
+
+
+
+
+
+ক) Maturity Analysis (সময়ের আগে ফসল তোলা রোধ)
+
+
+
+সিস্টেম অটোমেটিক চেক করবে: Harvest_Date - Sowing_Date = কত দিন? যদি ওই নির্দিষ্ট ফসলের আদর্শ সময়ের (যেমন ১০০ দিন) চেয়ে অনেক কম সময়ে ফসল তোলা হয়, তবে কিউআর কোড স্ক্যান করলে ক্রেতার ফোনে "Alert: Premature Harvest" দেখাবে। এটি কেমিক্যাল দিয়ে পাকানো ফল শনাক্ত করতে সাহায্য করবে।
+
+
+
+
+
+
+
+খ) Pesticide Withdrawal Period (কীটনাশকের নিরাপত্তা সময়)
+
+
+
+কীটনাশক দেওয়ার পর অন্তত ৭-১০ দিন ফসল তোলা নিষেধ। সিস্টেমে কৃষক যখন লাস্ট কীটনাশক দেওয়ার তারিখ এন্ট্রি করবে, তখন তার ১০ দিনের মধ্যে ফসল তুললে সিস্টেম তাকে "Chemical Risk" হিসেবে মার্ক করবে।
+
+
+
+
+
+
+
+গ) Geolocation Tracking (উৎপাদনস্থলের ম্যাপ)কনজিউমার কিউআর স্ক্যান করলে গুগল ম্যাপে দেখতে পাবে ঠিক কোন জমিতে এই ধান বা সবজিটি চাষ হয়েছে।
+
+
+
+
+
+
+
+ঘ) Quality Grade (এ-গ্রেড, বি-গ্রেড)
+
+
+
+QC অফিসার যখন এপ্রুভ করবেন, তখন তিনি ডাটার ওপর ভিত্তি করে গ্রেডিং দেবেন (যেমন: Grade A - Export Quality)। এতে ভালো মানের পণ্যের জন্য কৃষক বেশি দাম পাবে।
+
+
+
+
+
+
+
+ঙ) Environmental Impact Score
+
+
+
+চাষে কতটুকু পানি লেগেছে বা অর্গানিক সার ব্যবহার হয়েছে কিনা তার ওপর ভিত্তি করে একটি "Green Score" জেনারেট হবে।
+
+
+আপনার প্রজেক্টের ভ্যালু আরও বাড়ানোর জন্য এই ৩টি জিনিস মাথায় রাখতে পারেন:
+
+
+
+
+
+
+
+ক) "Safe to Consume" ক্যালকুলেটর (Pesticide Safety):
+
+
+
+কীটনাশক দেওয়ার পর নির্দিষ্ট দিন (Pre-Harvest Interval) পার না হওয়া পর্যন্ত ফসল তোলা নিষেধ।
+
+
+
+
+
+
+
+লজিক: আপনার কন্ট্রোলারে একটি চেক বসাতে পারেন—যদি Harvest_Date এবং শেষ কীটনাশক দেওয়ার তারিখের ব্যবধান ৭ দিনের কম হয়, তবে কিউআর কোড স্ক্যান করলে একটি লাল সতর্কতা (Red Warning) দেখাবে। এটি কনজিউমারদের কাছে আপনার প্রজেক্টকে হিরো বানিয়ে দেবে।
+
+
+
+খ) Dynamic Tracking Page (কাস্টমার ভিউ):
+
+
+
+কিউআর কোড স্ক্যান করার পর কাস্টমার যেন শুধু টেবিল না দেখে, বরং একটি টাইমলাইন দেখে।
+
+
+
+
+
+
+
+গ) Batch Status History (অবস্থান ট্র্যাকিং):
+
+
+
+বর্তমানে ব্যাচটি কোথায় আছে? (কৃষকের কাছে / প্রসেসিং সেন্টারে / ডিস্ট্রিবিউটরের কাছে / শোরুমে)। আপনার ব্যাচ টেবিলে একটি current_location বা status ফিল্ড থাকলে সাপ্লাই চেইন পূর্ণতা পাবে।
+
+
+
