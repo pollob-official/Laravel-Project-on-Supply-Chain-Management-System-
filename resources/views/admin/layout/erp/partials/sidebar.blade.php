@@ -1,37 +1,22 @@
-@section("style")
-<style>
-    /* ১. যখন বাম পাশের মেনু ছোট থাকবে তখন ইউজার বক্স এবং বর্ডার হাইড হবে */
-    body[data-leftbar-compact-mode="condensed"] .leftside-menu .user-box,
-    body[data-leftbar-compact-mode="condensed"] .leftside-menu hr {
-        display: none !important;
-    }
-
-    /* ২. বড় স্ক্রিনে যখন নরমাল অবস্থায় থাকবে তখন দেখাবে */
-    .user-box {
-        overflow: hidden;
-        transition: all 0.3s ease;
-    }
-
-    /* ৩. টেক্সট যাতে এক লাইনের বাইরে গিয়ে নিচে না নামে */
-    .user-info h5, .user-info p {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-</style>
-@endsection
-
 <div class="leftside-menu">
 
     <a href="{{ URL('/') }}" class="logo logo-light text-center">
         <span class="logo-lg"><img src="{{ asset('assets/images/logo.png') }}" alt="logo" style="height: 60px; width: 190px;"></span>
         <span class="logo-sm"><img src="{{ asset('assets/images/logo-sm.png') }}" alt="small logo" style="height: 30px; width: 40px;"></span>
     </a>
+    <a href="{{ URL('/') }}" class="logo logo-dark text-center">
+        <span class="logo-lg"><img src="{{ asset('assets/images/logo-dark.png') }}" alt="logo" style="height: 60px; width: 190px;"></span>
+        <span class="logo-sm"><img src="{{ asset('assets/images/logo-sm.png') }}" alt="small logo" style="height: 30px; width: 40px;"></span>
+    </a>
 
-    <div class="user-box px-3 mt-3 mb-2">
+    <div class="user-box px-3 mt-3 mb-1">
         <div class="user-info">
-            <h5 class="text-muted mb-0" style="font-size: 14px; font-weight: 700; letter-spacing: 0.5px;">POLLOB AHMED SAGOR</h5>
-            <p class="text-muted mb-0" style="font-size: 12px;">pollob.workmail@gmail.com</p>
+            <h5 class="text-muted mb-0" style="font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                POLLOB AHMED SAGOR
+            </h5>
+            <p class="text-muted mb-0" style="font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                pollob.workmail@gmail.com
+            </p>
         </div>
     </div>
     <hr class="mx-3 my-1 border-secondary opacity-25">
@@ -56,11 +41,11 @@
                 </a>
                 <div class="collapse" id="sidebarUsers">
                     <ul class="side-nav-second-level">
-                        <li><a href="{{URL("admin/farmer")}}">Farmer List (Origin)</a></li>
-                        <li><a href="{{URL("admin/miller")}}">Suppliers / Millers</a></li>
-                        <li><a href="{{URL("admin/wholesaler")}}">Wholesalers</a></li>
-                        <li><a href="{{URL("admin/retailer")}}">Retailers</a></li>
-                        <li><a href="{{URL("admin/stakeholder")}}">All Stakeholders</a></li>
+                        <li><a href="{{URL('admin/farmer')}}">Farmer List (Origin)</a></li>
+                        <li><a href="{{URL('admin/miller')}}">Suppliers / Millers</a></li>
+                        <li><a href="{{URL('admin/wholesaler')}}">Wholesalers</a></li>
+                        <li><a href="{{URL('admin/retailer')}}">Retailers</a></li>
+                        <li><a href="{{URL('admin/stakeholder')}}">All Stakeholders</a></li>
                     </ul>
                 </div>
             </li>
@@ -73,9 +58,9 @@
                 </a>
                 <div class="collapse" id="sidebarProducts">
                     <ul class="side-nav-second-level">
-                        <li><a href="{{URL("admin/category")}}">Categories</a></li>
-                        <li><a href="{{URL("admin/product")}}">Product List</a></li>
-                        <li><a href="{{URL("admin/unit")}}">Units (KG, Ton, Sack)</a></li>
+                        <li><a href="{{URL('admin/category')}}">Categories</a></li>
+                        <li><a href="{{URL('admin/product')}}">Product List</a></li>
+                        <li><a href="{{URL('admin/unit')}}">Units (KG, Ton, Sack)</a></li>
                     </ul>
                 </div>
             </li>
@@ -90,9 +75,9 @@
                 </a>
                 <div class="collapse" id="sidebarBatches">
                     <ul class="side-nav-second-level">
-                        <li><a href="{{URL("admin/batches/create")}}">Initiate New Batch</a></li>
-                        <li><a href="{{URL("admin/batches")}}">Active Supply Batches</a></li>
-                        <li><a href="{{URL("admin/batches/trashed")}}">QR Code Logs (Trash)</a></li>
+                        <li><a href="{{URL('admin/batches/create')}}">Initiate New Batch</a></li>
+                        <li><a href="{{URL('admin/batches')}}">Active Supply Batches</a></li>
+                        <li><a href="{{URL('admin/batches/trashed')}}">QR Code Logs (Trash)</a></li>
                     </ul>
                 </div>
             </li>
@@ -105,9 +90,9 @@
                 </a>
                 <div class="collapse" id="sidebarFlow">
                     <ul class="side-nav-second-level">
-                        <li><a href="{{URL("admin/journey")}}">Update Stage (Handover)</a></li>
+                        <li><a href="{{URL('admin/journey')}}">Update Stage (Handover)</a></li>
                         <li><a href="#">Cost & Profit Audit</a></li>
-                        <li><a href="{{URL("admin/journey/trashed")}}">Journey History (Trash)</a></li>
+                        <li><a href="{{URL('admin/journey/trashed')}}">Journey History (Trash)</a></li>
                     </ul>
                 </div>
             </li>
