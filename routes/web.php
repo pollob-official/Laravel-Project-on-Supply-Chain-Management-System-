@@ -218,17 +218,18 @@ Route::prefix("batches")->controller(BatchController::class)->group(function(){
     Route::post("approve/{id}", "approve")->name('batches.approve');
 });
 
-    // Journey / Handover
-    Route::prefix("journey")->controller(ProductJourneyController::class)->group(function(){
-        Route::get("/", "index");
-        Route::get("create", "create");
-        Route::post("save", "save");
-        Route::get("edit/{id}", "edit");
-        Route::post("update/{id}", "update");
-        Route::delete("delete/{id}", "delete");
-        Route::get("trashed", "trashed");
-        Route::get("restore/{id}", "restore");
-        Route::delete("force-delete/{id}", "force_delete");
+// Journey / Handover
+Route::prefix("journey")->controller(ProductJourneyController::class)->group(function(){
+    Route::get("/", "index");
+    Route::get("create", "create");
+    Route::post("save", "save");
+    Route::get("edit/{id}", "edit");
+    Route::post("update/{id}", "update");
+    Route::delete("delete/{id}", "delete");
+    Route::get("trashed", "trashed");
+    Route::get("restore/{id}", "restore");
+    Route::delete("force-delete/{id}", "force_delete");
+    Route::get("trace/{tracking_no}", "public_trace");
     });
 
 }); // End Admin Prefix Group
