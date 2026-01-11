@@ -222,3 +222,8 @@ composer require simplesoftwareio/simple-qrcode
 Code Arrange= "shift+alt+f"
 
 tree /f > structure.txt
+
+
+###{Api bananor command:}###
+php artisan install:api
+php artisan make:controller Api/CustomerController

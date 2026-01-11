@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Stakeholder;
 use App\Models\Batch; // ব্যাচ মডেল যোগ করা হয়েছে
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ProductJourneyController extends Controller
@@ -167,5 +168,53 @@ public function delete($id) {
                     ->get();
 
         return view("admin.journey.trace", compact("history", "tracking_no", "current_record"));
+    }
+
+   public function audit()
+    {
+        $batchAudits = ProductJourney::with(['batch', 'product'])
+            ->select('batch_id', 'product_id',
+                DB::raw('SUM(buying_price) as total_buying'),
+                DB::raw('SUM(extra_cost) as total_extra_cost'),
+                DB::raw('SUM(selling_price) as total_revenue'),
+                DB::raw('SUM(profit_margin) as total_profit'),
+                DB::raw('MAX(created_at) as last_update')
+            )
+            ->groupBy('batch_id', 'product_id')
+            ->latest('last_update')
+            ->paginate(15);
+
+        return view('admin.journey.audit', compact('batchAudits'));
+    }
+
+   public function priceAlerts(Request $request)
+    {
+        // ইউজার ইনপুট দিলে সেটা নিবে, না দিলে ডিফল্ট ২৫
+        $marginLimit = $request->has('margin') ? $request->margin : 25;
+
+        $alerts = ProductJourney::with(['batch', 'product', 'seller', 'buyer'])
+            ->whereRaw('(profit_margin / (buying_price + extra_cost)) * 100 > ?', [$marginLimit])
+            ->latest()
+            ->paginate(15);
+
+        return view('admin.journey.alerts', compact('alerts', 'marginLimit'));
+    }
+
+    public function supplyChainMap(Request $request)
+    {
+        $search = $request->search;
+        $journeys = [];
+
+        if ($search) {
+            $journeys = ProductJourney::with(['batch', 'product', 'seller', 'buyer'])
+                ->where('tracking_no', $search)
+                ->orWhereHas('batch', function($q) use ($search) {
+                    $q->where('batch_no', $search);
+                })
+                ->orderBy('created_at', 'asc') // শুরুর ধাপ আগে দেখাবে
+                ->get();
+        }
+
+        return view('admin.journey.map', compact('journeys', 'search'));
     }
 }

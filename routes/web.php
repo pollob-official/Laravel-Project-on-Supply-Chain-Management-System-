@@ -16,6 +16,7 @@ use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WholesalerController;
 use App\Http\Controllers\BatchController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -28,10 +29,11 @@ Auth::routes();
 
 Route::match(['get', 'post'], '/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
+// Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
 // পাবলিক ট্র্যাকিং (কিউআর কোড স্ক্যান করলে যা আসবে)
-Route::get("trace/{tracking_no}", [ProductJourneyController::class, "public_trace"]);
+// Route::get("trace/{tracking_no}", [ProductJourneyController::class, "public_trace"]);
 
 
 // --- ২. Independent/Extra Routes (অ্যাডমিন গ্রুপের বাইরে) ---
@@ -230,7 +232,12 @@ Route::prefix("journey")->controller(ProductJourneyController::class)->group(fun
     Route::get("restore/{id}", "restore");
     Route::delete("force-delete/{id}", "force_delete");
     Route::get("trace/{tracking_no}", "public_trace");
+    Route::get("audit", "audit");
+    Route::get('price-alerts', 'priceAlerts');
+    Route::get('map', 'supplyChainMap');
     });
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 }); // End Admin Prefix Group
 

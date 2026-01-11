@@ -91,7 +91,7 @@
                 <div class="collapse" id="sidebarFlow">
                     <ul class="side-nav-second-level">
                         <li><a href="{{URL('admin/journey')}}">Update Stage (Handover)</a></li>
-                        <li><a href="#">Cost & Profit Audit</a></li>
+                        <li><a href="{{URL('admin/journey/audit')}}">Cost & Profit Audit</a></li>
                         <li><a href="{{URL('admin/journey/trashed')}}">Journey History (Trash)</a></li>
                     </ul>
                 </div>
@@ -107,9 +107,9 @@
                 </a>
                 <div class="collapse" id="sidebarReports">
                     <ul class="side-nav-second-level">
-                        <li><a href="#">Abnormal Price Alerts</a></li>
+                        <li><a href="{{URL('admin/journey/price-alerts')}}">Abnormal Price Alerts</a></li>
                         <li><a href="#">Price Fluctuation</a></li>
-                        <li><a href="#">Supply Chain Map</a></li>
+                        <li><a href="{{URL('admin/journey/map')}}">Supply Chain Map</a></li>
                     </ul>
                 </div>
             </li>
