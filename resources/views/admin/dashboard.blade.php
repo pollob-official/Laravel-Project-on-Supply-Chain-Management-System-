@@ -35,7 +35,7 @@
             </div>
 
             <div class="col-xxl-3 col-sm-6">
-                <div class="card widget-flat text-bg-info">
+                <div class="card widget-flat text-white" style="background-color:#16a34a;">
                     <div class="card-body">
                         <div class="float-end">
                             <i class="ri-money-dollar-circle-line widget-icon"></i>
@@ -51,7 +51,8 @@
             </div>
 
             <div class="col-xxl-3 col-sm-6">
-                <div class="card widget-flat text-bg-success">
+                <div class="card widget-flat text-white"
+         style="background: linear-gradient(135deg, #2563eb, #3b82f6);">
                     <div class="card-body">
                         <div class="float-end">
                             <i class="ri-line-chart-line widget-icon"></i>

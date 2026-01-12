@@ -42,7 +42,7 @@
                     <tr>
                         <td>
                             <span class="fw-bold text-primary">{{ $journey->tracking_no }}</span><br>
-                            <span class="badge bg-light text-dark border">Batch: {{ $journey->batch->batch_code ?? 'N/A' }}</span>
+                            <span class="badge bg-light text-dark border">Batch: {{ $journey->batch->batch_no ?? 'N/A' }}</span>
                         </td>
                         <td>
                             <span class="fw-bold text-dark">{{ $journey->product->name ?? 'N/A' }}</span><br>

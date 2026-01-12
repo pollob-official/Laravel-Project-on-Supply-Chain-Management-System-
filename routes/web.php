@@ -17,6 +17,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WholesalerController;
 use App\Http\Controllers\BatchController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SystemConfigController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -242,6 +243,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 }); // End Admin Prefix Group
 
 
+Route::get('admin/settings', [SystemConfigController::class, 'index'])->name('admin.settings');
+Route::post('admin/settings/update', [SystemConfigController::class, 'update'])->name('admin.settings.update');
 
 // --- ৪. Fallback ---
 Route::fallback(function(){

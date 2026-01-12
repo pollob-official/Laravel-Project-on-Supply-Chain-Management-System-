@@ -43,9 +43,10 @@ class ProductJourneyController extends Controller
 
         // শুধুমাত্র Active ব্যাচগুলো নিচ্ছি (যদি status কলাম থাকে)
         // অথবা সরাসরি সব ব্যাচ নিচ্ছি আপনার আগের লজিক অনুযায়ী
-        $batches = Batch::orderBy('id', 'desc')->get();
+        $batches = Batch::with("product")->orderBy('id', 'desc')->get();
+        $product_journeys = ProductJourney::all();
 
-        return view("admin.journey.create", compact("products", "stakeholders", "batches"));
+        return view("admin.journey.create", compact("products", "stakeholders", "batches", "product_journeys"));
     }
 
     // ৪. ডাটা সেভ করার মেথড (নতুন কলামসহ)
