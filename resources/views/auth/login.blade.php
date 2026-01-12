@@ -19,6 +19,14 @@
 
     <!-- Icons css -->
     <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+
+<style>
+    .btn-soft-primary:hover i {
+        transform: translateX(4px);
+        transition: transform 0.3s ease;
+    }
+</style>
+
 </head>
 
 <body class="authentication-bg position-relative">
@@ -28,10 +36,10 @@
         <div class="row justify-content-center">
             <div class="col-xxl-8 col-lg-10">
                 <div class="card overflow-hidden">
-                    <div class="row g-0">
+                    <div class="row g-0 " >
 
                         <!-- LEFT IMAGE -->
-                        <div class="col-lg-6 d-none d-lg-block p-2">
+                        <div class="col-lg-6 d-none d-lg-block p-2" >
                             <img src="{{ asset('assets/images/auth-img.jpg') }}"
                                  class="img-fluid rounded h-100" alt="">
                         </div>
