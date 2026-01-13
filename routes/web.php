@@ -22,22 +22,18 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 // --- ১. Public & Auth Routes ---
-Route::get('/', function () {
-    return view("pages.erp.dashboard.index");
-});
+// Route::get('/', function () {
+//     return view("pages.erp.dashboard.index");
+// });
+
+
+Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
 
 Auth::routes();
 
 Route::match(['get', 'post'], '/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-// Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
-Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
-// পাবলিক ট্র্যাকিং (কিউআর কোড স্ক্যান করলে যা আসবে)
-// Route::get("trace/{tracking_no}", [ProductJourneyController::class, "public_trace"]);
-
-
-// --- ২. Independent/Extra Routes (অ্যাডমিন গ্রুপের বাইরে) ---
 
 // Student Routes
 Route::get("/students", [StudentController::class, "index"]);
@@ -238,7 +234,7 @@ Route::prefix("journey")->controller(ProductJourneyController::class)->group(fun
     Route::get('map', 'supplyChainMap');
     });
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
 
 }); // End Admin Prefix Group
 

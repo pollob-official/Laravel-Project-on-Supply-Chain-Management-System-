@@ -25,7 +25,7 @@
         <ul class="side-nav">
 
             <li class="side-nav-item">
-                <a href="{{ URL('/dashboard') }}" class="side-nav-link">
+                <a href="{{ URL('/') }}" class="side-nav-link">
                     <i class="ri-dashboard-3-line"></i>
                     <span> Supply Chain Overview </span>
                 </a>
