@@ -2,26 +2,36 @@
 @section("content")
     <x-alert/>
 
-    <h3 class="mb-2">Product Category List</h3>
+    <h2 class="text-success mb-2 mt-2">Product Category List</h2>
 
-    <form action="{{URL("admin/category")}}" method="GET">
-        <div class="mb-3 d-flex gap-2">
-            <input value="{{request("search")}}" type="text" class="form-control" id="search" name="search" placeholder="Search by category name or slug...">
-            <button type="submit" class="btn btn-primary">Search</button>
+    <div class="mb-1">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+            <div class="d-flex gap-2">
+                <x-button :url="URL('admin/category/create')" type="primary">
+                    <i class="bi bi-plus-lg"></i> Add New Category
+                </x-button>
+
+                {{-- যেহেতু সফট ডিলিট ফাংশন নেই, আপনি চাইলে বাটনটি হাইড রাখতে পারেন বা পরে এড করতে পারেন --}}
+                {{-- <a href="{{ URL('admin/category/trashed') }}" class="btn btn-outline-danger">
+                    <i class="bi bi-trash"></i> View Trash
+                </a> --}}
+            </div>
+
+            <form action="{{ URL('admin/category') }}" method="GET" class="d-flex gap-1">
+                <input value="{{ request('search') }}" type="text" class="form-control" style="width: 280px;"
+                    name="search" placeholder="Search by name or slug...">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+
         </div>
-    </form>
-
-    <div class="mb-3">
-        <x-button :url="URL('admin/category/create')" type="primary">
-            <i class="bi bi-plus-lg"></i> Add New Category
-        </x-button>
     </div>
 
     <div class="card shadow-sm border-0">
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
-                    <thead style="background-color:#0ae264;">
+                    <thead class="text-white" style="background-color:#0ae264;">
                         <tr>
                             <th scope="col" style="width: 80px;">#ID</th>
                             <th scope="col">Category Name</th>
@@ -59,11 +69,10 @@
                                             <i class="bi bi-pencil"></i>
                                         </a>
 
-                                        {{-- সরাসরি ডিলিট লজিক (যেহেতু সফট ডিলিট নেই) --}}
-                                        <form action="{{ URL('admin/category/delete/'.$category->id) }}" method="POST" onsubmit="return confirm('Are you sure? This will delete the category permanently.')">
+                                        <form action="{{ URL('admin/category/delete/'.$category->id) }}" method="POST" onsubmit="return confirm('Are you sure? Permanent delete!')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete Permanent">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         </form>
@@ -81,7 +90,7 @@
         </div>
     </div>
 
-    <div class="mt-3">
+    <div class="mt-2">
         {{ $categories->appends(request()->query())->links() }}
     </div>
 @endsection

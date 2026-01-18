@@ -28,7 +28,7 @@ class CategoryController extends Controller
     }
 
     // ৩. নতুন ক্যাটাগরি সেভ করা
-    public function store(Request $request)
+    public function save(Request $request)
     {
         $request->validate([
             'name' => 'required|max:255',

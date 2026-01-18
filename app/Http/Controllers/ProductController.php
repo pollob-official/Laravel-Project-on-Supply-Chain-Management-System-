@@ -13,21 +13,34 @@ use Illuminate\Support\Str;
 class ProductController extends Controller
 {
     // ১. ইনডেক্স লিস্ট (Advanced Search সহ)
-    public function index(Request $request)
-    {
-        $products = Product::with(['category', 'unit'])
-            ->when($request->search, function($query) use($request) {
-                return $query->where(function($q) use($request) {
-                    $q->where("name", "LIKE", "%" . $request->search . "%")
-                      ->orWhere("sku", "LIKE", "%" . $request->search . "%")
-                      ->orWhere("product_type", "LIKE", "%" . $request->search . "%");
-                });
-            })
-            ->orderBy("id", "desc")
-            ->paginate(5);
+   public function index(Request $request)
+{
+    $search = $request->search;
 
-        return view("admin.product.index", compact("products"));
-    }
+    $products = Product::with(['category', 'unit'])
+        ->when($search, function($query) use ($search) {
+            return $query->where(function($q) use ($search) {
+                // ১. সরাসরি প্রোডাক্ট টেবিলের কলামে সার্চ
+                $q->where("name", "LIKE", "%$search%")
+                  ->orWhere("sku", "LIKE", "%$search%")
+                  ->orWhere("product_type", "LIKE", "%$search%")
+
+                // ২. রিলেশনশিপ টেবিলের (Category) ভেতরে সার্চ
+                ->orWhereHas('category', function($catQuery) use ($search) {
+                    $catQuery->where('name', 'LIKE', "%$search%");
+                })
+
+                // ৩. রিলেশনশিপ টেবিলের (Unit) ভেতরে সার্চ
+                ->orWhereHas('unit', function($unitQuery) use ($search) {
+                    $unitQuery->where('short_name', 'LIKE', "%$search%");
+                });
+            });
+        })
+        ->orderBy("id", "desc")
+        ->paginate(10); // ৫ এর বদলে ১০ দিলে ইউজার এক্সপেরিয়েন্স ভালো হবে
+
+    return view("admin.product.index", compact("products"));
+}
 
     // ২. ট্র্যাশ লিস্ট
 

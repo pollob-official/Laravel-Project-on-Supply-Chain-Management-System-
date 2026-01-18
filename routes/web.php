@@ -17,6 +17,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WholesalerController;
 use App\Http\Controllers\BatchController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SystemConfigController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -241,6 +242,12 @@ Route::prefix("journey")->controller(ProductJourneyController::class)->group(fun
 
 Route::get('admin/settings', [SystemConfigController::class, 'index'])->name('admin.settings');
 Route::post('admin/settings/update', [SystemConfigController::class, 'update'])->name('admin.settings.update');
+
+
+Route::prefix("admin/purchase")->group(function(){
+    Route::get("create", [PurchaseController::class, 'create']);
+    Route::post("store", [PurchaseController::class, 'store']);
+});
 
 // --- ৪. Fallback ---
 Route::fallback(function(){

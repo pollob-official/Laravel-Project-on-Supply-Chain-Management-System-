@@ -72,7 +72,7 @@
                                             </a>
 
                                             {{-- Permanent Delete Form --}}
-                                            <form action="{{ URL('admin/batches/force_delete/'.$batch->id) }}"
+                                            <form action="{{ URL('admin/batches/force-delete/'.$batch->id) }}"
                                                   method="POST"
                                                   onsubmit="return confirm('সাবধান! এই ব্যাচটি চিরতরে ডিলিট হয়ে যাবে এবং এটি আর পুনরুদ্ধার করা সম্ভব হবে না। আপনি কি নিশ্চিত?')">
                                                 @csrf
