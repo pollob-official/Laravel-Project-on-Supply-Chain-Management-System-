@@ -28,9 +28,14 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
-Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
 
 Auth::routes();
+
+Route::middleware("auth")->group(function(){
+
+
+
+Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
 
 Route::match(['get', 'post'], '/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -253,4 +258,4 @@ Route::prefix("admin/purchase")->group(function(){
 Route::fallback(function(){
     return "404 No Route matched";
 });
-
+});
