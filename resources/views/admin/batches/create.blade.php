@@ -1,298 +1,247 @@
 @extends('admin.layout.erp.app')
 @section('content')
     <div class="container mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-            <h3 class="text-primary fw-bold"><i class="bi bi-qr-code-scan"></i> Generate World-Class Product Batch</h3>
-            <a href="{{ URL('admin/batches') }}" class="btn btn-secondary btn-sm shadow-sm">
-                <i class="bi bi-arrow-left"></i> Back to Batch List
-            </a>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="text-primary fw-bold"><i class="bi bi-qr-code-scan"></i> Dynamic Batch & Traceability Initiation</h3>
+            {{-- সংশোধিত রাউট নাম: index --}}
+            <a href="{{ route('batches.index') }}" class="btn btn-secondary btn-sm rounded-pill px-3">Back</a>
         </div>
 
-        <form action="{{ URL('admin/batches/store') }}" method="POST" class="p-4 border-0 rounded-4 shadow bg-white">
+        <form action="{{ route('batches.store') }}" method="POST" class="p-4 border-0 rounded-4 shadow bg-white">
             @csrf
 
-            {{-- Section 1: Identification & GPS --}}
-            <h4 class="text-muted mb-3 border-bottom pb-2">Batch Identification & Farm GPS</h4>
-
-
+            {{-- Section 1: Source & Identification --}}
+            <h4 class="text-muted mb-3 border-bottom pb-2">Step 1: Stakeholder & Product Selection</h4>
             <div class="row">
-                {{-- Select Product Section --}}
                 <div class="col-md-4 mb-3">
-                    <label class="form-label font-weight-bold">Select Product <span class="text-danger">*</span></label>
-                    <div class="input-group">
-                        <select name="product_id" class="form-select @error('product_id') is-invalid @enderror shadow-sm"
-                            required>
-                            <option value="">-- Choose Product --</option>
-                            @foreach ($products as $product)
-                                <option value="{{ $product->id }}"
-                                    {{ old('product_id') == $product->id ? 'selected' : '' }}>{{ $product->name }}</option>
-                            @endforeach
-                        </select>
-                        {{-- Add Product Button --}}
-                        <x-button :url="URL('admin/product/create')" type="primary">
-                            <i class="bi bi-plus-lg"></i>
-                        </x-button>
-                    </div>
-                    @error('product_id')
-                        <div class="text-danger small">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                {{-- Select Farmer Section --}}
-                <div class="col-md-4 mb-3">
-                    <label class="form-label font-weight-bold">Source Farmer <span class="text-danger">*</span></label>
-                    <div class="input-group">
-                        <select name="initial_farmer_id"
-                            class="form-select @error('initial_farmer_id') is-invalid @enderror shadow-sm" required>
-                            <option value="">-- Choose Farmer --</option>
-                            @foreach ($farmers as $farmer)
-                                <option value="{{ $farmer->id }}"
-                                    {{ old('initial_farmer_id') == $farmer->id ? 'selected' : '' }}>{{ $farmer->name }}
-                                    ({{ $farmer->phone }})</option>
-                            @endforeach
-                        </select>
-                        {{-- Add Farmer Button --}}
-                        <x-button :url="URL('admin/farmer/create')" type="primary">
-                            <i class="bi bi-plus-lg"></i>
-                        </x-button>
-                    </div>
-                    @error('initial_farmer_id')
-                        <div class="text-danger small">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                {{-- Current Location --}}
-                <div class="col-md-4 mb-3">
-                    <label class="form-label font-weight-bold">Current Stage/Location</label>
-                    <input type="text" name="current_location" id="current_location" class="form-control shadow-sm"
-                        value="{{ old('current_location', 'Farmer Field') }}">
-                </div>
-            </div>
-
-            {{-- GPS Coordinates Section --}}
-            <div class="row bg-light p-3 rounded-4 mb-4 mx-1 border border-primary border-opacity-25">
-                <div class="col-md-6 mb-2">
-                    <label class="form-label font-weight-bold text-primary small"><i class="bi bi-geo-alt-fill"></i>
-                        Latitude (অক্ষরেখা)</label>
-                    <input type="text" name="latitude" id="lat"
-                        class="form-control border-primary bg-white shadow-sm" readonly placeholder="Detecting...">
-                </div>
-                <div class="col-md-6 mb-2">
-                    <label class="form-label font-weight-bold text-primary small"><i class="bi bi-geo-alt-fill"></i>
-                        Longitude (দ্রাঘিমারেখা)</label>
-                    <input type="text" name="longitude" id="lon"
-                        class="form-control border-primary bg-white shadow-sm" readonly placeholder="Detecting...">
-                </div>
-                <div class="col-12 mt-1">
-                    <small id="gps_msg" class="text-muted fw-semibold"><i class="bi bi-broadcast"></i> Securely capturing
-                        farm location for traceability...</small>
-                </div>
-            </div>
-
-
-            {{-- Section 2: Cultivation & Seed Info --}}
-            <h4 class="text-info mb-3 border-bottom pb-2 mt-2"><i class="bi bi-seedling"></i> Seed & Cultivation Info</h4>
-            <div class="row">
-                <div class="col-md-3 mb-3">
-                    <label class="form-label font-weight-bold small text-muted">Seed Brand</label>
-                    <input type="text" name="seed_brand" class="form-control border-info shadow-sm"
-                        value="{{ old('seed_brand') }}" placeholder="e.g. Bayer">
-                </div>
-                <div class="col-md-3 mb-3">
-                    <label class="form-label font-weight-bold small text-muted">Seed Variety</label>
-                    <input type="text" name="seed_variety" class="form-control border-info shadow-sm"
-                        value="{{ old('seed_variety') }}" placeholder="e.g. Miniket">
-                </div>
-                <div class="col-md-3 mb-3">
-                    <label class="form-label font-weight-bold text-danger small">Sowing Date</label>
-                    <input type="date" name="sowing_date" class="form-control border-danger shadow-sm"
-                        value="{{ old('sowing_date') }}">
-                </div>
-                <div class="col-md-3 mb-3">
-                    <label class="form-label font-weight-bold text-danger small">Last Pesticide Date</label>
-                    <input type="date" name="last_pesticide_date" class="form-control border-danger shadow-sm"
-                        value="{{ old('last_pesticide_date') }}">
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label class="form-label font-weight-bold text-muted small">Fertilizer History</label>
-                    <textarea name="fertilizer_history" class="form-control shadow-sm" rows="2"
-                        placeholder="Describe fertilizers used...">{{ old('fertilizer_history') }}</textarea>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label font-weight-bold text-muted small">Pesticide History</label>
-                    <textarea name="pesticide_history" class="form-control shadow-sm" rows="2"
-                        placeholder="Describe pesticides used...">{{ old('pesticide_history') }}</textarea>
-                </div>
-            </div>
-
-            {{-- STEP 2 ADDITION: Financial Transparency & Value Addition --}}
-            <h4 class="text-primary mb-3 border-bottom pb-2 mt-2"><i class="bi bi-cash-stack"></i> Price Transparency &
-                Value Addition</h4>
-            <div
-                class="row bg-primary bg-opacity-10 p-3 rounded-4 mb-4 mx-1 border border-primary border-opacity-25 shadow-sm">
-                <div class="col-md-4 mb-3">
-                    <label class="form-label font-weight-bold text-dark">Farmer Price (Per Unit) <span
-                            class="text-danger small">*</span></label>
-                    <div class="input-group shadow-sm">
-                        <span class="input-group-text bg-white border-primary">৳</span>
-                        <input type="number" step="0.01" name="farmer_price" class="form-control border-primary"
-                            value="{{ old('farmer_price') }}" placeholder="Price paid to farmer" required>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label class="form-label font-weight-bold text-dark">Processing/Value Addition Cost <span
-                            class="text-danger small">*</span></label>
-                    <div class="input-group shadow-sm">
-                        <span class="input-group-text bg-white border-primary text-primary fw-bold">+</span>
-                        <input type="number" step="0.01" name="processing_cost" class="form-control border-primary"
-                            value="{{ old('processing_cost') }}" placeholder="Milling/Packaging cost" required>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label class="form-label font-weight-bold text-dark">Target Retail Price <span
-                            class="text-danger small">*</span></label>
-                    <div class="input-group shadow-sm">
-                        <span class="input-group-text bg-dark text-white border-dark">৳</span>
-                        <input type="number" step="0.01" name="target_retail_price" class="form-control border-dark"
-                            value="{{ old('target_retail_price') }}" placeholder="Final consumer price" required>
-                    </div>
-                </div>
-                <div class="col-12 mt-1">
-                    <small class="text-primary fw-semibold"><i class="bi bi-shield-lock-fill"></i> This breakdown will be
-                        visible to customers to build 100% trust.</small>
-                </div>
-            </div>
-
-            {{-- Section 3: Quantity & Safety --}}
-            <h4 class="text-success mb-3 border-bottom pb-2 mt-2"><i class="bi bi-box-seam"></i> Quantity & Quality
-                Analysis</h4>
-            <div class="row">
-                <div class="col-md-3 mb-3">
-                    <label class="form-label text-success font-weight-bold">Total Quantity (KG/Unit) <span
-                            class="text-danger">*</span></label>
-                    <input type="number" step="0.01" name="total_quantity"
-                        class="form-control border-success shadow-sm @error('total_quantity') is-invalid @enderror"
-                        value="{{ old('total_quantity') }}" required>
-                    @error('total_quantity')
-                        <div class="text-danger small">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="col-md-3 mb-3">
-                    <label class="form-label text-success font-weight-bold small">Moisture Level (%)</label>
-                    <input type="text" name="moisture_level" class="form-control border-success shadow-sm"
-                        value="{{ old('moisture_level', '12%') }}">
-                </div>
-                <div class="col-md-3 mb-3">
-                    <label class="form-label text-success font-weight-bold">Manufacturing Date <span
-                            class="text-danger">*</span></label>
-                    <input type="date" name="manufacturing_date" class="form-control border-success shadow-sm"
-                        value="{{ old('manufacturing_date', date('Y-m-d')) }}" required>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <label class="form-label text-success font-weight-bold small">Harvest Date</label>
-                    <input type="date" name="harvest_date" class="form-control border-success shadow-sm"
-                        value="{{ old('harvest_date') }}">
-                </div>
-            </div>
-
-            {{-- Section 4: Advanced World-Class Analytics --}}
-            <h4 class="text-warning mb-3 border-bottom pb-2 mt-2"><i class="bi bi-patch-check"></i> Certification &
-                Storage</h4>
-            <div class="row">
-                <div class="col-md-3 mb-3">
-                    <label class="form-label font-weight-bold text-warning small">Production Cost (Per Unit)</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-warning text-white">৳</span>
-                        <input type="number" step="0.01" name="production_cost_per_unit"
-                            class="form-control border-warning shadow-sm" value="{{ old('production_cost_per_unit') }}"
-                            placeholder="0.00">
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <label class="form-label font-weight-bold text-muted small">Certification Type</label>
-                    <select name="certification_type" class="form-select border-warning shadow-sm">
-                        <option value="Standard">Standard</option>
-                        <option value="Organic">Organic (অর্গানিক)</option>
-                        <option value="GAP">GAP Certified</option>
-                        <option value="ISO">ISO Certified</option>
-                        <option value="Non-GMO">Non-GMO</option>
+                    <label class="form-label fw-bold">Select Product <span class="text-danger">*</span></label>
+                    <select name="product_id" id="product_id" class="form-select shadow-sm" required onchange="updateDynamicUnits()">
+                        <option value="">-- Choose Product --</option>
+                        @foreach ($products as $product)
+                            {{-- এখানে data-unit এ রিলেশনশিপ ডাটা পাস হচ্ছে --}}
+                            <option value="{{ $product->id }}"
+                                    data-unit="{{ $product->unit->name ?? 'Unit' }}">
+                                {{ $product->name }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
-                <div class="col-md-3 mb-3">
-                    <label class="form-label font-weight-bold text-muted small">Storage Condition</label>
-                    <input type="text" name="storage_condition" class="form-control border-warning shadow-sm"
-                        value="{{ old('storage_condition') }}" placeholder="e.g. 18°C, Dry">
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label fw-bold">Source Stakeholder Role <span class="text-danger">*</span></label>
+                    <select id="role_selector" name="source_type" class="form-select shadow-sm" required onchange="filterStakeholders()">
+                        <option value="">-- Select Role --</option>
+                        <option value="farmer">Farmer (Primary Producer)</option>
+                        <option value="miller">Miller / Supplier</option>
+                        <option value="wholesaler">Wholesaler</option>
+                        <option value="retailer">Retailer</option>
+                    </select>
                 </div>
-                <div class="col-md-3 mb-3">
-                    <label class="form-label font-weight-bold text-muted small">Target Market</label>
-                    <input type="text" name="target_market" class="form-control border-warning shadow-sm"
-                        value="{{ old('target_market') }}" placeholder="e.g. Export / Local Retail">
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label fw-bold">Select Specific Stakeholder <span class="text-danger">*</span></label>
+                    <select name="source_id" id="source_id" class="form-select shadow-sm" required>
+                        <option value="">-- Choose Name --</option>
+                    </select>
                 </div>
             </div>
 
-            <div class="row mt-2">
-                <div class="col-md-4 mb-3">
-                    <label class="form-label font-weight-bold text-secondary small">Expiry Date</label>
-                    <input type="date" name="expiry_date" class="form-control border-secondary shadow-sm"
-                        value="{{ old('expiry_date') }}">
+            {{-- Section 2: Location (GPS + Manual) --}}
+            <h4 class="text-muted mb-3 border-bottom pb-2 mt-2">Step 2: Traceability Location</h4>
+            <div class="row bg-light p-3 rounded-4 mb-4 mx-1 border border-primary border-opacity-25">
+                <div class="col-md-4 mb-2">
+                    <label class="form-label fw-bold text-primary small">GPS Coordinates (Auto)</label>
+                    <div class="input-group">
+                        <input type="text" name="latitude" id="lat" class="form-control bg-white" readonly placeholder="Lat">
+                        <input type="text" name="longitude" id="lon" class="form-control bg-white" readonly placeholder="Lon">
+                    </div>
                 </div>
-                <div class="col-md-4 mb-3">
-                    <label class="form-label font-weight-bold text-secondary small">Water Footprint (Approx.)</label>
-                    <input type="text" name="water_footprint" class="form-control border-secondary shadow-sm"
-                        placeholder="e.g. 500 Liters/KG">
+                <div class="col-md-8 mb-2">
+                    <label class="form-label fw-bold text-primary small">Manual Address (Village, Upazila, District) <span class="text-danger">*</span></label>
+                    <input type="text" name="manual_location" class="form-control border-primary shadow-sm"
+                           placeholder="Type detailed location for transparency" required>
                 </div>
-                <div class="col-md-4 mb-3 d-flex align-items-end">
-                    <div class="alert alert-info py-2 small w-100 mb-0 shadow-sm border-info" style="font-size: 0.75rem;">
-                        <i class="bi bi-info-circle-fill text-primary"></i> <strong>Note:</strong> AI Safety Score will be
-                        calculated during QC.
+                <div class="col-12">
+                    <small id="gps_status" class="text-muted"><i class="bi bi-broadcast"></i> Waiting for GPS signal...</small>
+                </div>
+            </div>
+
+            {{-- Section 3: Farmer Specific Info --}}
+            <div id="farmer_only_section" style="display: none;" class="animate__animated animate__fadeIn">
+                <h4 class="text-info mb-3 border-bottom pb-2 mt-2"><i class="bi bi-seedling"></i> Seed & Cultivation Details</h4>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label class="small fw-bold">Seed Brand/Variety</label>
+                        <input type="text" name="seed_variety" class="form-control border-info shadow-sm" placeholder="e.g. BRRI 28">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="small fw-bold">Sowing Date</label>
+                        <input type="date" name="sowing_date" class="form-control border-info shadow-sm">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="small fw-bold">Last Pesticide Date</label>
+                        <input type="date" name="last_pesticide_date" class="form-control border-info shadow-sm">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="small fw-bold">Harvest Date</label>
+                        <input type="date" name="harvest_date" class="form-control border-info shadow-sm">
                     </div>
                 </div>
             </div>
 
-            <div class="mt-5 border-top pt-4 text-center">
+            {{-- Section 4: Financial Transparency --}}
+            <h4 class="text-primary mb-3 border-bottom pb-2 mt-2"><i class="bi bi-cash-stack"></i> Financial Transparency & Quantity</h4>
+            <div class="row p-3 rounded-4 mb-4 mx-1 border shadow-sm" style="background-color: #f0f7ff; border-left: 5px solid #0d6efd !important;">
+
+                <div class="col-12 mb-2">
+                    <span class="badge bg-primary px-3 py-2 rounded-pill">
+                        Current Unit: <span id="current_unit_display" class="fw-bold text-warning">Not Selected</span>
+                    </span>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label class="fw-bold">Buying Price (Per <span class="u_name">Unit</span>) <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-primary">৳</span>
+                        <input type="number" step="0.01" id="per_unit_price" name="buying_price_per_unit"
+                               class="form-control border-primary" required oninput="calculateTotalBatchCost()">
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label class="fw-bold text-success">Total Quantity (<span class="u_name">Unit</span>) <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <input type="number" step="0.1" id="total_qty" name="total_quantity"
+                               class="form-control border-success shadow-sm" required oninput="calculateTotalBatchCost()">
+                        <span class="input-group-text bg-light u_name">Unit</span>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label class="fw-bold text-dark">Processing/Added Cost</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-warning">+</span>
+                        <input type="number" step="0.01" id="processing_cost" name="processing_cost"
+                               class="form-control border-warning shadow-sm" placeholder="Milling/Labor" oninput="calculateTotalBatchCost()">
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label class="fw-bold text-primary">Total Batch Investment</label>
+                    <input type="text" id="total_batch_cost" class="form-control bg-dark text-white fw-bold border-0" readonly placeholder="0.00 ৳">
+                    <small id="effective_price_box" class="text-danger fw-bold d-block mt-1"></small>
+                </div>
+            </div>
+
+            {{-- Section 5: Other Info --}}
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="small fw-bold">Manufacturing/Batch Date</label>
+                    <input type="date" name="manufacturing_date" class="form-control shadow-sm" value="{{ date('Y-m-d') }}" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="small fw-bold">Moisture Level (%)</label>
+                    <input type="text" name="moisture_level" class="form-control shadow-sm" placeholder="e.g. 12%">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="small fw-bold">Certification (Optional)</label>
+                    <select name="certification_type" class="form-select shadow-sm">
+                        <option value="Standard">Standard</option>
+                        <option value="GAP">GAP Certified</option>
+                        <option value="Organic">Organic</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mt-4 text-center">
                 <button type="submit" class="btn btn-primary btn-lg px-5 shadow rounded-pill">
-                    <i class="bi bi-qr-code"></i> Create Verified Batch
+                    <i class="bi bi-qr-code"></i> Create World-Class Batch
                 </button>
-                <button type="reset" class="btn btn-outline-secondary btn-lg px-3 ms-2 rounded-pill">Reset Form</button>
             </div>
         </form>
     </div>
 
     <script>
+        // কন্ট্রোলার থেকে আসা স্টেকহোল্ডার ডাটা
+        const stakeholders = @json($stakeholders);
+
+        // ১. ইউনিট আপডেট লজিক
+        function updateDynamicUnits() {
+            const productSelect = document.getElementById('product_id');
+            const selectedOption = productSelect.options[productSelect.selectedIndex];
+
+            // ডাটা এট্রিবিউট থেকে ইউনিট নাম সংগ্রহ
+            const unitName = selectedOption.getAttribute('data-unit') || 'Unit';
+
+            // সব .u_name ক্লাস যুক্ত এলিমেন্টে টেক্সট বসানো
+            document.querySelectorAll('.u_name').forEach(el => {
+                el.innerText = unitName;
+            });
+
+            document.getElementById('current_unit_display').innerText = unitName;
+
+            calculateTotalBatchCost();
+        }
+
+        // ২. রোল অনুযায়ী স্টেকহোল্ডার ফিল্টার
+        function filterStakeholders() {
+            const selectedRole = document.getElementById('role_selector').value;
+            const sourceSelect = document.getElementById('source_id');
+            const farmerSection = document.getElementById('farmer_only_section');
+
+            sourceSelect.innerHTML = '<option value="">-- Choose Name --</option>';
+
+            const filtered = stakeholders.filter(s => s.role === selectedRole);
+            filtered.forEach(s => {
+                const option = document.createElement('option');
+                option.value = s.id;
+                option.text = `${s.name} (${s.phone})`;
+                sourceSelect.add(option);
+            });
+
+            // কৃষক হলে অতিরিক্ত সেকশন দেখানো
+            farmerSection.style.display = (selectedRole === 'farmer') ? 'block' : 'none';
+        }
+
+        // ৩. ক্যালকুলেশন লজিক
+        function calculateTotalBatchCost() {
+            const unitPrice = parseFloat(document.getElementById('per_unit_price').value) || 0;
+            const quantity = parseFloat(document.getElementById('total_qty').value) || 0;
+            const processing = parseFloat(document.getElementById('processing_cost').value) || 0;
+
+            const total = (unitPrice * quantity) + processing;
+
+            // কারেন্সি ফরম্যাটিং
+            document.getElementById('total_batch_cost').value = total.toLocaleString('bn-BD') + ' ৳';
+
+            const effectiveBox = document.getElementById('effective_price_box');
+            if(quantity > 0) {
+                const realCost = (total / quantity).toFixed(2);
+                const unit = document.getElementById('current_unit_display').innerText;
+                effectiveBox.innerHTML = `<i class="bi bi-info-circle"></i> Real Cost: ${realCost} ৳ / ${unit}`;
+            } else {
+                effectiveBox.innerText = '';
+            }
+        }
+
+        // ৪. অটো জিপিএস ডিটেকশন
         window.onload = function() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     document.getElementById('lat').value = position.coords.latitude.toFixed(6);
                     document.getElementById('lon').value = position.coords.longitude.toFixed(6);
-                    document.getElementById('gps_msg').innerHTML =
-                        "<i class='bi bi-check-circle-fill text-success'></i> Farm Location Authenticated: " +
-                        position.coords.latitude.toFixed(4) + ", " + position.coords.longitude.toFixed(4);
+                    document.getElementById('gps_status').innerHTML = '<i class="bi bi-check-circle-fill text-success"></i> GPS Signal Locked.';
                 }, function(error) {
-                    document.getElementById('gps_msg').innerHTML =
-                        "<i class='bi bi-exclamation-triangle-fill text-danger'></i> GPS Error: Location required for high-trust batches.";
+                    document.getElementById('gps_status').innerHTML = '<i class="bi bi-exclamation-triangle-fill text-danger"></i> GPS Error: Using Manual Input.';
                 });
             }
         };
     </script>
 
     <style>
-        .rounded-4 {
-            border-radius: 1.25rem !important;
-        }
-
-        .form-control,
-        .form-select {
-            border-radius: 10px;
-            padding: 0.6rem 0.75rem;
-        }
-
-        .input-group-text {
-            border-radius: 10px 0 0 10px;
-        }
-
-        .input-group .form-control {
-            border-radius: 0 10px 10px 0;
-        }
+        .rounded-4 { border-radius: 1.25rem !important; }
+        .form-control:focus, .form-select:focus { border-color: #0d6efd; box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1); }
+        .input-group-text { min-width: 45px; justify-content: center; }
+        .u_name { font-weight: bold; color: #dc3545; }
     </style>
 @endsection

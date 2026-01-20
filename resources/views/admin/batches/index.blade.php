@@ -181,7 +181,7 @@
                                     <a href="{{ route('batches.edit', $batch->id) }}" class="btn btn-white btn-sm text-primary border-end" title="Edit Batch">
                                         <i class="bi bi-pencil-fill"></i>
                                     </a>
-                                    <form action="{{ route('batches.delete', $batch->id) }}" method="POST" onsubmit="return confirm('Archive this batch?')" class="d-inline">
+                                    <form action="{{ route('batches.destroy', $batch->id) }}" method="POST" onsubmit="return confirm('Archive this batch?')" class="d-inline">
                                         @csrf @method('DELETE')
                                         <button type="submit" class="btn btn-white btn-sm text-danger" title="Move to Trash">
                                             <i class="bi bi-trash-fill"></i>

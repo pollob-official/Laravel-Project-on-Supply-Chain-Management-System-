@@ -15,96 +15,102 @@ use Illuminate\Support\Facades\Auth;
 class BatchController extends Controller
 {
     /**
-     * Display a listing of batches with advanced search.
+     * অ্যাডভান্সড সার্চ এবং ডায়নামিক সোর্স লোডিং
      */
     public function index(Request $request)
     {
-        $batches = Batch::with(['product', 'farmer'])
+        $batches = Batch::with(['product.unit', 'source']) // Product-এর সাথে Unit-ও লোড করা হয়েছে
             ->when($request->search, function ($query) use ($request) {
                 $query->where(function($q) use ($request) {
                     $q->where("batch_no", "LIKE", "%{$request->search}%")
                       ->orWhere("seed_brand", "LIKE", "%{$request->search}%")
                       ->orWhere("certification_type", "LIKE", "%{$request->search}%")
-                      // অ্যাডভান্সড সার্চ: প্রোডাক্ট বা কৃষকের নাম দিয়েও সার্চ হবে
                       ->orWhereHas('product', function($sq) use ($request) {
                           $sq->where('name', 'LIKE', "%{$request->search}%");
                       })
-                      ->orWhereHas('farmer', function($sq) use ($request) {
+                      ->orWhereHas('source', function($sq) use ($request) {
                           $sq->where('name', 'LIKE', "%{$request->search}%");
                       });
                 });
             })
             ->latest()
-            ->paginate(10);
+            ->paginate(15);
 
         return view("admin.batches.index", compact("batches"));
     }
 
     public function create()
     {
-        $products = Product::all();
-        $farmers = Stakeholder::where('role', 'farmer')->get();
-        return view("admin.batches.create", compact("products", "farmers"));
+        // প্রোডাক্টের সাথে তার সংশ্লিষ্ট ইউনিট টেবিল থেকে ডাটা আনা হচ্ছে
+        $products = Product::with('unit')->get();
+        $stakeholders = Stakeholder::all();
+
+        return view("admin.batches.create", compact("products", "stakeholders"));
     }
 
     /**
-     * Store Function: QR জেনারেশন ফিক্সড
+     * Store: ডায়নামিক সোর্স, প্রাইসিং এবং QR জেনারেশন
      */
     public function store(Request $request)
     {
         $request->validate([
             'product_id' => 'required',
-            'initial_farmer_id' => 'required',
-            'total_quantity' => 'required|numeric|min:1',
+            'source_type' => 'required',
+            'source_id' => 'required',
+            'total_quantity' => 'required|numeric|min:0.1',
+            'buying_price_per_unit' => 'required|numeric',
             'manufacturing_date' => 'required|date',
-            'farmer_price' => 'nullable|numeric',
-            'processing_cost' => 'nullable|numeric',
-            'target_retail_price' => 'nullable|numeric',
+            'manual_location' => 'required',
         ]);
 
         $data = $request->all();
-
-        // ইউনিক ব্যাচ নম্বর
-        $batch_no = 'SAGRI-' . date('ymd') . '-' . strtoupper(Str::random(4));
+        $batch_no = 'SAGRI-' . date('ymd') . '-' . strtoupper(Str::random(5));
         $data['batch_no'] = $batch_no;
 
-        // কিউআর কোড ম্যানেজমেন্ট
+        // QR Code Generation
         if (!File::exists(public_path('uploads/qrcodes'))) {
             File::makeDirectory(public_path('uploads/qrcodes'), 0777, true);
         }
         $qr_path = 'uploads/qrcodes/' . $batch_no . '.svg';
 
-        // ইনটেলফেন্স ফিক্সড রাউট কল
-        QrCode::format('svg')->size(300)->margin(1)
-            ->color(25, 135, 84)
+        // পাবলিক ট্রেস রাউট যদি না থাকে তবে এরর এড়াতে চেক করুন
+        QrCode::format('svg')->size(300)->margin(1)->color(25, 135, 84)
             ->generate(route('public.trace', ['batch_no' => $batch_no]), public_path($qr_path));
 
         $data['qr_code'] = $qr_path;
         $data['qc_status'] = 'pending';
         $data['safety_score'] = 100;
 
-        Batch::create($data);
+        // টোটাল কস্ট ক্যালকুলেশন
+        $data['total_buying_cost'] = $request->buying_price_per_unit * $request->total_quantity;
 
+        Batch::create($data);
         return redirect()->route('batches.index')->with('success', 'Global Standard Batch initiated successfully.');
     }
 
     public function edit($id)
     {
         $batch = Batch::findOrFail($id);
-        $products = Product::all();
-        $farmers = Stakeholder::where('role', 'farmer')->get();
-        return view("admin.batches.edit", compact("batch", "products", "farmers"));
+        $products = Product::with('unit')->get();
+        $stakeholders = Stakeholder::all(); // এডিট পেজে সব স্টেকহোল্ডার ফিল্টারিং এর জন্য লাগবে
+
+        return view("admin.batches.edit", compact("batch", "products", "stakeholders"));
     }
 
     public function update(Request $request, $id)
     {
         $batch = Batch::findOrFail($id);
         $request->validate([
+            'product_id' => 'required',
             'total_quantity' => 'required|numeric',
+            'buying_price_per_unit' => 'required|numeric',
             'manufacturing_date' => 'required|date',
         ]);
 
-        $batch->update($request->all());
+        $data = $request->all();
+        $data['total_buying_cost'] = $request->buying_price_per_unit * $request->total_quantity;
+
+        $batch->update($data);
         return redirect()->route('batches.index')->with('success', 'Batch updated successfully.');
     }
 
@@ -119,15 +125,14 @@ class BatchController extends Controller
         $batch->update([
             'qc_status'       => $analysis['is_safe'] ? 'approved' : 'rejected',
             'safety_score'    => $analysis['score'],
-            'quality_grade'   => $request->quality_grade ?? ($analysis['score'] >= 80 ? 'A' : 'B'),
-            'qc_officer_name' => Auth::check() ? Auth::user()->name : 'POLLOB AHMED',
+            'quality_grade'   => $request->quality_grade ?? ($analysis['score'] >= 80 ? 'Premium' : 'Standard'),
+            'qc_officer_name' => Auth::check() ? Auth::user()->name : 'SYSTEM AUDITOR',
             'qc_remarks'      => $analysis['message'] . " | " . $request->remarks,
-            'moisture_level'  => $request->moisture_level ?? $batch->moisture_level,
             'current_location'=> 'QC Certified Warehouse'
         ]);
 
         $type = $analysis['is_safe'] ? 'success' : 'error';
-        return back()->with($type, "Analysis Complete: Score {$analysis['score']}%");
+        return back()->with($type, "QC Analysis Complete: Score {$analysis['score']}%");
     }
 
     private function runSafetyAnalysis($batch)
@@ -136,48 +141,61 @@ class BatchController extends Controller
         $isSafe = true;
         $reasons = [];
 
-        if ($batch->sowing_date && $batch->harvest_date) {
+        if ($batch->source_type == 'farmer' && $batch->sowing_date && $batch->harvest_date) {
             $days = Carbon::parse($batch->sowing_date)->diffInDays(Carbon::parse($batch->harvest_date));
-            if ($days < 90) { $score -= 30; $reasons[] = "Short growth cycle"; $isSafe = false; }
+            if ($days < 85) {
+                $score -= 30;
+                $reasons[] = "Short growth cycle";
+            }
         }
 
         if ($batch->last_pesticide_date && $batch->harvest_date) {
             $gap = Carbon::parse($batch->last_pesticide_date)->diffInDays(Carbon::parse($batch->harvest_date));
-            if ($gap < 7) { $score -= 50; $reasons[] = "Toxic Residue Risk"; $isSafe = false; }
+            if ($gap < 7) {
+                $score -= 50;
+                $isSafe = false;
+                $reasons[] = "Chemical residue risk";
+            }
         }
 
-        $message = empty($reasons) ? "GAP Certified & Safe for Consumption." : "Issues: " . implode(', ', $reasons);
-
+        $message = empty($reasons) ? "GAP Certified & Safe." : "Warning: " . implode(', ', $reasons);
         return ['is_safe' => $isSafe, 'score' => max($score, 0), 'message' => $message];
     }
 
-    // --- Soft Delete Functionality ---
-    public function delete($id) {
-        Batch::findOrFail($id)->delete();
-        return back()->with('success', 'Batch moved to trash successfully.');
+    public function traceProduct($batch_no) {
+        $batch = Batch::with(['product.unit', 'source'])->where('batch_no', $batch_no)->firstOrFail();
+        return view('public.trace', compact('batch'));
+    }
+
+    // --- Soft Delete Functionality (Completed as requested) ---
+
+    public function destroy($id) {
+        $batch = Batch::findOrFail($id);
+        $batch->delete(); // Soft Delete
+        return redirect()->route('batches.index')->with('warning', 'Batch moved to trash.');
     }
 
     public function trashed() {
-        $batches = Batch::onlyTrashed()->with(['product', 'farmer'])->latest()->paginate(10);
+        // ট্র্যাশে থাকা ডাটা দেখানোর জন্য onlyTrashed() ব্যবহার করা হয়েছে
+        $batches = Batch::onlyTrashed()->with(['product', 'source'])->latest()->paginate(10);
         return view("admin.batches.trashed", compact("batches"));
     }
 
     public function restore($id) {
-        Batch::withTrashed()->findOrFail($id)->restore();
-        return redirect()->route('batches.index')->with('success', 'Batch restored.');
+        $batch = Batch::withTrashed()->findOrFail($id);
+        $batch->restore();
+        return redirect()->route('batches.index')->with('success', 'Batch restored from trash.');
     }
 
     public function force_delete($id) {
         $batch = Batch::withTrashed()->findOrFail($id);
+
+        // চিরতরে ডিলিট করার আগে QR Code ফাইলটি সার্ভার থেকে মুছে ফেলা হচ্ছে
         if ($batch->qr_code && File::exists(public_path($batch->qr_code))) {
             File::delete(public_path($batch->qr_code));
         }
+
         $batch->forceDelete();
         return back()->with('success', 'Batch permanently deleted.');
-    }
-
-    public function traceProduct($batch_no) {
-        $batch = Batch::with(['product', 'farmer'])->where('batch_no', $batch_no)->firstOrFail();
-        return view('public.trace', compact('batch'));
     }
 }
