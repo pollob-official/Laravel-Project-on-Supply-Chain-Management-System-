@@ -227,3 +227,17 @@ tree /f > structure.txt
 ###{Api bananor command:}###
 php artisan install:api
 php artisan make:controller Api/CustomerController
+
+
+
+Sanctum 
+
+composer require laravel/sanctum
+php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider" 
+php artisan migrate
+user HasApiTokens in user Model
+php artisan make:controller Api/UserController --api
+
+Sanctum: 
+Laravel Sanctum মূলত API authentication ও SPA (Single Page Application) নিরাপদভাবে manage করার জন্য ব্যবহার হয়।
+সহজভাবে বললে 👉 Sanctum দিয়ে আপনি user কে secureভাবে login করাতে পারেন token বা session এর মাধ্যমে।
