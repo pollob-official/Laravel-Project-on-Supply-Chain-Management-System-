@@ -37,6 +37,14 @@
                         <input type="text" name="sku" class="form-control" placeholder="RICE-MIN-001" value="{{ old('sku') }}" required>
                     </div>
 
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label font-weight-bold">GTIN / HS Code</label>
+                        <div class="d-flex gap-2">
+                            <input type="text" name="gtin" class="form-control" placeholder="GTIN" value="{{ old('gtin') }}">
+                            <input type="text" name="hs_code" class="form-control" placeholder="HS Code" value="{{ old('hs_code') }}">
+                        </div>
+                    </div>
+
                     {{-- Product Type --}}
                     <div class="col-md-3 mb-3">
                         <label class="form-label font-weight-bold">Product Type <span class="text-danger">*</span></label>

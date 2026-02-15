@@ -108,7 +108,7 @@
                 <div class="collapse" id="sidebarReports">
                     <ul class="side-nav-second-level">
                         <li><a href="{{URL('admin/journey/price-alerts')}}">Abnormal Price Alerts</a></li>
-                        <li><a href="#">Price Fluctuation</a></li>
+                        <li><a href="{{URL('admin/journey/fluctuation')}}">Price Fluctuation</a></li>
                         <li><a href="{{URL('admin/journey/map')}}">Supply Chain Map</a></li>
                     </ul>
                 </div>

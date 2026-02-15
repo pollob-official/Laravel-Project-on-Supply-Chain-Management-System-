@@ -56,10 +56,14 @@
                         <input type="text" name="longitude" id="lon" class="form-control bg-white" readonly placeholder="Lon">
                     </div>
                 </div>
-                <div class="col-md-8 mb-2">
+                <div class="col-md-5 mb-2">
                     <label class="form-label fw-bold text-primary small">Manual Address (Village, Upazila, District) <span class="text-danger">*</span></label>
-                    <input type="text" name="manual_location" class="form-control border-primary shadow-sm"
+                    <input type="text" name="manual_address" class="form-control border-primary shadow-sm"
                            placeholder="Type detailed location for transparency" required>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <label class="form-label fw-bold text-primary small">Field / Plot ID (Audit)</label>
+                    <input type="text" name="field_id" class="form-control border-primary shadow-sm" placeholder="e.g. Plot-12A">
                 </div>
                 <div class="col-12">
                     <small id="gps_status" class="text-muted"><i class="bi bi-broadcast"></i> Waiting for GPS signal...</small>
@@ -162,8 +166,7 @@
     </div>
 
     <script>
-        // কন্ট্রোলার থেকে আসা স্টেকহোল্ডার ডাটা
-        const stakeholders = @json($stakeholders);
+        const stakeholders = JSON.parse('{!! json_encode($stakeholders) !!}');
 
         // ১. ইউনিট আপডেট লজিক
         function updateDynamicUnits() {

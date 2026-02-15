@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Batch;
 use App\Models\Product;
 use App\Models\Stakeholder;
+use App\Models\ProductJourney;
+use App\Models\ActivityLog;
+use App\Services\BatchRiskService;
+use App\Services\DataCompletenessService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
@@ -17,7 +21,7 @@ class BatchController extends Controller
     /**
      * অ্যাডভান্সড সার্চ এবং ডায়নামিক সোর্স লোডিং
      */
-    public function index(Request $request)
+    public function index(Request $request, BatchRiskService $riskService, DataCompletenessService $completenessService)
     {
         $batches = Batch::with(['product.unit', 'source']) // Product-এর সাথে Unit-ও লোড করা হয়েছে
             ->when($request->search, function ($query) use ($request) {
@@ -36,7 +40,14 @@ class BatchController extends Controller
             ->latest()
             ->paginate(15);
 
-        return view("admin.batches.index", compact("batches"));
+        $riskSummary = [];
+        $completenessSummary = [];
+        foreach ($batches as $batch) {
+            $riskSummary[$batch->id] = $riskService->calculateRiskScore($batch);
+            $completenessSummary[$batch->id] = $completenessService->scoreBatch($batch);
+        }
+
+        return view("admin.batches.index", compact("batches", "riskSummary", "completenessSummary"));
     }
 
     public function create()
@@ -60,7 +71,7 @@ class BatchController extends Controller
             'total_quantity' => 'required|numeric|min:0.1',
             'buying_price_per_unit' => 'required|numeric',
             'manufacturing_date' => 'required|date',
-            'manual_location' => 'required',
+            'manual_address' => 'required',
         ]);
 
         $data = $request->all();
@@ -84,7 +95,16 @@ class BatchController extends Controller
         // টোটাল কস্ট ক্যালকুলেশন
         $data['total_buying_cost'] = $request->buying_price_per_unit * $request->total_quantity;
 
-        Batch::create($data);
+        $batch = Batch::create($data);
+
+        ActivityLog::create([
+            'user_id' => Auth::check() ? Auth::id() : null,
+            'action' => 'batch_created',
+            'subject_type' => Batch::class,
+            'subject_id' => $batch->id,
+            'changes' => json_encode($batch->toArray()),
+        ]);
+
         return redirect()->route('batches.index')->with('success', 'Global Standard Batch initiated successfully.');
     }
 
@@ -103,14 +123,20 @@ class BatchController extends Controller
         $request->validate([
             'product_id' => 'required',
             'total_quantity' => 'required|numeric',
-            'buying_price_per_unit' => 'required|numeric',
             'manufacturing_date' => 'required|date',
         ]);
 
         $data = $request->all();
-        $data['total_buying_cost'] = $request->buying_price_per_unit * $request->total_quantity;
 
         $batch->update($data);
+
+        ActivityLog::create([
+            'user_id' => Auth::check() ? Auth::id() : null,
+            'action' => 'batch_updated',
+            'subject_type' => Batch::class,
+            'subject_id' => $batch->id,
+            'changes' => json_encode($batch->getChanges()),
+        ]);
         return redirect()->route('batches.index')->with('success', 'Batch updated successfully.');
     }
 
@@ -126,9 +152,19 @@ class BatchController extends Controller
             'qc_status'       => $analysis['is_safe'] ? 'approved' : 'rejected',
             'safety_score'    => $analysis['score'],
             'quality_grade'   => $request->quality_grade ?? ($analysis['score'] >= 80 ? 'Premium' : 'Standard'),
+            'withholding_period_days' => $analysis['withholding_period_days'],
+            'residue_risk_level'      => $analysis['residue_risk_level'],
             'qc_officer_name' => Auth::check() ? Auth::user()->name : 'SYSTEM AUDITOR',
             'qc_remarks'      => $analysis['message'] . " | " . $request->remarks,
             'current_location'=> 'QC Certified Warehouse'
+        ]);
+
+        ActivityLog::create([
+            'user_id' => Auth::check() ? Auth::id() : null,
+            'action' => 'batch_qc_approved',
+            'subject_type' => Batch::class,
+            'subject_id' => $batch->id,
+            'changes' => json_encode($batch->getChanges()),
         ]);
 
         $type = $analysis['is_safe'] ? 'success' : 'error';
@@ -140,6 +176,8 @@ class BatchController extends Controller
         $score = 100;
         $isSafe = true;
         $reasons = [];
+        $withholdingDays = null;
+        $riskLevel = null;
 
         if ($batch->source_type == 'farmer' && $batch->sowing_date && $batch->harvest_date) {
             $days = Carbon::parse($batch->sowing_date)->diffInDays(Carbon::parse($batch->harvest_date));
@@ -150,21 +188,41 @@ class BatchController extends Controller
         }
 
         if ($batch->last_pesticide_date && $batch->harvest_date) {
-            $gap = Carbon::parse($batch->last_pesticide_date)->diffInDays(Carbon::parse($batch->harvest_date));
-            if ($gap < 7) {
+            $withholdingDays = Carbon::parse($batch->last_pesticide_date)->diffInDays(Carbon::parse($batch->harvest_date));
+
+            if ($withholdingDays < 7) {
                 $score -= 50;
                 $isSafe = false;
-                $reasons[] = "Chemical residue risk";
+                $riskLevel = 'high';
+                $reasons[] = "Chemical residue risk (withholding < 7 days)";
+            } elseif ($withholdingDays < 14) {
+                $score -= 20;
+                $riskLevel = 'medium';
+                $reasons[] = "Moderate residue risk (withholding < 14 days)";
+            } else {
+                $riskLevel = 'low';
             }
         }
 
         $message = empty($reasons) ? "GAP Certified & Safe." : "Warning: " . implode(', ', $reasons);
-        return ['is_safe' => $isSafe, 'score' => max($score, 0), 'message' => $message];
+
+        return [
+            'is_safe' => $isSafe,
+            'score' => max($score, 0),
+            'message' => $message,
+            'withholding_period_days' => $withholdingDays,
+            'residue_risk_level' => $riskLevel,
+        ];
     }
 
     public function traceProduct($batch_no) {
         $batch = Batch::with(['product.unit', 'source'])->where('batch_no', $batch_no)->firstOrFail();
-        return view('public.trace', compact('batch'));
+        $journeys = ProductJourney::with(['seller', 'buyer'])
+            ->where('batch_id', $batch->id)
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        return view('public.trace', compact('batch', 'journeys'));
     }
 
     // --- Soft Delete Functionality (Completed as requested) ---

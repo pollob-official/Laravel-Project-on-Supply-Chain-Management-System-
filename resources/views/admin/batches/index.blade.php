@@ -104,11 +104,11 @@
                         @forelse($batches as $batch)
                         {{-- ডাইনামিক লেফট বর্ডার স্ট্যাটাস অনুযায়ী --}}
                         @php
-                            $borderColor = '#ffc107'; // Default Pending
-                            if($batch->qc_status == 'approved') $borderColor = '#198754';
-                            if($batch->qc_status == 'rejected') $borderColor = '#dc3545';
+                            $borderClass = 'tr-border-pending';
+                            if($batch->qc_status == 'approved') $borderClass = 'tr-border-approved';
+                            if($batch->qc_status == 'rejected') $borderClass = 'tr-border-rejected';
                         @endphp
-                        <tr style="border-left: 5px solid {{ $borderColor }}">
+                        <tr class="{{ $borderClass }}">
                             <td class="ps-4">
                                 <span class="badge bg-light text-dark border mb-1">#{{ $batch->batch_no }}</span>
                                 <div class="small text-muted"><i class="bi bi-calendar3"></i> {{ $batch->created_at->format('d M, Y') }}</div>
@@ -138,6 +138,15 @@
                                         M: {{ $batch->moisture_level ?? '0' }}%
                                     </small>
                                 </div>
+                                @php
+                                    $complete = $completenessSummary[$batch->id] ?? 0;
+                                    $completeClass = $complete >= 80 ? 'bg-success-subtle text-success' : ($complete >= 50 ? 'bg-warning-subtle text-warning' : 'bg-danger-subtle text-danger');
+                                @endphp
+                                <div class="mt-1">
+                                    <small class="badge {{ $completeClass }}">
+                                        Data completeness: {{ $complete }}%
+                                    </small>
+                                </div>
                             </td>
 
                             <td>
@@ -147,16 +156,29 @@
 
                             <td>
                                 <div class="d-flex flex-column">
-                                    {{-- ডাইনামিক স্ট্যাটাস ব্যাজ কালার --}}
                                     @php
                                         $statusClass = 'bg-warning text-dark';
                                         if($batch->qc_status == 'approved') $statusClass = 'bg-success';
                                         if($batch->qc_status == 'rejected') $statusClass = 'bg-danger';
+
+                                        $risk = $riskSummary[$batch->id] ?? ['level' => 'low', 'score' => 0];
+                                        $riskBadgeClass = [
+                                            'high' => 'bg-danger',
+                                            'medium' => 'bg-warning text-dark',
+                                            'low' => 'bg-success',
+                                        ][$risk['level']] ?? 'bg-secondary';
                                     @endphp
                                     <span class="badge {{ $statusClass }} align-self-start mb-1">
                                         {{ strtoupper($batch->qc_status) }}
                                     </span>
                                     <small class="fw-bold text-muted">Grade: <span class="text-primary">{{ $batch->quality_grade ?? 'Pending' }}</span></small>
+
+                                    <div class="mt-1">
+                                        <span class="badge {{ $riskBadgeClass }} align-self-start">
+                                            <i class="bi bi-activity"></i>
+                                            Risk: {{ strtoupper($risk['level']) }} ({{ $risk['score'] }})
+                                        </span>
+                                    </div>
 
                                     @if($batch->qc_status == 'pending')
                                     <button class="btn btn-sm btn-link p-0 text-start text-decoration-none text-primary" data-bs-toggle="modal" data-bs-target="#qcModal{{$batch->id}}">
@@ -282,6 +304,10 @@
     tr:hover { background-color: rgba(13, 110, 253, 0.03) !important; transition: 0.3s; }
     .avatar-sm { display: inline-block; text-align: center; }
     .x-small { font-size: 11px; }
+
+    .tr-border-pending { border-left: 5px solid #ffc107; }
+    .tr-border-approved { border-left: 5px solid #198754; }
+    .tr-border-rejected { border-left: 5px solid #dc3545; }
 
     @media print {
         .no-print { display: none !important; }

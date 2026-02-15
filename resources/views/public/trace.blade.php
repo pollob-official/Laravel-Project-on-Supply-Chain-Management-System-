@@ -80,12 +80,22 @@
             body { background: white; }
             .main-container { max-width: 100%; padding: 0; }
             .glass-card { box-shadow: none; border: none; border-radius: 0; }
-            .hero-section { -webkit-print-color-adjust: exact; }
+            .hero-section {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
         }
     </style>
 </head>
 
 <body>
+
+    @php
+        $mrp = $batch->target_retail_price ?? 0;
+        $farmerPrice = $batch->farmer_price ?? 0;
+        $farmerShare = $mrp > 0 ? ($farmerPrice / $mrp) * 100 : 0;
+        $riskLevel = $batch->residue_risk_level;
+    @endphp
 
     <div class="main-container">
         <div class="glass-card">
@@ -100,6 +110,31 @@
                 <p class="text-uppercase small fw-semibold">Safety & Trust Score</p>
                 <div class="badge bg-success rounded-pill px-3 py-2">
                     <i class="bi bi-patch-check-fill me-1"></i> Verified Traceability
+                </div>
+                <div class="mt-3 d-flex justify-content-center flex-wrap gap-2">
+                    @if($riskLevel === 'low' || (!$riskLevel && $batch->safety_score >= 80))
+                        <span class="badge bg-success-subtle text-success">
+                            <i class="bi bi-shield-check me-1"></i> Pesticide Safe
+                        </span>
+                    @elseif($riskLevel === 'medium')
+                        <span class="badge bg-warning text-dark">
+                            <i class="bi bi-exclamation-triangle me-1"></i> Check Withholding Period
+                        </span>
+                    @elseif($riskLevel === 'high')
+                        <span class="badge bg-danger">
+                            <i class="bi bi-x-octagon me-1"></i> High Residue Risk
+                        </span>
+                    @endif
+
+                    @if($farmerShare >= 40)
+                        <span class="badge bg-success-subtle text-success">
+                            <i class="bi bi-emoji-smile me-1"></i> Fair Price for Farmer
+                        </span>
+                    @elseif($farmerShare > 0)
+                        <span class="badge bg-warning text-dark">
+                            <i class="bi bi-emoji-neutral me-1"></i> Review Farmer Share
+                        </span>
+                    @endif
                 </div>
             </div>
 
@@ -120,32 +155,100 @@
                         <span class="fw-bold small">৳{{ number_format($batch->processing_cost, 2) }}</span>
                     </div>
                     <hr class="my-2">
-                    <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
                         <span class="fw-bold text-success">Retail Price (MRP):</span>
-                        <span class="badge bg-success fs-6">৳{{ number_format($batch->target_retail_price, 2) }}</span>
+                        <span class="badge bg-success fs-6">৳{{ number_format($mrp, 2) }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted small">Farmer Share of MRP:</span>
+                        <span class="fw-bold small {{ $farmerShare < 30 ? 'text-danger' : 'text-success' }}">
+                            {{ number_format($farmerShare, 1) }}%
+                        </span>
                     </div>
                 </div>
 
-                <h5 class="fw-bold mb-4 text-dark"><i class="bi bi-diagram-3-fill me-2 text-primary"></i> Farm-to-Fork Journey</h5>
+                <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-diagram-3-fill me-2 text-primary"></i> Farm-to-Fork Journey</h5>
 
-                <div class="stepper">
+                <div class="stepper mb-4">
                     <div class="step-item">
                         <div class="step-dot"><i class="bi bi-house-door-fill"></i></div>
                         <div class="fw-bold text-primary text-uppercase" style="font-size: 0.75rem;">Stage 1: Origin</div>
-                        <h6 class="fw-bold mb-1">{{ $batch->farmer->name ?? 'Contracted Farmer' }}</h6>
-                        <p class="text-muted small mb-2"><i class="bi bi-calendar-event"></i> Harvested: {{ date('M d, Y', strtotime($batch->harvest_date)) }}</p>
+                        <h6 class="fw-bold mb-1">{{ $batch->source->name ?? 'Contracted Farmer' }}</h6>
+                        @if($batch->harvest_date)
+                        <p class="text-muted small mb-0"><i class="bi bi-calendar-event"></i> Harvested: {{ $batch->harvest_date->format('M d, Y') }}</p>
+                        @endif
                     </div>
 
                     <div class="step-item">
                         <div class="step-dot"><i class="bi bi-shield-check"></i></div>
                         <div class="fw-bold text-primary text-uppercase" style="font-size: 0.75rem;">Stage 2: Quality Audit</div>
                         <h6 class="fw-bold mb-1">QC Certified</h6>
-                        <p class="text-muted small mb-2"><i class="bi bi-calendar-check"></i> Tested: {{ date('M d, Y', strtotime($batch->updated_at)) }}</p>
+                        <p class="text-muted small mb-2"><i class="bi bi-calendar-check"></i> Tested: {{ $batch->updated_at->format('M d, Y') }}</p>
                         <div class="stakeholder-card bg-success-subtle border-0">
                             <p class="mb-0 text-dark small">{{ $batch->qc_remarks ?? 'All quality parameters passed.' }}</p>
                         </div>
                     </div>
                 </div>
+
+                @if(isset($journeys) && $journeys->count())
+                <h6 class="fw-bold mb-3 text-dark"><i class="bi bi-distribute-vertical me-2 text-primary"></i> Detailed Price & Stage Timeline</h6>
+                <div class="stepper">
+                    @foreach($journeys as $index => $step)
+                    <div class="step-item">
+                        <div class="step-dot">
+                            @if($step->current_stage === 'Farmer')
+                                <i class="bi bi-house-heart"></i>
+                            @elseif($step->current_stage === 'Miller')
+                                <i class="bi bi-gear-wide-connected"></i>
+                            @elseif($step->current_stage === 'Wholesaler')
+                                <i class="bi bi-truck"></i>
+                            @else
+                                <i class="bi bi-shop"></i>
+                            @endif
+                        </div>
+                        <div class="fw-bold text-primary text-uppercase" style="font-size: 0.7rem;">
+                            {{ $step->current_stage ?? 'Stage' }}
+                        </div>
+                        <h6 class="fw-bold mb-1">
+                            {{ $step->seller->name ?? 'Partner' }}
+                            @if($step->buyer)
+                                <span class="text-muted small">→ {{ $step->buyer->name }}</span>
+                            @endif
+                        </h6>
+                        <p class="text-muted small mb-1">
+                            <i class="bi bi-geo-alt"></i> {{ $step->location ?? 'Registered Facility' }}
+                        </p>
+                        <p class="text-muted small mb-2">
+                            <i class="bi bi-calendar-event"></i> {{ $step->created_at->format('M d, Y') }}
+                        </p>
+                        <div class="stakeholder-card">
+                            <div class="d-flex justify-content-between small mb-1">
+                                <span>Buying:</span>
+                                <span class="fw-semibold">৳{{ number_format($step->buying_price, 2) }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between small mb-1">
+                                <span>Extra cost:</span>
+                                <span class="fw-semibold">৳{{ number_format($step->extra_cost, 2) }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between small mb-1">
+                                <span>Selling:</span>
+                                <span class="fw-semibold text-dark">৳{{ number_format($step->selling_price, 2) }}</span>
+                            </div>
+                            @php
+                                $investment = ($step->buying_price ?? 0) + ($step->extra_cost ?? 0);
+                                $margin_percent = $investment > 0 ? (($step->profit_margin ?? 0) / $investment) * 100 : 0;
+                            @endphp
+                            <div class="d-flex justify-content-between align-items-center small">
+                                <span>Margin:</span>
+                                <span class="fw-semibold {{ $margin_percent > 40 ? 'text-danger' : 'text-success' }}">
+                                    {{ number_format($margin_percent, 1) }}%
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+                @endif
 
                 <div class="p-2 mt-4 text-center border-top pt-4 no-print">
                     <button onclick="window.print()" class="btn-download">

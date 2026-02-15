@@ -42,7 +42,7 @@
                         <div class="col-md-4 mb-3">
                             <label class="form-label fw-bold">Source Farmer/Vendor <span class="text-danger">*</span></label>
                             <select name="initial_farmer_id" class="form-select shadow-none border-primary-subtle" required>
-                                @foreach ($farmers as $farmer)
+                                @foreach ($stakeholders as $farmer)
                                     <option value="{{ $farmer->id }}"
                                         {{ $batch->initial_farmer_id == $farmer->id ? 'selected' : '' }}>
                                         {{ $farmer->name }} ({{ $farmer->phone }})
@@ -58,7 +58,6 @@
                         </div>
                     </div>
 
-                    {{-- GPS Coordinates --}}
                     <div class="row bg-light p-3 rounded-3 mb-4 mx-0 border border-info-subtle">
                         <div class="col-md-6 mb-2">
                             <label class="form-label fw-bold text-info small"><i class="bi bi-geo-alt-fill"></i> Field Latitude (Locked)</label>
@@ -69,6 +68,16 @@
                             <label class="form-label fw-bold text-info small"><i class="bi bi-geo-alt-fill"></i> Field Longitude (Locked)</label>
                             <input type="text" name="longitude" value="{{ $batch->longitude }}"
                                 class="form-control border-0 bg-white shadow-sm" readonly>
+                        </div>
+                        <div class="col-md-8 mb-2">
+                            <label class="form-label fw-bold text-primary small">Manual Address (Village, Upazila, District)</label>
+                            <input type="text" name="manual_address" value="{{ $batch->manual_address }}"
+                                class="form-control border-primary shadow-sm" placeholder="Type detailed location for transparency">
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label class="form-label fw-bold text-primary small">Field / Plot ID (Audit)</label>
+                            <input type="text" name="field_id" value="{{ $batch->field_id }}"
+                                class="form-control border-primary shadow-sm" placeholder="e.g. Plot-12A">
                         </div>
                     </div>
 
@@ -127,12 +136,12 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <label class="form-label small fw-bold text-danger">Sowing Date</label>
-                            <input type="date" name="sowing_date" value="{{ $batch->sowing_date }}"
+                            <input type="date" name="sowing_date" value="{{ $batch->sowing_date?->format('Y-m-d') }}"
                                 class="form-control shadow-none border-danger-subtle">
                         </div>
                         <div class="col-md-3 mb-3">
                             <label class="form-label small fw-bold text-danger">Last Pesticide Applied</label>
-                            <input type="date" name="last_pesticide_date" value="{{ $batch->last_pesticide_date }}"
+                            <input type="date" name="last_pesticide_date" value="{{ $batch->last_pesticide_date?->format('Y-m-d') }}"
                                 class="form-control shadow-none border-danger-subtle">
                         </div>
                     </div>
@@ -154,12 +163,12 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <label class="form-label fw-bold text-success">Manufacturing Date</label>
-                            <input type="date" name="manufacturing_date" value="{{ $batch->manufacturing_date }}"
+                            <input type="date" name="manufacturing_date" value="{{ $batch->manufacturing_date?->format('Y-m-d') }}"
                                 class="form-control shadow-none border-success-subtle" required>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label class="form-label fw-bold text-success">Harvest Date</label>
-                            <input type="date" name="harvest_date" value="{{ $batch->harvest_date }}"
+                            <input type="date" name="harvest_date" value="{{ $batch->harvest_date?->format('Y-m-d') }}"
                                 class="form-control shadow-none border-success-subtle">
                         </div>
                     </div>
@@ -171,7 +180,7 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label fw-bold text-secondary">Expiry Date</label>
-                            <input type="date" name="expiry_date" value="{{ $batch->expiry_date }}"
+                            <input type="date" name="expiry_date" value="{{ $batch->expiry_date?->format('Y-m-d') }}"
                                 class="form-control shadow-none">
                         </div>
                         <div class="col-md-4 mb-3">

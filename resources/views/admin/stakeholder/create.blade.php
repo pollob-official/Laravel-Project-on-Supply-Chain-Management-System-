@@ -49,6 +49,17 @@
       </div>
   </div>
 
+  <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">External Code</label>
+        <input type="text" name="external_code" class="form-control" placeholder="Internal/ERP Code" value="{{ old('external_code') }}">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">GLN (Location Number)</label>
+        <input type="text" name="gln" class="form-control" placeholder="Global Location Number" value="{{ old('gln') }}">
+      </div>
+  </div>
+
   <div class="mb-3">
     <label class="form-label">NID Number</label>
     <input type="text" name="nid" class="form-control" placeholder="Enter NID Number">

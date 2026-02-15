@@ -121,7 +121,7 @@
                                                 {!! QrCode::size(150)->generate(url('admin/journey/trace/' . $journey->tracking_no)) !!}
                                             </div>
                                             <h5 class="mt-2 mb-0 fw-bold">{{ $journey->product->name }}</h5>
-                                            <p class="small text-muted mb-0">Batch: {{ $journey->batch->batch_code ?? 'N/A' }}</p>
+                                            <p class="small text-muted mb-0">Batch: {{ $journey->batch->batch_no ?? 'N/A' }}</p>
                                             <hr class="my-2">
                                             <small class="text-primary fw-bold">Authenticity Guaranteed</small>
                                         </div>

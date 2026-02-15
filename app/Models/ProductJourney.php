@@ -12,6 +12,16 @@ class ProductJourney extends Model
 
     protected $guarded = [];
 
+    public function getEventTypeAttribute()
+    {
+        return $this->current_stage;
+    }
+
+    public function getQuantityUnitAttribute()
+    {
+        return $this->quantity_unit;
+    }
+
     // কোন ব্যাচের আন্ডারে এই হ্যান্ডওভার হচ্ছে
     public function batch()
     {

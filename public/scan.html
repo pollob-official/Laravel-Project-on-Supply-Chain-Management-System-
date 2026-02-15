@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scan Product | TrustTrace</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    :root { --primary: #0d6efd; --success: #198754; --bg: #f8fafc; }
+    body { background: var(--bg); }
+    .hero {
+      background: linear-gradient(135deg, #0d6efd 0%, #0ea5e9 100%);
+      color: #fff; border-radius: 18px; padding: 28px 22px;
+    }
+    .card-glass {
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(2, 6, 23, 0.06);
+    }
+    .scanner-frame {
+      border: 2px dashed rgba(13,110,253,0.35);
+      border-radius: 12px;
+      padding: 10px;
+      background: #ffffff;
+    }
+    .help-text { color: #64748b; }
+  </style>
+</head>
+<body>
+  <div class="container py-4">
+    <div class="hero mb-4">
+      <div class="d-flex align-items-center">
+        <div class="flex-grow-1">
+          <h1 class="h3 mb-1">Scan Product</h1>
+          <p class="mb-0 opacity-75">Use your camera to scan a QR or enter a batch number manually.</p>
+        </div>
+        <div class="ms-3 d-none d-md-block">
+          <i class="bi bi-upc-scan fs-1"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-lg-7">
+        <div class="card-glass p-3">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h5 class="mb-0"><i class="bi bi-camera-video me-2"></i>Live Scanner</h5>
+            <span class="badge text-bg-light">Camera access required</span>
+          </div>
+          <div class="scanner-frame">
+            <div id="reader" style="width:100%; min-height: 280px;"></div>
+          </div>
+          <div class="small help-text mt-2">Scans a code and loads details inline below.</div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-5">
+        <div class="card-glass p-3 h-100">
+          <h5 class="mb-2"><i class="bi bi-pencil-square me-2"></i>Manual Entry</h5>
+          <p class="help-text">Enter a batch number if you prefer not to use the camera.</p>
+          <div class="input-group mb-2">
+            <input id="batchInput" type="text" class="form-control" placeholder="e.g., SAGRI-250101-ABCDE" />
+            <button id="goBtn" class="btn btn-primary">Show Details</button>
+          </div>
+          <div class="form-text">Fetches details from /api/batches/{batch_no}</div>
+
+          <hr class="my-3" />
+          <h6 class="mb-2"><i class="bi bi-info-circle me-1"></i>Tips</h6>
+          <ul class="small help-text mb-0">
+            <li>Ensure good lighting and keep the code steady.</li>
+            <li>Grant camera permission when prompted by your browser.</li>
+            <li>You can switch cameras using the control in the scanner widget.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="resultWrap" class="mt-4" style="display:none;">
+      <div class="card-glass p-3">
+        <div class="d-flex justify-content-between align-items-center">
+          <h5 class="mb-0"><i class="bi bi-box-seam me-2"></i>Product Details</h5>
+          <button id="scanAgainBtn" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-repeat me-1"></i>Scan Again</button>
+        </div>
+        <div id="loadingRow" class="text-center py-4">
+          <div class="spinner-border text-primary" role="status" aria-hidden="true"></div>
+          <div class="small mt-2 help-text">Loading details…</div>
+        </div>
+        <div id="errorRow" class="alert alert-danger d-none" role="alert"></div>
+        <div id="dataRow" class="row g-3 mt-1" style="display:none;">
+          <div class="col-12 col-md-6">
+            <div class="p-3 border rounded-3">
+              <div class="small text-muted">Batch No</div>
+              <div id="f-batch" class="fw-semibold"></div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="p-3 border rounded-3">
+              <div class="small text-muted">Product</div>
+              <div id="f-product" class="fw-semibold"></div>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="p-3 border rounded-3">
+              <div class="small text-muted">QC Status</div>
+              <div id="f-qc" class="fw-semibold"></div>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="p-3 border rounded-3">
+              <div class="small text-muted">Safety Score</div>
+              <div id="f-score" class="fw-semibold"></div>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="p-3 border rounded-3">
+              <div class="small text-muted">Grade</div>
+              <div id="f-grade" class="fw-semibold"></div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="p-3 border rounded-3">
+              <div class="small text-muted">Retail Price</div>
+              <div id="f-price" class="fw-semibold"></div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="p-3 border rounded-3">
+              <div class="small text-muted">Source</div>
+              <div id="f-source" class="fw-semibold"></div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="p-3 border rounded-3">
+              <div class="small text-muted">Remarks</div>
+              <div id="f-remarks" class="fw-semibold"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/html5-qrcode@2.3.9/html5-qrcode.min.js"></script>
+  <script>
+    (function() {
+      const resultWrap = document.getElementById('resultWrap');
+      const loadingRow = document.getElementById('loadingRow');
+      const errorRow = document.getElementById('errorRow');
+      const dataRow = document.getElementById('dataRow');
+
+      function extractBatchNo(text) {
+        const s = String(text || '').trim();
+        const m1 = s.match(/\/batches\/trace\/([^\/?#]+)/i);
+        if (m1 && m1[1]) return decodeURIComponent(m1[1]);
+        const m2 = s.match(/SAGRI-[A-Z0-9-]+/i);
+        if (m2 && m2[0]) return m2[0];
+        try {
+          const url = new URL(s);
+          const seg = url.pathname.split('/').filter(Boolean);
+          if (seg.length) return seg[seg.length - 1];
+        } catch (_) {}
+        return s;
+      }
+
+      function showLoading() {
+        resultWrap.style.display = '';
+        loadingRow.style.display = '';
+        errorRow.classList.add('d-none');
+        dataRow.style.display = 'none';
+      }
+
+      function showError(msg) {
+        resultWrap.style.display = '';
+        loadingRow.style.display = 'none';
+        errorRow.textContent = msg;
+        errorRow.classList.remove('d-none');
+        dataRow.style.display = 'none';
+      }
+
+      function setText(id, val) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val ?? '';
+      }
+
+      async function fetchAndRender(batchNo) {
+        if (!batchNo) return;
+        showLoading();
+        try {
+          const res = await fetch('/api/batches/' + encodeURIComponent(batchNo), { headers: { 'Accept': 'application/json' } });
+          if (!res.ok) {
+            const j = await res.json().catch(() => ({}));
+            showError(j.message || 'Failed to load batch details');
+            return;
+          }
+          const d = await res.json();
+          setText('f-batch', d.batch_no || '');
+          setText('f-product', d.product?.name ? d.product.name + (d.product.unit ? ' (' + d.product.unit + ')' : '') : '');
+          setText('f-qc', d.qc_status || '');
+          setText('f-score', d.safety_score != null ? String(d.safety_score) + '%' : '');
+          setText('f-grade', d.quality_grade || '');
+          setText('f-price', d.target_retail_price != null ? (d.currency ? d.currency + ' ' : '') + String(d.target_retail_price) : '');
+          setText('f-source', d.source?.name ? (d.source.role ? d.source.role + ': ' : '') + d.source.name : '');
+          setText('f-remarks', d.remarks || '');
+          loadingRow.style.display = 'none';
+          errorRow.classList.add('d-none');
+          dataRow.style.display = '';
+        } catch (e) {
+          showError('Unexpected error while loading data');
+        }
+      }
+
+      const config = {
+        fps: 10,
+        qrbox: { width: 240, height: 240 },
+        rememberLastUsedCamera: true,
+        aspectRatio: 1.0
+      };
+
+      const scanner = new Html5QrcodeScanner("reader", config, /* verbose= */ false);
+      scanner.render(
+        function onScanSuccess(decodedText, decodedResult) {
+          try { scanner.clear(); } catch (_) {}
+          const batchNo = extractBatchNo(decodedText);
+          fetchAndRender(batchNo);
+        },
+        function onScanFailure(error) {
+        }
+      );
+
+      document.getElementById('goBtn').addEventListener('click', function() {
+        const val = document.getElementById('batchInput').value;
+        const batchNo = extractBatchNo(val);
+        fetchAndRender(batchNo);
+      });
+      document.getElementById('batchInput').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          document.getElementById('goBtn').click();
+        }
+      });
+      document.getElementById('scanAgainBtn').addEventListener('click', function() {
+        resultWrap.style.display = 'none';
+        try {
+          const scanner2 = new Html5QrcodeScanner("reader", config, false);
+          scanner2.render(
+            function onScanSuccess(decodedText) {
+              try { scanner2.clear(); } catch (_) {}
+              const batchNo = extractBatchNo(decodedText);
+              fetchAndRender(batchNo);
+            },
+            function onScanFailure() {}
+          );
+        } catch (_) {}
+      });
+    })();
+  </script>
+</body>
+</html>
+

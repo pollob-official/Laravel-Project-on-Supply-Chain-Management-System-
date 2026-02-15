@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('batches/trace/{batch_no}', [BatchController::class, 'traceProduct'])->name('public.trace');
-Route::get('journey/trace/{tracking_no}', [ProductJourneyController::class, 'public_trace'])->name('journey.public_trace');
+Route::get('admin/journey/trace/{tracking_no}', [ProductJourneyController::class, 'public_trace'])->name('journey.public_trace');
 
 Auth::routes();
 
@@ -217,10 +217,11 @@ Route::prefix("journey")->controller(ProductJourneyController::class)->group(fun
     Route::get("trashed", "trashed");
     Route::get("restore/{id}", "restore");
     Route::delete("force-delete/{id}", "force_delete");
-    Route::get("trace/{tracking_no}", "public_trace");
-    Route::get("audit", "audit");
-    Route::get('price-alerts', 'priceAlerts');
-    Route::get('map', 'supplyChainMap');
+    // Route::get("trace/{tracking_no}", "public_trace");
+        Route::get("audit", "audit");
+        Route::get('price-alerts', 'priceAlerts');
+        Route::get('fluctuation', 'priceFluctuation')->name('journey.price_fluctuation');
+        Route::get('map', 'supplyChainMap');
     });
 
 

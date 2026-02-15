@@ -119,6 +119,21 @@
             </div>
         </div>
 
+        <div class="row g-3 mb-3">
+            <div class="col-md-3">
+                <label class="form-label fw-bold small">Quantity Moved</label>
+                <input type="number" step="0.01" name="quantity_moved" class="form-control" placeholder="0.00">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-bold small">Unit</label>
+                <input type="text" name="quantity_unit" class="form-control" placeholder="e.g. KG, Bag">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-bold small">Loss / Spoilage</label>
+                <input type="number" step="0.01" name="loss_quantity" class="form-control" placeholder="0.00">
+            </div>
+        </div>
+
         <div class="row g-3 mb-4">
             <div class="col-md-3">
                 <label class="form-label fw-bold small">Location</label>
@@ -191,7 +206,7 @@
             let batchId = this.value;
             if (!batchId) return;
 
-            let productJourneys = @json($product_journeys);
+            let productJourneys = JSON.parse('{!! json_encode($product_journeys) !!}');
 
             // filter journeys by batch_id
             let existingJourneys = productJourneys.filter(pj => pj.batch_id == batchId);

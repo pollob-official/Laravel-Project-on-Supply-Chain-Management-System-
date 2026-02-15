@@ -31,6 +31,16 @@
                 <input value="{{ $stakeholder->nid }}" type="text" name="nid" class="form-control">
             </div>
 
+            <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">External Code</label>
+                <input value="{{ $stakeholder->external_code }}" type="text" name="external_code" class="form-control">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">GLN (Location Number)</label>
+                <input value="{{ $stakeholder->gln }}" type="text" name="gln" class="form-control">
+            </div>
+
             <div class="col-md-12 mb-3">
                 <label class="form-label font-weight-bold">Address</label>
                 <textarea name="address" class="form-control" rows="2">{{ $stakeholder->address }}</textarea>

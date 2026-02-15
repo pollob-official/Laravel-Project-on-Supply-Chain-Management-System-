@@ -46,6 +46,8 @@ class StakeholderController extends Controller
         $stakeholder->role    = $request->role;
         $stakeholder->address = $request->address;
         $stakeholder->nid     = $request->nid;
+        $stakeholder->external_code = $request->external_code;
+        $stakeholder->gln      = $request->gln;
         $stakeholder->save();
 
         $id = $stakeholder->id;
@@ -86,6 +88,8 @@ class StakeholderController extends Controller
             'phone'   => $request->phone,
             'address' => $request->address,
             'nid'     => $request->nid,
+            'external_code' => $request->external_code,
+            'gln'           => $request->gln,
         ]);
 
         $role = strtolower($stakeholder->role);

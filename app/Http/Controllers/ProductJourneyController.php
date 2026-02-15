@@ -6,6 +6,8 @@ use App\Models\ProductJourney;
 use App\Models\Product;
 use App\Models\Stakeholder;
 use App\Models\Batch; // ব্যাচ মডেল যোগ করা হয়েছে
+use App\Models\ActivityLog;
+use App\Services\BatchInventoryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -50,8 +52,19 @@ class ProductJourneyController extends Controller
     }
 
     // ৪. ডাটা সেভ করার মেথড (নতুন কলামসহ)
-    public function save(Request $request)
+    public function save(Request $request, BatchInventoryService $inventory)
     {
+        $request->validate([
+            'batch_id' => 'required|integer',
+            'product_id' => 'required|integer',
+            'seller_id' => 'required|integer',
+            'buyer_id' => 'required|integer',
+            'current_stage' => 'required|string',
+            'buying_price' => 'required|numeric',
+            'profit_percent' => 'required|numeric',
+            'quantity_moved' => 'nullable|numeric|min:0',
+        ]);
+
         $buying_price = $request->buying_price ?? 0;
         $extra_cost   = $request->extra_cost ?? 0;
         $profit_percent = $request->profit_percent ?? 0;
@@ -60,10 +73,20 @@ class ProductJourneyController extends Controller
         $profit_amount = ($base_amount * $profit_percent) / 100;
         $selling_price = $base_amount + $profit_amount;
 
+        $usedBefore = $inventory->getUsedQuantity((int) $request->batch_id);
+        $moveQty = $request->quantity_moved ? (float) $request->quantity_moved : 0;
+        $batch = Batch::find($request->batch_id);
+
+        if ($batch && $moveQty > 0 && ($usedBefore + $moveQty) > $batch->total_quantity) {
+            return back()->withInput()->withErrors([
+                'quantity_moved' => 'This movement exceeds available batch quantity.',
+            ]);
+        }
+
         $journey = new ProductJourney();
         $journey->tracking_no   = 'TRK-' . strtoupper(Str::random(10));
         $journey->product_id    = $request->product_id;
-        $journey->batch_id      = $request->batch_id; // নতুন কলাম
+        $journey->batch_id      = $request->batch_id;
         $journey->seller_id     = $request->seller_id;
         $journey->buyer_id      = $request->buyer_id;
         $journey->buying_price  = $buying_price;
@@ -71,10 +94,21 @@ class ProductJourneyController extends Controller
         $journey->profit_margin = $profit_amount;
         $journey->selling_price = $selling_price;
         $journey->current_stage = $request->current_stage;
+        $journey->quantity_moved = $request->quantity_moved;
+        $journey->quantity_unit  = $request->quantity_unit;
+        $journey->loss_quantity  = $request->loss_quantity;
         $journey->location      = $request->location;      // নতুন কলাম
         $journey->quality_status = $request->quality_status ?? 'Good'; // নতুন কলাম
         $journey->remarks       = $request->remarks;       // নতুন কলাম
         $journey->save();
+
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'journey_created',
+            'subject_type' => ProductJourney::class,
+            'subject_id' => $journey->id,
+            'changes' => json_encode($journey->toArray()),
+        ]);
 
         return redirect("admin/journey")->with("success", "Product Handover recorded successfully!");
     }
@@ -95,8 +129,19 @@ class ProductJourneyController extends Controller
     }
 
     // ৬. আপডেট মেথড
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, BatchInventoryService $inventory)
     {
+        $request->validate([
+            'batch_id' => 'required|integer',
+            'product_id' => 'required|integer',
+            'seller_id' => 'required|integer',
+            'buyer_id' => 'required|integer',
+            'current_stage' => 'required|string',
+            'buying_price' => 'required|numeric',
+            'profit_percent' => 'required|numeric',
+            'quantity_moved' => 'nullable|numeric|min:0',
+        ]);
+
         $journey = ProductJourney::findOrFail($id);
 
         $buying_price = $request->buying_price ?? 0;
@@ -106,6 +151,16 @@ class ProductJourneyController extends Controller
         $base_amount = $buying_price + $extra_cost;
         $profit_amount = ($base_amount * $profit_percent) / 100;
         $selling_price = $base_amount + $profit_amount;
+
+        $usedBefore = $inventory->getUsedQuantity((int) $request->batch_id) - ($journey->quantity_moved ?? 0);
+        $moveQty = $request->quantity_moved ? (float) $request->quantity_moved : 0;
+        $batch = Batch::find($request->batch_id);
+
+        if ($batch && $moveQty > 0 && ($usedBefore + $moveQty) > $batch->total_quantity) {
+            return back()->withInput()->withErrors([
+                'quantity_moved' => 'This movement exceeds available batch quantity.',
+            ]);
+        }
 
         $journey->update([
             'product_id'     => $request->product_id,
@@ -117,9 +172,20 @@ class ProductJourneyController extends Controller
             'profit_margin'  => $profit_amount,
             'selling_price'  => $selling_price,
             'current_stage'  => $request->current_stage,
+            'quantity_moved' => $request->quantity_moved,
+            'quantity_unit'  => $request->quantity_unit,
+            'loss_quantity'  => $request->loss_quantity,
             'location'       => $request->location,
             'quality_status' => $request->quality_status,
             'remarks'        => $request->remarks,
+        ]);
+
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'journey_updated',
+            'subject_type' => ProductJourney::class,
+            'subject_id' => $journey->id,
+            'changes' => json_encode($journey->getChanges()),
         ]);
 
         return redirect("admin/journey")->with("success", "Record updated successfully.");
@@ -128,6 +194,13 @@ class ProductJourneyController extends Controller
     // ৭. সফট ডিলিট (আপনি যেমনটা চেয়েছিলেন)
 public function delete($id) {
     $journey = ProductJourney::findOrFail($id);
+    ActivityLog::create([
+        'user_id' => auth()->id(),
+        'action' => 'journey_deleted',
+        'subject_type' => ProductJourney::class,
+        'subject_id' => $journey->id,
+        'changes' => null,
+    ]);
     $journey->delete(); // এটি ডাটাবেজ থেকে মুছবে না, শুধু deleted_at কলামে সময় বসাবে
     return redirect()->back()->with('success', 'Record moved to trash successfully.');
 }
@@ -199,6 +272,52 @@ public function delete($id) {
             ->paginate(15);
 
         return view('admin.journey.alerts', compact('alerts', 'marginLimit'));
+    }
+
+    public function priceFluctuation(Request $request)
+    {
+        $productId = $request->product_id;
+
+        $query = ProductJourney::select(
+                'product_id',
+                DB::raw('DATE(created_at) as date'),
+                DB::raw('AVG(selling_price) as avg_price')
+            )
+            ->when($productId, function ($q) use ($productId) {
+                $q->where('product_id', $productId);
+            })
+            ->groupBy('product_id', 'date')
+            ->orderBy('date', 'asc');
+
+        $data = $query->get();
+        $products = Product::orderBy('name')->get();
+
+        $chartSeries = [];
+        $labels = [];
+
+        if ($data->count()) {
+            $labels = $data->pluck('date')->map(function ($d) {
+                return \Carbon\Carbon::parse($d)->format('M d');
+            })->toArray();
+
+            $seriesData = $data->pluck('avg_price')->map(function ($v) {
+                return round($v, 2);
+            })->toArray();
+
+            $chartSeries = [
+                [
+                    'name' => 'Avg Selling Price',
+                    'data' => $seriesData,
+                ],
+            ];
+        }
+
+        return view('admin.journey.fluctuation', [
+            'products' => $products,
+            'selectedProductId' => $productId,
+            'chartLabels' => $labels,
+            'chartSeries' => $chartSeries,
+        ]);
     }
 
     public function supplyChainMap(Request $request)

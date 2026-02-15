@@ -123,6 +123,21 @@
 
     <div class="row g-3 mb-4">
         <div class="col-md-3">
+            <label class="form-label fw-bold small">Quantity Moved</label>
+            <input type="number" step="0.01" name="quantity_moved" class="form-control" value="{{ $journey->quantity_moved }}" placeholder="0.00">
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-bold small">Unit</label>
+            <input type="text" name="quantity_unit" class="form-control" value="{{ $journey->quantity_unit }}" placeholder="e.g. KG, Bag">
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-bold small">Loss / Spoilage</label>
+            <input type="number" step="0.01" name="loss_quantity" class="form-control" value="{{ $journey->loss_quantity }}" placeholder="0.00">
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
             <label class="form-label fw-bold small">Location</label>
             <input type="text" name="location" class="form-control" value="{{ $journey->location }}" placeholder="e.g. Dhaka">
         </div>

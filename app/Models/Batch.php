@@ -19,6 +19,7 @@ class Batch extends Model
         'latitude',
         'longitude',
         'manual_address',
+        'field_id',
         'current_location',
         'seed_brand',
         'seed_variety',
@@ -29,8 +30,12 @@ class Batch extends Model
         'fertilizer_history',
         'processing_method',
         'raw_material_source_batch',
+        'withholding_period_days',
+        'residue_risk_level',
         'total_quantity',
         'unit_name',
+        'farmer_price',
+        'processing_cost',
         'buying_price_per_unit',
         'processing_cost_per_unit',
         'target_retail_price',
@@ -58,6 +63,8 @@ class Batch extends Model
         'last_pesticide_date' => 'date',
         'buying_price_per_unit' => 'decimal:2',
         'processing_cost_per_unit' => 'decimal:2',
+        'farmer_price' => 'decimal:2',
+        'processing_cost' => 'decimal:2',
         'target_retail_price' => 'decimal:2',
     ];
 
@@ -98,7 +105,7 @@ class Batch extends Model
      */
     public function getTotalProductionCostAttribute()
     {
-        return $this->buying_price_per_unit + $this->processing_cost_per_unit;
+        return $this->production_cost_per_unit;
     }
 
     /**
@@ -106,7 +113,14 @@ class Batch extends Model
      */
     public function getProfitMarginAttribute()
     {
-        return $this->target_retail_price - $this->total_production_cost;
+        return $this->target_retail_price - $this->production_cost_per_unit;
+    }
+
+    public function getProductionCostPerUnitAttribute()
+    {
+        $buy = $this->farmer_price ?? $this->buying_price_per_unit;
+        $proc = $this->processing_cost ?? $this->processing_cost_per_unit;
+        return (float) ($buy ?? 0) + (float) ($proc ?? 0);
     }
 
     /**
